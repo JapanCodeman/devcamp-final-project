@@ -1,128 +1,159 @@
-# from flask import Flask
-# app = Flask(__name__)
-# @app.route('/')
-# def flask_mongodb_atlas():
-#     return "flask mongodb atlas!"
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+import pymongo
 
-# if __name__ == '__main__':
-#     app.run(port=8000)
+CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/letsgovocab?retryWrites=true&w=majority"
+app = Flask(__name__)
+client = pymongo.MongoClient(CONNECTION_URL)
 
-# from db import *
-# #test to insert data to the data base
+Database = client.get_database('letsgovocab')
 
-# @app.route("/test")
-# def test():
-#     db.db.Instructors.insert_one({
-#         "user_id" : 2,
-#         "role" : "Instructor",
-#         "email" : "instructor@bottega.com",
-#         "course" : "Math"
-#     })
-#     return "Connected to the data base!"
+instructors = Database.instructors
+students = Database.students
+cards = Database.cards
+admin = Database.admin
 
+# Test to see if flask is working
+@app.route('/')
+def test():
+  return "connected to flask"
 
-# import pymongo
-from pymongo import MongoClient
-from bson.objectid import ObjectId
+# Register a new instructor - WORKING!!!
+@app.route('/register-instructor/<first>/<last>/<email>/<course>/', methods=['GET'])
+def register_one_instructor(first, last, email, course):
+  queryObject = {
+    'first': first,
+    'last': last,
+    'role': 'Instructor',
+    'email': email,
+    'course': course
+  }
+  query = instructors.insert_one(queryObject)
+  return f'{first} {last} and associated data registered to Instructor database'
 
-# define cluster with password entered - DO NOT DEPLOY THIS WAY!!! Password will be visible
-# also, replace "MyFirstDatabase" with your database name (here, "PyMongo_Test")
-cluster = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/PyMongo_Test?retryWrites=true&w=majority"
-client = MongoClient(cluster)
+# List all instructors - WORKING!!! - don't really understand for loop reason
+@app.route('/instructors/', methods=['GET'])
+def find_all_instructors():
+  results = instructors.find()
+  output = {}
+  i = 0
+  for result in results:
+    output[i] = result
+    output[i].pop('_id')
+    i += 1
+  return jsonify(output)
 
-# prints list of all databases on this client - PyMongo_Test, test, admin, local
-# print(client.list_database_names())
+# Find one instructor - WORKING!!!
+@app.route('/instructor/<tag>/<value>/')
+def find_one_instructor(tag, value):
+  queryObject = {tag : value}
+  result = instructors.find_one(queryObject)
+  result.pop('_id')
+  return jsonify(result)
 
-# sets the database to be "PyMongo_Test" on the client
-db = client.letsgovocab
-instructors = db.instructors
-students = db.students
-cards = db.cards
-admin = db.admin
+# Update one instructor - NOT WORKING!!! - how to put in the $set to the code?
+@app.route('/instructor/<tag>/<value>/<newtag>/<newvalue>')
+def update_one_instructor(tag, value, newtag, newvalue):
+  queryObject = {tag : value}
+  updateObject = {newtag : newvalue}
+  result = instructors.update_one({queryObject}, {"$set":{updateObject}})
+  return 'Instructor information updated'
 
+# Delete one instructor - WORKING!!!
+@app.route('/delete-instructor/<tag>/<value>/')
+def delete_one_instructor(tag, value):
+  queryObject = {tag : value}
+  result = instructors.delete_one(queryObject)
+  return 'Instructor deleted'
 
-print(db.list_collection_names())
+# Delete entire instructor document
+@app.route('/delete-all-instructors/')
+def delete_all_instructors():
+  queryObject = {}
+  result = instructors.delete_many({})
+  return 'Instructor table dropped'
 
+# TODO - students CRUD
+# Register a new student - WORKING!!!
+@app.route('/register-student/<first>/<last>/<email>/<course>/', methods=['GET'])
+def register_one_student(first, last, email, course):
+  queryObject = {
+    'first': first,
+    'last': last,
+    'role': 'Student',
+    'email': email,
+    'course': course
+  }
+  query = students.insert_one(queryObject)
+  return f'{first} {last} and associated data registered to Student database'
 
-# Add one user to a collection - need to work on this; making "role" optional... *args?
-def insert_new_user_to_collection(collection, user_id, *role, email, course):
-    if collection == instructors:
-        new_user = {
-            "user_id" : user_id,
-            "role" : "Instructor",
-            "email" : email,
-            "course" : course
-        }
-        create = collection.insert_one(new_user)    
-    elif collection == students:
-        new_user = {
-            "user_id" : user_id,
-            "role" : "Student",
-            "email" : email,
-            "course" : course
-        }
-        create = collection.insert_one(new_user)
-    elif collection == admin:
-        new_user = {
-            "user_id" : user_id,
-            "role" : role,
-            "email" : email,
-            "course" : course
-        }
-        create = collection.insert_one(new_user)
-    else:
-        return("Inserting improper data into cards collection")
+# List all students - WORKING!!!
+@app.route('/students/', methods=['GET'])
+def find_all_students():
+  results = students.find()
+  output = {}
+  i = 0
+  for result in results:
+    output[i] = result
+    output[i].pop('_id')
+    i += 1
+  return jsonify(output)
 
-# insert_new_user_to_collection(instructors, 1, "Instructor", "jordanhughes@uni.com", "Analytics")
-# insert_new_user_to_collection(instructors, 2, "Instructor", "maywest@uni.com", "Analytics")
-# insert_new_user_to_collection(instructors, 3, "Instructor", "cathybates@uni.com", "Communication")
-# insert_new_user_to_collection(students, 1, "Student", "williamtell@students.uni.com", "Analytics")
-# insert_new_user_to_collection(students, 2, "Student", "giffordlee@students.uni.com", "Communication")
+# Find one student - WORKING!!!
+@app.route('/student/<tag>/<value>/')
+def find_one_student(tag, value):
+  queryObject = {tag : value}
+  result = students.find_one(queryObject)
+  result.pop('_id')
+  return jsonify(result)
 
-# Find one document in a given collection
-def find_one_document(collection, tag, term):
-    if tag == "_id":
-        result = collection.find_one({tag : ObjectId(term)})
-    else:
-        result = collection.find_one({tag : term})
-    print(result)
+# Update one student - NOT WORKING
+@app.route('/student/<tag>/<value>/<newtag>/<newvalue>')
+def update_one_student(tag, value, newtag, newvalue):
+  queryObject = {tag : value}
+  updateObject = {newtag : newvalue}
+  result = students.update_one({queryObject}, {"$set":{updateObject}})
+  return 'Student information updated'
 
-# find_one_document(instructors, "_id", "61fa47ab9e9f9433312524d8")
+# Delete one student - WORKING!!!
+@app.route('/delete-student/<tag>/<value>/')
+def delete_one_student(tag, value):
+  queryObject = {tag : value}
+  result = students.delete_one(queryObject)
+  return 'Student deleted'
 
-# Find all documents that match search terms - for loop prevents cursor object
-def find_all_documents(collection, tag, term):
-    results = collection.find({tag : term})
-    for result in results:
-        print(result)
-find_all_documents(instructors, "course", "Analytics")
+# Delete entire student document - WORKING!!!
+@app.route('/delete-all-students/')
+def delete_all_students():
+  queryObject = {}
+  result = students.delete_many({})
+  return 'Student table dropped'
 
-# Count documents in a collection
-def count_documents(collection, tag, term):
-    result = collection.count_documents({tag : term})
-    print(result)
+# TODO - cards CRUD
 
-# Delete a document in a collection
-def delete_document(collection, tag, term):
-    if tag == "_id":
-        result = collection.delete_one({tag : ObjectId(term)})
-    else:
-        result = collection.delete_one({tag : term})
+# Create one new card with associated course
+@app.route('/create-card/<course>/<lang1>/<lang2>/')
+def create_card(course, lang1, lang2):
+  queryObject = {
+    'course': course,
+    'front': lang1,
+    'back': lang2
+  }
+  result = cards.insert_one(queryObject)
+  return f'{lang1}/{lang2} card created for course: {course}'
 
-# Delete an entire collection - warning
-def delete_collection(collection):
-    confirm = input(f'YOU ARE ABOUT TO DELETE ALL RECORDS IN {str(collection)}! PROCEED? Y/N')
-    if confirm.lower() == "y":
-        result = collection.delete_many({})
-    else:
-        print(f'Delete {collection} aborted')
-        
-# Update a record -- PICK UP HERE TOMORROW
-def update_document(collection, oldinfo, newinfo):
-    result = collection.update_one(oldinfo, "$set:" + newinfo)
+# Create many cards - TODO test with Postman
+@app.route('/create-cards/<course>/<cards>/')
+def create_cards(course, cards):
+  cards = [{}]
+  queryObject = {
+    'course': course,
+    'cards': cards
+  }
+  result = cards.insert_many(queryObject)
+  return 'Multiple cards uploaded'
 
-update_document(students, {"email":"giffordlee@students.uni.com"}, {"email":"leegifford@students.uni.com"})
+# TODO - admin CRUD
 
-# TODO - create a database with the following collections: instructors, students, cards, admin
-# TODO - define a series of functions to CRUD these various collections using PyMongo syntax
-# TODO - wrap flask around this entire app to give it api functionality
-# TODO - how to do all of this in pipenv?? 
+if __name__ == '__main__':
+  app.run(debug=True)
