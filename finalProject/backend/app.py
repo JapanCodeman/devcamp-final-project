@@ -1,13 +1,11 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, Response, request
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 from bson import json_util
 from flask_cors import CORS
 from itsdangerous import json
-from numpy import False_
 import pymongo
-
-
+from pymongo import ReturnDocument
 
 CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/letsgovocab?retryWrites=true&w=majority"
 app = Flask(__name__)
@@ -24,6 +22,9 @@ instructors = Database.instructors
 students = Database.students
 cards = Database.cards
 admin = Database.admin
+
+# TODO - Password hashing - bcrypt or werzeug
+
 
 # Test to see if flask is working
 @app.route('/')
@@ -50,48 +51,46 @@ def register_one_instructor():
   query = instructors.insert_one(queryObject)
   return f'{first} {last} and associated data registered to Instructor database'
 
-# List all instructors - WORKING!!! - but would like to get _id value back as well
+# List all instructors - WORKING!!!
 @app.route('/instructors/', methods=['GET'])
 def find_all_instructors():
-  results = instructors.find()
-  output = {}
-  i = 0
-  # for result in results:
-  #   output[i] = result
-  #   if output.keys[i] == ('_id'):
-  #     output[i] = ObjectId(output[i])
-  #     i += 1
-  #   else:
-  #     i += 1
-  # return jsonify(output)
+  results = list(instructors.find())
+  for instructor in results:
+    instructor["_id"] = str(instructor["_id"])
 
-  for result in results:
-    output[i] = result
-    output[i].pop('_id')
-    i += 1
-  return jsonify(output)
+  return Response(
+    response=json.dumps(results),
+    status=200,
+    mimetype="application/json"
+  )
 
 # TODO - add ability to search by <id>?
-# Find one instructor - Working, but is this the correct way?
-@app.route('/instructor/<tag>/<value>/', methods=['GET'])
+# Find all instructors that match criteria - TODO only returns first result
+@app.route('/instructors/<tag>/<value>/', methods=['GET'])
 def find_one_instructor(tag, value):
   queryObject = {tag : value}
-  result = instructors.find_one(queryObject)
-  result.pop('_id')
+  results = instructors.find(queryObject)
+  for result in results:
+    result.pop('_id')
   return jsonify(result)
 
-# Update one instructor 
-@app.route('/instructor/<id>/<newtag>/<newvalue>/', methods=['PATCH'])
-def update_one_instructor(id, newtag, newvalue):
+# Update one instructor - WORKING!!!
+@app.route('/update-instructor/<id>', methods=['PATCH'])
+def update_one_instructor(id):
   id = ObjectId(id)
-  updateObject = {newtag : newvalue}
-  result = instructors.find_one_and_update("_id": id, {"$set":updateObject})
-  return 'Instructor information updated'
+  id_call = {"_id" : id}
+  request_params = request.get_json()
+  updateObject = request_params
 
-# Delete one instructor
+  result = instructors.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+  return f'Instructor information updated {updateObject}'
+
+# Delete one instructor - WORKING!!!
 @app.route('/delete-instructor/<id>', methods=['DELETE'])
 def delete_one_instructor(id):
-  id = instructors.delete_one({'_id':ObjectId(id)})
+  id = ObjectId(id)
+  id_call = {"_id" : id}
+  id = instructors.delete_one(id_call)
   return 'Instructor deleted'
 
 # Delete entire instructor document 
@@ -101,8 +100,8 @@ def delete_all_instructors():
   return 'Instructor table dropped'
 
 # TODO - students CRUD
-# Register a new student 
-@app.route('/register-student/', methods=['POST'])
+# Register a new student - WORKING!!!
+@app.route('/register-student', methods=['POST'])
 def register_one_student():
   first = request.json.get("first")
   last = request.json.get("last")
@@ -111,68 +110,64 @@ def register_one_student():
   password = request.json.get("password")
 
   queryObject = {
-    "first": first,
-    "last": last,
-    "role": "Student",
-    "email": email,
-    "course": course,
-    "password": password
+    "first" : first,
+    "last" : last,
+    "email" : email,
+    "course" : course,
+    "password" : password
   }
   query = students.insert_one(queryObject)
   return f'{first} {last} registered to student database.'
 
 # Dunno why, but this works - TODO - figure it out
+# Returns only in a list... not "pretty"
 @app.route('/student/<id>', methods=['GET'])
 def get_student(id):
   student = students.find_one({'_id':ObjectId(id)})
-  return make_response(json_util.dumps({"students":student}))
+  return Response(json_util.dumps({"students":student}))
  
-# List all students 
+# List all students - Working!!!
 @app.route('/students/', methods=['GET'])
 def find_all_students():
-  results = students.find()
-  output = {}
-  i = 0
-  for result in results:
-    output[i] = result
-    output[i].pop('_id')
-    i += 1
-  return jsonify(output)
+  results = list(students.find())
+  for student in results:
+    student["_id"] = str(student["_id"])
 
-# Find one student 
-@app.route('/student/', methods=['GET'])
-def find_one_student(tag, value):
-  queryObject = {tag : value}
-  result = students.find_one(queryObject)
-  result.pop('_id')
-  return jsonify(result)
+  return Response(
+    response=json.dumps(results),
+    status=200,
+    mimetype="application/json"
+  )
 
-# Update one student 
-@app.route('/update-student/<tag>/<value>/<newtag>/<newvalue>', methods=['PATCH'])
-def update_one_student(tag, value, newtag, newvalue):
-  queryObject = {tag : value}
-  updateObject = {newtag : newvalue}
-  result = students.update_one(queryObject, {"$set":updateObject})
-  return 'Student information updated'
+# Update one student - WORKING!!!
+@app.route('/update-student/<id>', methods=['PATCH'])
+def update_one_student(id):
+  request_params = request.get_json()
+  updateObject = request_params
+  id = ObjectId(id)
+  id_call = {"_id" : id}
 
-# Delete one student 
-@app.route('/delete-student/', methods=['DELETE'])
+  result = students.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+  return f'Student information updated {updateObject}'
+
+# Delete one student - WORKING!!!
+@app.route('/delete-student/<id>', methods=['DELETE'])
 def delete_one_student(id):
-  id = request.json.get(ObjectId('_id'))
-  result = students.delete_one(id)
+  id = ObjectId(id)
+  id_call = {"_id" : id}
+  result = students.delete_one(id_call)
   return 'Student deleted'
 
-# Delete entire student document 
-@app.route('/delete-all-students/', methods=['DELETE'])
+# Delete entire student document - WORKING!!!
+@app.route('/delete-all-students', methods=['DELETE'])
 def delete_all_students():
-  queryObject = {}
+  # queryObject = {}
   result = students.delete_many({})
   return 'Student table dropped'
 
 # TODO - cards CRUD
-
 # Create one new card with associated course 
-@app.route('/create-card/', methods=['POST'])
+@app.route('/create-card', methods=['POST'])
 def create_card(course, lang1, lang2, box_number=0, guessed_correctly=False):
   course = request.json.get('course')
   lang1 = request.json.get('lang1')
@@ -187,26 +182,44 @@ def create_card(course, lang1, lang2, box_number=0, guessed_correctly=False):
   result = cards.insert_one(queryObject)
   return f'{lang1}/{lang2} card created for course: {course}'
 
-# Create many cards - TODO test with Postman
-@app.route('/create-cards/', methods=['PUT'])
-def create_cards(course):
-  cards_list = request.json.get('cards_list')
+# Create many cards - WORKING!!!
+@app.route('/create-cards', methods=['PUT'])
+def create_cards():
+  cards_list = request.get_json()
   result = cards.insert_many(cards_list)
   return 'Multiple cards uploaded'
 
-# TODO - admin CRUD
+# View all cards - WORKING!!!
+@app.route('/cards', methods=['GET'])
+def get_all_cards():
+  results = list(cards.find())
+  for card in results:
+    card["_id"] = str(card["_id"])
 
-# Register a new admin - WORKING!!!
-@app.route('/register-admin/<first>/<last>/<email>/', methods=['GET'])
-def register_one_admin(first, last, email):
+  return Response(
+    response=json.dumps(results),
+    status=200,
+    mimetype="application/json"
+  )
+# TODO - admin CRUD
+# Register a new administrator - WORKING!!!
+@app.route('/register-admin', methods=['POST'])
+def register_one_admin():
+  first = request.json.get("first")
+  last = request.json.get("last")
+  email = request.json.get("email")
+  course = request.json.get("course")
+  password = request.json.get("password")
+
   queryObject = {
-    'first': first,
-    'last': last,
-    'role': 'Admin',
-    'email': email,
+    "first" : first,
+    "last" : last,
+    "email" : email,
+    "role" : "Administrator",
+    "password" : password
   }
   query = admin.insert_one(queryObject)
-  return f'{first} {last} and associated data registered to Administrator database'
+  return f'{first} {last} registered with administrator privileges.'
 
 if __name__ == '__main__':
   app.run(debug=True)
