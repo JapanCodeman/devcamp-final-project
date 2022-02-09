@@ -6,9 +6,12 @@ from flask_cors import CORS
 from itsdangerous import json
 import pymongo
 from pymongo import ReturnDocument
+from werkzeug.security import generate_password_hash, check_password_hash
 
 CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/letsgovocab?retryWrites=true&w=majority"
 app = Flask(__name__)
+
+app.secret_key = "OnomichiCats1"
 
 try:
   client = pymongo.MongoClient(CONNECTION_URL, serverSelectionTimeoutMS = 2000)
@@ -21,7 +24,7 @@ Database = client.get_database('letsgovocab')
 instructors = Database.instructors
 students = Database.students
 cards = Database.cards
-admin = Database.admin
+administrators = Database.admin
 
 # TODO - Password hashing - bcrypt or werzeug
 
@@ -40,13 +43,15 @@ def register_one_instructor():
   course = request.json.get("course")
   password = request.json.get("password")
 
+  _hashed_password = generate_password_hash(password)
+
   queryObject = {
     "first": first,
     "last": last,
     "role": "Instructor",
     "email": email,
     "course": course,
-    "password": password 
+    "password": _hashed_password 
   }
   query = instructors.insert_one(queryObject)
   return f'{first} {last} and associated data registered to Instructor database'
@@ -64,26 +69,32 @@ def find_all_instructors():
     mimetype="application/json"
   )
 
-# TODO - add ability to search by <id>?
-# Find all instructors that match criteria - TODO only returns first result
-@app.route('/instructors/<tag>/<value>/', methods=['GET'])
-def find_one_instructor(tag, value):
-  queryObject = {tag : value}
-  results = instructors.find(queryObject)
-  for result in results:
-    result.pop('_id')
-  return jsonify(result)
+# Find one instructor by id - WORKING!!!
+@app.route('/instructor/<id>', methods=['GET'])
+def find_one_instructor(id):
+  instructor = instructors.find_one({"_id":ObjectId(id)})
+  instructor["_id"] = str(instructor["_id"])
+  
+  return Response(
+    response=json.dumps(instructor),
+    status=200,
+    mimetype="application/json"
+  )
 
-# Update one instructor - WORKING!!!
+# Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
 @app.route('/update-instructor/<id>', methods=['PATCH'])
 def update_one_instructor(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
   request_params = request.get_json()
+  if "password" in request_params.keys():
+    generate_password_hash(request_params["password"])
+
   updateObject = request_params
 
+
   result = instructors.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
-  return f'Instructor information updated {updateObject}'
+  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
 # Delete one instructor - WORKING!!!
 @app.route('/delete-instructor/<id>', methods=['DELETE'])
@@ -93,7 +104,7 @@ def delete_one_instructor(id):
   id = instructors.delete_one(id_call)
   return 'Instructor deleted'
 
-# Delete entire instructor document 
+# Delete entire instructor document - WORKING!!!
 @app.route('/delete-all-instructors/', methods=['DELETE'])
 def delete_all_instructors():
   result = instructors.delete_many({})
@@ -119,14 +130,19 @@ def register_one_student():
   query = students.insert_one(queryObject)
   return f'{first} {last} registered to student database.'
 
-# Dunno why, but this works - TODO - figure it out
-# Returns only in a list... not "pretty"
+# Find one student - WORKING!!!
 @app.route('/student/<id>', methods=['GET'])
 def get_student(id):
   student = students.find_one({'_id':ObjectId(id)})
-  return Response(json_util.dumps({"students":student}))
+  student["_id"] = str(student["_id"])
+  
+  return Response(
+    response=json.dumps(student),
+    status=200,
+    mimetype="application/json"
+  )
  
-# List all students - Working!!!
+# List all students - WORKING!!!
 @app.route('/students/', methods=['GET'])
 def find_all_students():
   results = list(students.find())
@@ -148,7 +164,7 @@ def update_one_student(id):
   id_call = {"_id" : id}
 
   result = students.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
-  return f'Student information updated {updateObject}'
+  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
 # Delete one student - WORKING!!!
 @app.route('/delete-student/<id>', methods=['DELETE'])
@@ -166,9 +182,9 @@ def delete_all_students():
   return 'Student table dropped'
 
 # TODO - cards CRUD
-# Create one new card with associated course 
+# Create one new card with associated course - WORKING!!!
 @app.route('/create-card', methods=['POST'])
-def create_card(course, lang1, lang2, box_number=0, guessed_correctly=False):
+def create_card(box_number=0, guessed_correctly=False):
   course = request.json.get('course')
   lang1 = request.json.get('lang1')
   lang2 = request.json.get('lang2')
@@ -184,8 +200,11 @@ def create_card(course, lang1, lang2, box_number=0, guessed_correctly=False):
 
 # Create many cards - WORKING!!!
 @app.route('/create-cards', methods=['PUT'])
-def create_cards():
+def create_cards(box_number=0, guessed_correctly=False):
   cards_list = request.get_json()
+  for card in cards_list:
+    card["box_number"] = box_number
+    card["guessed_correctly"] = guessed_correctly
   result = cards.insert_many(cards_list)
   return 'Multiple cards uploaded'
 
@@ -201,6 +220,36 @@ def get_all_cards():
     status=200,
     mimetype="application/json"
   )
+
+# Update a card - WORKING!!!
+@app.route('/update-card/<id>', methods=['PATCH'])
+def update_a_card(id, box_number=0, guessed_correctly=False):
+  id = ObjectId(id)
+  id_call = {"_id" : id}
+  request_params = request.get_json()
+  updateObject = request_params
+  updateObject["box_number"] = box_number
+  updateObject["guessed_correctly"] = guessed_correctly
+
+  result = cards.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+  return f'Card information updated {updateObject}'
+
+# TODO - How to do update_many? Submit via form? Necessary?
+# TODO - also, delete_many? Add "deck" key or perhaps timestamp to each card?
+@app.route('/delete-card/<id>', methods=['DELETE'])
+def delete_a_card(id):
+  id = ObjectId(id)
+  id_call = {"_id" : id}
+
+  result = cards.find_one_and_delete(id_call)
+  return "Card deleted"
+
+# Delete all cards - WORKING!!!
+@app.route('/delete-all-cards', methods=['DELETE'])
+def delete_all_cards():
+  result = cards.delete_many({})
+  return 'Cards table dropped'
+
 # TODO - admin CRUD
 # Register a new administrator - WORKING!!!
 @app.route('/register-admin', methods=['POST'])
@@ -208,7 +257,6 @@ def register_one_admin():
   first = request.json.get("first")
   last = request.json.get("last")
   email = request.json.get("email")
-  course = request.json.get("course")
   password = request.json.get("password")
 
   queryObject = {
@@ -218,8 +266,50 @@ def register_one_admin():
     "role" : "Administrator",
     "password" : password
   }
-  query = admin.insert_one(queryObject)
+  query = administrators.insert_one(queryObject)
   return f'{first} {last} registered with administrator privileges.'
+
+# Find one administrator by id
+@app.route('/administrator/<id>', methods=['GET'])
+def find_one_administrator(id):
+  id_call = {"_id" : ObjectId(id)}
+  administrator = administrators.find_one(id_call)
+  administrator["_id"] = str(administrator["_id"])
+  
+  return administrator
+
+# Find all administrators
+@app.route('/administrators/', methods=['GET'])
+def find_all_admins():
+  results = list(administrators.find())
+  for admin in results:
+    admin["_id"] = str(admin["_id"])
+
+  return Response(
+    response=json.dumps(results),
+    status=200,
+    mimetype="application/json"
+  )
+
+# Update one administrator - WORKING!!!
+@app.route('/update-administrator/<id>', methods=['PATCH'])
+def update_one_administrator(id):
+  request_params = request.get_json()
+  updateObject = request_params
+  id = ObjectId(id)
+  id_call = {"_id" : id}
+
+  result = administrators.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
+
+# Delete one administrator 
+@app.route('/delete-administrator/<id>', methods=['DELETE'])
+def delete_one_administrator(id):
+  id_call = {"_id":ObjectId(id)}
+
+
+  result = administrators.find_one_and_delete(id_call)
+  return f'Administrator removed from database.'
 
 if __name__ == '__main__':
   app.run(debug=True)
