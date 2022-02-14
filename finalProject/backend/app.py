@@ -26,7 +26,20 @@ students = Database.students
 cards = Database.cards
 administrators = Database.admin
 
-# TODO - Password hashing - bcrypt or werzeug
+# Vocabulary program logic
+
+# 'Boxes' to store vocabulary words for students
+# filled with card objects or card ObjectId?
+box0 = []
+box1 = []
+box2 = []
+box3 = []
+box4 = []
+box5 = []
+box6 = []
+box7 = []
+
+# TODO - werzeug
 
 
 # Test to see if flask is working
@@ -86,12 +99,9 @@ def find_one_instructor(id):
 def update_one_instructor(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
+
   request_params = request.get_json()
-  if "password" in request_params.keys():
-    generate_password_hash(request_params["password"])
-
   updateObject = request_params
-
 
   result = instructors.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
   return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
@@ -184,7 +194,7 @@ def delete_all_students():
 # TODO - cards CRUD
 # Create one new card with associated course - WORKING!!!
 @app.route('/create-card', methods=['POST'])
-def create_card(box_number=0, guessed_correctly=False):
+def create_card(box_number=0, guessed_correctly_count=0):
   course = request.json.get('course')
   lang1 = request.json.get('lang1')
   lang2 = request.json.get('lang2')
@@ -193,18 +203,19 @@ def create_card(box_number=0, guessed_correctly=False):
     'front': lang1,
     'back': lang2,
     'box_number': box_number,
-    'guessed_correctly': guessed_correctly
+    'guessed_correctly_count': guessed_correctly_count
   }
+  
   result = cards.insert_one(queryObject)
   return f'{lang1}/{lang2} card created for course: {course}'
 
 # Create many cards - WORKING!!!
 @app.route('/create-cards', methods=['PUT'])
-def create_cards(box_number=0, guessed_correctly=False):
+def create_cards(box_number=0, guessed_correctly_count=0):
   cards_list = request.get_json()
   for card in cards_list:
     card["box_number"] = box_number
-    card["guessed_correctly"] = guessed_correctly
+    card["guessed_correctly_count"] = guessed_correctly_count
   result = cards.insert_many(cards_list)
   return 'Multiple cards uploaded'
 
@@ -223,13 +234,13 @@ def get_all_cards():
 
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])
-def update_a_card(id, box_number=0, guessed_correctly=False):
+def update_a_card(id, box_number=0, guessed_correctly_count=0):
   id = ObjectId(id)
   id_call = {"_id" : id}
   request_params = request.get_json()
   updateObject = request_params
   updateObject["box_number"] = box_number
-  updateObject["guessed_correctly"] = guessed_correctly
+  updateObject["guessed_correctly_count"] = guessed_correctly_count
 
   result = cards.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
   return f'Card information updated {updateObject}'
@@ -249,6 +260,8 @@ def delete_a_card(id):
 def delete_all_cards():
   result = cards.delete_many({})
   return 'Cards table dropped'
+
+# TODO - Get today's cards based on vocab study calendar
 
 # TODO - admin CRUD
 # Register a new administrator - WORKING!!!

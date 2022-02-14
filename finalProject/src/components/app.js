@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import './headerNavbar/headerNavbar';
+import TitlePage from './body/titlePage';
 import HeaderNavbar from './headerNavbar/headerNavbar';
 
 export default class App extends Component {
   render() {
     return (
-      <div className='app'>
+      <div>
         <HeaderNavbar />
-        <h1>Let's Go! Vocabulary Study System</h1>
-        <img className='OG-logo' src='../static/images/OG_logo.jpg' />
+        <TitlePage />
       </div>
     );
   }

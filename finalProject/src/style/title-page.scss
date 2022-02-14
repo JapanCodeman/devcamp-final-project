@@ -1,0 +1,29 @@
+.title-page-wrapper {
+  display: grid;
+  grid-template-columns: [left-s] 1fr [left-e mid-s] 1fr [mid-e right-s] 1fr [right-e];
+  grid-template-rows: [text-s] 1fr [text-e logo-s] 2fr [logo-e buttons-s] 1fr [buttons-e];
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+
+  .title-page-text {
+    grid-column: mid-s/mid-e;
+    grid-row: text-s/text-e;
+  }
+  .title-page-logo-wrapper {
+    grid-column: mid-s/mid-e;
+    grid-row: logo-s/logo-e;
+    height: 100px;
+
+    img {
+      size: 2rem;
+    }
+    
+  }
+  .button-wrapper {
+    grid-column: mid-s/mid-e;
+    grid-row: buttons-s/buttons-e;
+    align-items: center;
+    align-content: space-between;
+  }
+}
