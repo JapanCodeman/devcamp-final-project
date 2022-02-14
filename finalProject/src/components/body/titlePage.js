@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ogLogo from '../../static/images/OG_logo.jpg';
+import ogLogo from '../../../static/images/OG_logo.jpg';
 
 export default class TitlePage extends Component {
   render () {
@@ -11,7 +11,7 @@ export default class TitlePage extends Component {
             <h1>Let's Go! Vocabulary Study System</h1>
           </div>
           <div className='title-page-logo-wrapper'>
-            <img className='OG-logo' src={ogLogo} />
+            <img src={ogLogo} />
           </div>
           <div className='button-wrapper'>
             <button className='register'>
