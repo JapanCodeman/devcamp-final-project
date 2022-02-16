@@ -6,10 +6,17 @@ import history from '../../history';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
 
 export default class TitlePage extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      showImage: false
+    }
+  }
+
   render () {
     return (
       <div>
-        <HeaderNavbar/>
+        <HeaderNavbar hideSmallLogo/> 
         <div className='title-page-wrapper'>
           <div className='title-page-text'>
             <h1>Let's Go! Vocabulary Study System</h1>

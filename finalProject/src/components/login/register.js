@@ -1,4 +1,7 @@
+
 import React, { Component } from 'react';
+
+import axios from 'axios';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
 
 export default class Register extends Component {
@@ -19,13 +22,19 @@ export default class Register extends Component {
   handleChange(event) {
     this.setState({
     [event.target.name]: event.target.value
-  })
-}
+    });
+  }
+  
+  handleSubmit(event) {
+    console.log(event)
+    // axios.post('http://127.0.0.1:5000/register') // make sure to run api simultaneously in order to post to axios
+    event.preventDefault();
+  }
 
   render () {
     return (
       <div>
-        <HeaderNavbar/>
+        <HeaderNavbar />
         <div className='register-heading'>
           <form onSubmit={this.handleSubmit}>
             <label>First Name</label>
@@ -56,7 +65,7 @@ export default class Register extends Component {
             />
 
             <label>Course</label>
-            <select value={this.state.course} onChange={this.handleChange}>
+            <select name="course" value={this.state.course} onChange={this.handleChange}>
               <option value="1-1">1-1</option>
               <option value="2-1">2-1</option>
               <option value="2-2">2-2</option>
@@ -80,12 +89,11 @@ export default class Register extends Component {
             value={this.state.confirm_password}
             onChange={this.handleChange}
             />
+            <div>
+              <button type="submit">Create Account</button>
+            </div>
           </form>
-
-          <button type="submit">Create Account</button>
         </div>
-
-
       </div>
     );
   }
