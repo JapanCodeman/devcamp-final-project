@@ -1,15 +1,16 @@
-from flask import Flask, jsonify, make_response, Response, request
-from bson.objectid import ObjectId
 from bson.json_util import dumps
-from bson import json_util
-from flask_cors import CORS
-from itsdangerous import json
+from bson.objectid import ObjectId
+from flask import Flask, jsonify, make_response, Response, request
+from flask_cors import CORS, cross_origin
+import json
 import pymongo
 from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
 CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/letsgovocab?retryWrites=true&w=majority"
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
 
 app.secret_key = "OnomichiCats1"
 
@@ -123,6 +124,7 @@ def delete_all_instructors():
 # TODO - students CRUD
 # Register a new student - WORKING!!!
 @app.route('/register-student', methods=['POST'])
+# @cross_origin(origins='*')
 def register_one_student():
   first = request.json.get("first")
   last = request.json.get("last")

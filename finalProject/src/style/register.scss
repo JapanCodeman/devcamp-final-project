@@ -1,0 +1,55 @@
+.register-page-wrapper {
+  display: grid;
+  padding: 200px;
+
+  .register-heading {
+      color: #6BD35F;
+      font-weight: 700;
+      font-size: large;
+      grid-row: register-s/register-e;
+  }
+  
+  .register-form {
+    display: grid;
+    grid-template-columns: 1fr [content-s] 1fr [content-e] 1fr;
+    grid-template-rows: [register-s] 40px [register-e names-s] 1fr [names-e email-course-s] 1fr [email-course-e password-s] 1fr [password-e confirm-s] 1fr [confirm-e button-s] 1fr [button-e];
+    grid-gap: 100px 20px;
+    height: 40px;
+
+    &__first-name, &__last-name {
+      grid-row: names-s/names-e;
+      border: none;
+      border-bottom: solid black 2px;
+    }
+
+    &__e-mail {
+      grid-row: email-course-s/email-course-e;
+    }
+
+    &__course {
+      grid-row: email-course-s/email-course-e;
+      width: 50px;
+    }
+
+    &__password {
+      grid-row: password-s/password-e;
+    }
+
+    &__confirm-password {
+      grid-row: confirm-s/confirm-e;
+    }
+
+    .create-acct-button {
+      color: #FFFFFF;
+      font-size: 2em;
+      border-radius: 10px;
+      height: 50px;
+      width: 125px;
+      background-color: #6BD35F;
+      text-decoration: none;
+      text-align: center;
+      align-items: center;
+    }
+  }
+}
+
