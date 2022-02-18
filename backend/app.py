@@ -1,8 +1,10 @@
 from bson.json_util import dumps
 from bson.objectid import ObjectId
+import datetime
 from flask import Flask, jsonify, make_response, Response, request
 from flask_cors import CORS, cross_origin
 import json
+
 import pymongo
 from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -47,6 +49,16 @@ box7 = []
 @app.route('/')
 def test():
   return "connected to flask"
+
+# TODO - make login route
+@app.route('/login')
+def login():
+  auth = request.authorization
+
+  if auth and auth.password == 'password':
+    return ''
+
+  return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
@@ -132,12 +144,14 @@ def register_one_student():
   course = request.json.get("course")
   password = request.json.get("password")
 
+  _hashed_password = generate_password_hash(password)
+
   queryObject = {
     "first" : first,
     "last" : last,
     "email" : email,
     "course" : course,
-    "password" : password
+    "password" : _hashed_password
   }
   query = students.insert_one(queryObject)
   return f'{first} {last} registered to student database.'

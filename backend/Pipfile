@@ -11,7 +11,8 @@ itsdangerous = "*"
 flask-pymongo = "*"
 pymongo = {extras = ["srv"], version = "*"}
 dnspython = "*"
-
+jwt = "*"
+pyjwt = "*"
 
 [dev-packages]
 

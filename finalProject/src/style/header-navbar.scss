@@ -3,9 +3,16 @@
   align-items: center;
   justify-content: center;
   height: 10vh;
-  color: gray;
-  font-size: 1.5rem;
+
   background-color: #6BD35F;
+
+  &__title {
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+    color: Green;
+    font-size: 48px;
+    font-weight: 700;
+  }
 }
 
 .SmallOgLogo {

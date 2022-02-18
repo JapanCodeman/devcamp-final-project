@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import SmallOgLogo from '../../../static/images/small_og_logo.png';
 
@@ -13,7 +14,7 @@ export default class HeaderNavbar extends Component {
           <div>
             {this.props.hideSmallLogo ? null  : <img className='SmallOgLogo' src={SmallOgLogo}/>} 
           </div>
-          <h1>Onomichi Junior and Senior High School</h1>
+          <Link className='header-navbar__title' to='/'>Onomichi Junior and Senior High School</Link>
         </div>
       </div>
     );
