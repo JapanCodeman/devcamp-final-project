@@ -24,6 +24,7 @@ export default class Login extends Component {
   }
   
   handleSubmit(event) {
+    event.preventDefault();
     axios.post('http://127.0.0.1:5000/login',
     {
       "email": this.state.email,
@@ -32,8 +33,9 @@ export default class Login extends Component {
     // { withCredentials: true } // How to get this working?
     ).then(response => {
       console.log("response", response)
+      // history.push("/home")
     })
-    event.preventDefault();
+  
   }
 
   render () {
@@ -49,8 +51,9 @@ export default class Login extends Component {
                 type="email"
                 name="email"
                 placeholder="Email"
-                value={this.state.email}
+               // value={this.state.email}
                 onChange={this.handleChange}
+                required
                 />
 
               <label className='login-form__password-label' for='password'>Password</label>
@@ -60,10 +63,11 @@ export default class Login extends Component {
                 type="password"
                 name="password"
                 placeholder="Password"
-                value={this.state.password}
+                //value={this.state.password}
                 onChange={this.handleChange}
+                required
                 />
-              <Link className='login-form__login-button' onClick={this.handleSubmit}>Login</Link>
+              <button  type="submit"className='login-form__login-button' >Login</button>
               <Link className='login-form__forgot-password' to='/reset-password'>
                 Forgot Password?
               </Link>

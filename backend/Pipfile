@@ -7,11 +7,10 @@ name = "pypi"
 flask = "*" 
 flask-cors = "*"
 bson = "*"
-itsdangerous = "*"
 flask-pymongo = "*"
 pymongo = {extras = ["srv"], version = "*"}
 dnspython = "*"
-jwt = "*"
+flask-jwt-extended = "==4.3.1"
 pyjwt = "*"
 
 [dev-packages]

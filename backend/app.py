@@ -1,11 +1,12 @@
-from bson.json_util import dumps
-from bson.objectid import ObjectId
 import datetime
-from flask import Flask, jsonify, make_response, Response, request
-from flask_cors import CORS, cross_origin
 import json
 
 import pymongo
+import jwt
+from flask_jwt_extended import JWTManager
+from bson.objectid import ObjectId
+from flask import Flask, jsonify, make_response, Response, request
+from flask_cors import CORS
 from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -13,6 +14,7 @@ CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mon
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
+jwt = JWTManager(app)
 
 app.secret_key = "OnomichiCats1"
 
@@ -51,14 +53,58 @@ def test():
   return "connected to flask"
 
 # TODO - make login route
-@app.route('/login')
-def login():
-  auth = request.authorization
 
-  if auth and auth.password == 'password':
-    return ''
 
-  return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
+@app.route("/login", methods=["POST"])
+def create_token():
+  email = request.json.get("email", None)
+  password = request.json.get("password", None)
+
+  if not email or not password:
+    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
+  user = students.find_one({"email" : email})
+
+  if not user:
+    user = students.find_one({"email" : email, "password" : password})
+
+  if not user:
+    user = administrators.find_one({"email" : email})
+
+  if not user:
+    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
+
+  if check_password_hash(password, user["password"]):
+    token = jwt.encode({'email' : user["email"], 'role' : user["role"], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+
+    return jsonify({'token' : token.decode('UTF-8')})
+
+  return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
+
+
+# @app.route('/login')
+# def login():
+#   auth = request.authorization
+
+#   if not auth or not auth.username or not auth.password:
+#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
+#   user = instructors.find_one({"email" : auth.username})
+
+#   if not user:
+#     user = students.find_one({"email" : auth.username})
+
+#   if not user:
+#     user = administrators.find_one({"email" : auth.username})
+
+#   if not user:
+#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
+
+#   if check_password_hash(user.password, auth.password):
+#     token = jwt.encode({'email' : user.email, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+
+#     return jsonify({'token' : token.decode('UTF-8')})
+
+#   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
+
 
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
@@ -69,7 +115,7 @@ def register_one_instructor():
   course = request.json.get("course")
   password = request.json.get("password")
 
-  _hashed_password = generate_password_hash(password)
+  _hashed_password = generate_password_hash(password, method='sha256')
 
   queryObject = {
     "first": first,
@@ -144,7 +190,7 @@ def register_one_student():
   course = request.json.get("course")
   password = request.json.get("password")
 
-  _hashed_password = generate_password_hash(password)
+  _hashed_password = generate_password_hash(password, method='sha256')
 
   queryObject = {
     "first" : first,
