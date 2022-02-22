@@ -3,14 +3,17 @@ import json
 
 import pymongo
 import jwt
-from flask_jwt_extended import JWTManager
 from bson.objectid import ObjectId
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import decode_token
+from flask_jwt_extended import JWTManager
 from flask import Flask, jsonify, make_response, Response, request
 from flask_cors import CORS
 from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
 CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/letsgovocab?retryWrites=true&w=majority"
+
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
@@ -19,7 +22,7 @@ jwt = JWTManager(app)
 app.secret_key = "OnomichiCats1"
 
 try:
-  client = pymongo.MongoClient(CONNECTION_URL, serverSelectionTimeoutMS = 2000)
+  client = pymongo.MongoClient(CONNECTION_URL, serverSelectionTimeoutMS = 10000)
 
 except:
   print("Error - cannot connect to database")
@@ -59,6 +62,7 @@ def test():
 def create_token():
   email = request.json.get("email", None)
   password = request.json.get("password", None)
+  role = request.json.get("role", None)
 
   if not email or not password:
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
@@ -73,10 +77,11 @@ def create_token():
   if not user:
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
-  if check_password_hash(password, user["password"]):
-    token = jwt.encode({'email' : user["email"], 'role' : user["role"], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
-
-    return jsonify({'token' : token.decode('UTF-8')})
+  if check_password_hash(user["password"], password):
+    token = create_access_token({'email' : email, 'role' : role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        # access_token = create_access_token(identity=request.json.get("user_email", None))
+        # return jsonify(access_token=access_token), 200
+    return jsonify({'token' : decode_token(token)})
 
   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
 

@@ -35,7 +35,6 @@ export default class Login extends Component {
       console.log("response", response)
       // history.push("/home")
     })
-  
   }
 
   render () {
