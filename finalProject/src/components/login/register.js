@@ -38,7 +38,10 @@ export default class Register extends Component {
     },
     // { withCredentials: true } // How to get this working?
     ).then(response => {
-      console.log("response", response)
+      console.log(response)
+    })
+    .catch(error => {
+      console.log("registration error", error);
     })
     event.preventDefault();
   }

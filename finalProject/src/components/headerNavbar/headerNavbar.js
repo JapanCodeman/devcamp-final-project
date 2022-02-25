@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import SmallOgLogo from '../../../static/images/small_og_logo.png';
+import GreenButton from '../helpers/greenButton';
 
 export default class HeaderNavbar extends Component {
   constructor(props) {

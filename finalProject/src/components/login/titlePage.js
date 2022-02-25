@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import ogLogo from '../../../static/images/OG_logo.jpg';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
+import GreenButton from '../helpers/greenButton';
 
 export default class TitlePage extends Component {
   constructor(props){
@@ -25,12 +26,8 @@ export default class TitlePage extends Component {
           </div>
             
           <div className='button-wrapper'>
-            <Link to='/register' className='green_button'>
-              Register
-            </Link>
-            <Link to='/login' className='green_button'>
-              Login
-            </Link>
+            <GreenButton className={'green-button'} to={'/register'} text={'Register'} />
+            <GreenButton className={'green-button'} to={'login'} text={'Login'} />
           </div>
         </div>
       </div>

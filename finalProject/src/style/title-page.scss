@@ -30,14 +30,14 @@
     }
   }
   .button-wrapper {
-    display: grid;
     grid-column: mid-s/mid-e;
-    justify-items: center;
+    display: flex;
+    justify-content: space-between;
     height: auto;
-
-    .green_button {
-      display: grid;
-      grid-row: buttons-s/buttons-e;
+    width: 500px;
+   
+    .green-button {
+      display: flex;
       color: #FFFFFF;
       font-size: 28px;
       border-radius: 10px;
@@ -45,8 +45,10 @@
       width: 175px;
       background-color: #6BD35F;
       text-decoration: none;
-      text-align: center;
+      justify-content: center;
       align-items: center;
     }
   }
 }
+
+

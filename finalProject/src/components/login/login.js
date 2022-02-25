@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 
 import axios from 'axios';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
+import history from '../../history';
+import jwtDecode from 'jwt-decode';
 import { Link } from 'react-router-dom';
 
 export default class Login extends Component {
@@ -13,6 +15,7 @@ export default class Login extends Component {
       email: "",
       password: ""
     }
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -32,10 +35,21 @@ export default class Login extends Component {
     },
     // { withCredentials: true } // How to get this working?
     ).then(response => {
-      console.log("response", response)
-      // history.push("/home")
+      if (response.status === 200) return response;
+      else alert("There was an error");
+    })
+    .then(data => {
+      const token = data.data.token
+      console.log("This came from the backend", data)
+      window.sessionStorage.setItem("token", token)
+      history.push("/home")
+      
+    })
+    .catch(error => {
+      console.error("There was an error!", error);
     })
   }
+
 
   render () {
     return (
@@ -62,11 +76,11 @@ export default class Login extends Component {
                 type="password"
                 name="password"
                 placeholder="Password"
-                //value={this.state.password}
+                // value={this.state.password}
                 onChange={this.handleChange}
                 required
                 />
-              <button  type="submit"className='login-form__login-button' >Login</button>
+              <button type="submit" className='login-form__login-button'>Login</button>
               <Link className='login-form__forgot-password' to='/reset-password'>
                 Forgot Password?
               </Link>
