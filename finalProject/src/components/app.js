@@ -12,11 +12,6 @@ import Profile from './pages/profile';
 export default class App extends Component {
 constructor() {
   super();
-
-  this.state = {
-    loggedInStatus: "NOT_LOGGED_IN",
-    user: {}
-  }
 }
 
   render() {
@@ -27,13 +22,7 @@ constructor() {
             <Route exact path="/" component={TitlePage}/>
             <Route exact path="/register" component={Register}/>
             <Route exact path="/login" component={Login}/>
-            <Route 
-            exact 
-            path="/home" 
-            render={props => (
-              <Home {...props} loggedInStatus={this.state.loggedInStatus}/>
-            )}
-            />
+            <Route exact path="/home" component={Home}/>
             <Route exact path ="/profile" component={Profile}/>
           </Switch>
         </Router>

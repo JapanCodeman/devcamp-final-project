@@ -1,8 +1,9 @@
 import datetime
+from distutils.log import error
 import json
 
 import pymongo
-import jwt
+# import jwt
 from bson.objectid import ObjectId
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import decode_token
@@ -17,9 +18,10 @@ CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mon
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
+
+app.config['JWT_SECRET_KEY'] = "f3cfe9ed8fae309f02079dbf"
 jwt = JWTManager(app)
 
-app.secret_key = "OnomichiCats1"
 
 try:
   client = pymongo.MongoClient(CONNECTION_URL, serverSelectionTimeoutMS = 10000)
@@ -55,9 +57,13 @@ box7 = []
 def test():
   return "connected to flask"
 
+# @app.route('/token', methods=["POST"])
+# def tokentest():
+#   token = request.get_json("token")
+#   secret_data = decode_token(token)
+#   return secret_data
+
 # TODO - make login route
-
-
 @app.route("/login", methods=["POST"])
 def create_token():
   email = request.json.get("email", None)
@@ -66,10 +72,10 @@ def create_token():
 
   if not email or not password:
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-  user = students.find_one({"email" : email})
+  user = instructors.find_one({"email" : email})
 
   if not user:
-    user = students.find_one({"email" : email, "password" : password})
+    user = students.find_one({"email" : email})
 
   if not user:
     user = administrators.find_one({"email" : email})
@@ -78,38 +84,13 @@ def create_token():
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
   if check_password_hash(user["password"], password):
-    token = create_access_token({'email' : email, 'role' : role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
-        # access_token = create_access_token(identity=request.json.get("user_email", None))
-        # return jsonify(access_token=access_token), 200
-    return jsonify({'token' : decode_token(token)})
+    try:
+      token = create_access_token(identity={"email" : email, "role": role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+      return jsonify(token=token)
+    except:
+      return "Token unable to be distributed", error
 
   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-
-
-# @app.route('/login')
-# def login():
-#   auth = request.authorization
-
-#   if not auth or not auth.username or not auth.password:
-#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-#   user = instructors.find_one({"email" : auth.username})
-
-#   if not user:
-#     user = students.find_one({"email" : auth.username})
-
-#   if not user:
-#     user = administrators.find_one({"email" : auth.username})
-
-#   if not user:
-#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
-
-#   if check_password_hash(user.password, auth.password):
-#     token = jwt.encode({'email' : user.email, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
-
-#     return jsonify({'token' : token.decode('UTF-8')})
-
-#   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-
 
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
@@ -119,16 +100,18 @@ def register_one_instructor():
   email = request.json.get("email")
   course = request.json.get("course")
   password = request.json.get("password")
+  logged_status = "False"
 
   _hashed_password = generate_password_hash(password, method='sha256')
 
   queryObject = {
     "first": first,
     "last": last,
-    "role": "Instructor",
+    "role": '',
     "email": email,
     "course": course,
-    "password": _hashed_password 
+    "password": _hashed_password,
+    "logged_in": logged_status
   }
   query = instructors.insert_one(queryObject)
   return f'{first} {last} and associated data registered to Instructor database'
@@ -194,6 +177,7 @@ def register_one_student():
   email = request.json.get("email")
   course = request.json.get("course")
   password = request.json.get("password")
+  logged_status = "False"
 
   _hashed_password = generate_password_hash(password, method='sha256')
 
@@ -201,17 +185,32 @@ def register_one_student():
     "first" : first,
     "last" : last,
     "email" : email,
+    "role" : '',
     "course" : course,
-    "password" : _hashed_password
+    "password" : _hashed_password,
+    "logged_in": logged_status
   }
   query = students.insert_one(queryObject)
-  return f'{first} {last} registered to student database.'
+  return 'registered'
 
 # Find one student - WORKING!!!
 @app.route('/student/<id>', methods=['GET'])
 def get_student(id):
   student = students.find_one({'_id':ObjectId(id)})
   student["_id"] = str(student["_id"])
+  
+  return Response(
+    response=json.dumps(student),
+    status=200,
+    mimetype="application/json"
+  )
+
+# Look student up by e-mail for after login - TODO change to user instead of student
+@app.route('/student-email/<email>', methods=['GET'])
+def get_student_by_email(email):
+  # email = request.get_json("email")
+  student = students.find_one({"email":email})
+  student["_id"].pop()
   
   return Response(
     response=json.dumps(student),
@@ -338,13 +337,15 @@ def register_one_admin():
   last = request.json.get("last")
   email = request.json.get("email")
   password = request.json.get("password")
+  logged_status = "False"
 
   queryObject = {
     "first" : first,
     "last" : last,
     "email" : email,
-    "role" : "Administrator",
-    "password" : password
+    "role" : '',
+    "password" : password,
+    "logged_in": logged_status
   }
   query = administrators.insert_one(queryObject)
   return f'{first} {last} registered with administrator privileges.'
