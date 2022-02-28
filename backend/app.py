@@ -37,21 +37,8 @@ students = Database.students
 cards = Database.cards
 administrators = Database.admin
 
-# Vocabulary program logic
-
-# 'Boxes' to store vocabulary words for students
-# filled with card objects or card ObjectId?
-box0 = []
-box1 = []
-box2 = []
-box3 = []
-box4 = []
-box5 = []
-box6 = []
-box7 = []
-
-# TODO - werzeug
-
+# Calendar for 64 day schedule
+overall_study_calendar = [[2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [6,1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [7,1], [2,1], [3,1], [6,2,1], [5,1], [4,2,1], [3,1], [2,1], [1]]
 
 # Test to see if flask is working
 @app.route('/')
@@ -187,6 +174,16 @@ def register_one_student():
   course = request.json.get("course")
   password = request.json.get("password")
   logged_status = "False"
+  # This will use an index call on overall_study_calendar to pull today's study sets
+  scheduled_study_set = 0
+  # Boxes will hold IDs of cards to be studied (maybe something else to avoid dealing with ObjectID)
+  vocabulary_box_one = []
+  vocabulary_box_two = []
+  vocabulary_box_three = []
+  vocabulary_box_four = []
+  vocabulary_box_five = []
+  vocabulary_box_six = []
+  vocabulary_box_seven = []
 
   _hashed_password = generate_password_hash(password, method='sha256')
 
@@ -197,7 +194,15 @@ def register_one_student():
     "role" : '',
     "course" : course,
     "password" : _hashed_password,
-    "logged_in": logged_status
+    "logged_in": logged_status,
+    "scheduled_study_set": scheduled_study_set,
+    "vocabulary_box_one": vocabulary_box_one,
+    "vocabulary_box_two": vocabulary_box_two,
+    "vocabulary_box_three": vocabulary_box_three,
+    "vocabulary_box_four": vocabulary_box_four,
+    "vocabulary_box_five": vocabulary_box_five,
+    "vocabulary_box_six": vocabulary_box_six,
+    "vocabulary_box_seven": vocabulary_box_seven,
   }
   query = students.insert_one(queryObject)
   return 'registered'
