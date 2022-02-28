@@ -8,6 +8,8 @@ import TitlePage from './login/titlePage';
 import Register from './login/register';
 import Login from './login/login';
 import Profile from './pages/profile';
+import AdministratorLogin from './admin/adminLogin';
+import AdministratorHome from './admin/adminHome';
 
 export default class App extends Component {
 constructor() {
@@ -24,6 +26,8 @@ constructor() {
             <Route exact path="/login" component={Login}/>
             <Route exact path="/home" component={Home}/>
             <Route exact path ="/profile" component={Profile}/>
+            <Route exact path ="/admin/login" component={AdministratorLogin} />
+            <Route exact path ="/admin" component={AdministratorHome} />
           </Switch>
         </Router>
       </div>

@@ -8,8 +8,9 @@ from bson.objectid import ObjectId
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import decode_token
 from flask_jwt_extended import JWTManager
+from flask_jwt_extended import jwt_required
 from flask import Flask, jsonify, make_response, Response, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -65,6 +66,7 @@ def test():
 
 # TODO - make login route
 @app.route("/login", methods=["POST"])
+@cross_origin()
 def create_token():
   email = request.json.get("email", None)
   password = request.json.get("password", None)
@@ -94,6 +96,7 @@ def create_token():
 
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
+@cross_origin()
 def register_one_instructor():
   first = request.json.get("first")
   last = request.json.get("last")
@@ -118,6 +121,7 @@ def register_one_instructor():
 
 # List all instructors - WORKING!!!
 @app.route('/instructors/', methods=['GET'])
+@cross_origin()
 def find_all_instructors():
   results = list(instructors.find())
   for instructor in results:
@@ -131,6 +135,7 @@ def find_all_instructors():
 
 # Find one instructor by id - WORKING!!!
 @app.route('/instructor/<id>', methods=['GET'])
+@cross_origin()
 def find_one_instructor(id):
   instructor = instructors.find_one({"_id":ObjectId(id)})
   instructor["_id"] = str(instructor["_id"])
@@ -143,6 +148,7 @@ def find_one_instructor(id):
 
 # Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
 @app.route('/update-instructor/<id>', methods=['PATCH'])
+@cross_origin()
 def update_one_instructor(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
@@ -155,6 +161,7 @@ def update_one_instructor(id):
 
 # Delete one instructor - WORKING!!!
 @app.route('/delete-instructor/<id>', methods=['DELETE'])
+@cross_origin()
 def delete_one_instructor(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
@@ -163,6 +170,7 @@ def delete_one_instructor(id):
 
 # Delete entire instructor document - WORKING!!!
 @app.route('/delete-all-instructors/', methods=['DELETE'])
+@cross_origin()
 def delete_all_instructors():
   result = instructors.delete_many({})
   return 'Instructor table dropped'
@@ -170,6 +178,7 @@ def delete_all_instructors():
 # TODO - students CRUD
 # Register a new student - WORKING!!!
 @app.route('/register-student', methods=['POST'])
+@cross_origin()
 # @cross_origin(origins='*')
 def register_one_student():
   first = request.json.get("first")
@@ -195,6 +204,7 @@ def register_one_student():
 
 # Find one student - WORKING!!!
 @app.route('/student/<id>', methods=['GET'])
+@cross_origin()
 def get_student(id):
   student = students.find_one({'_id':ObjectId(id)})
   student["_id"] = str(student["_id"])
@@ -207,10 +217,11 @@ def get_student(id):
 
 # Look student up by e-mail for after login - TODO change to user instead of student
 @app.route('/student-email/<email>', methods=['GET'])
+@cross_origin()
+@jwt_required()
 def get_student_by_email(email):
-  # email = request.get_json("email")
   student = students.find_one({"email":email})
-  student["_id"].pop()
+  del student["_id"]
   
   return Response(
     response=json.dumps(student),
@@ -220,6 +231,7 @@ def get_student_by_email(email):
  
 # List all students - WORKING!!!
 @app.route('/students/', methods=['GET'])
+@cross_origin()
 def find_all_students():
   results = list(students.find())
   for student in results:
@@ -233,6 +245,7 @@ def find_all_students():
 
 # Update one student - WORKING!!!
 @app.route('/update-student/<id>', methods=['PATCH'])
+@cross_origin()
 def update_one_student(id):
   request_params = request.get_json()
   updateObject = request_params
@@ -244,6 +257,7 @@ def update_one_student(id):
 
 # Delete one student - WORKING!!!
 @app.route('/delete-student/<id>', methods=['DELETE'])
+@cross_origin()
 def delete_one_student(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
@@ -252,6 +266,7 @@ def delete_one_student(id):
 
 # Delete entire student document - WORKING!!!
 @app.route('/delete-all-students', methods=['DELETE'])
+@cross_origin()
 def delete_all_students():
   # queryObject = {}
   result = students.delete_many({})
@@ -260,6 +275,7 @@ def delete_all_students():
 # TODO - cards CRUD
 # Create one new card with associated course - WORKING!!!
 @app.route('/create-card', methods=['POST'])
+@cross_origin()
 def create_card(box_number=0, guessed_correctly_count=0):
   course = request.json.get('course')
   lang1 = request.json.get('lang1')
@@ -277,6 +293,7 @@ def create_card(box_number=0, guessed_correctly_count=0):
 
 # Create many cards - WORKING!!!
 @app.route('/create-cards', methods=['PUT'])
+@cross_origin()
 def create_cards(box_number=0, guessed_correctly_count=0):
   cards_list = request.get_json()
   for card in cards_list:
@@ -287,6 +304,7 @@ def create_cards(box_number=0, guessed_correctly_count=0):
 
 # View all cards - WORKING!!!
 @app.route('/cards', methods=['GET'])
+@cross_origin()
 def get_all_cards():
   results = list(cards.find())
   for card in results:
@@ -300,6 +318,7 @@ def get_all_cards():
 
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])
+@cross_origin()
 def update_a_card(id, box_number=0, guessed_correctly_count=0):
   id = ObjectId(id)
   id_call = {"_id" : id}
@@ -314,6 +333,7 @@ def update_a_card(id, box_number=0, guessed_correctly_count=0):
 # TODO - How to do update_many? Submit via form? Necessary?
 # TODO - also, delete_many? Add "deck" key or perhaps timestamp to each card?
 @app.route('/delete-card/<id>', methods=['DELETE'])
+@cross_origin()
 def delete_a_card(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
@@ -323,6 +343,7 @@ def delete_a_card(id):
 
 # Delete all cards - WORKING!!!
 @app.route('/delete-all-cards', methods=['DELETE'])
+@cross_origin()
 def delete_all_cards():
   result = cards.delete_many({})
   return 'Cards table dropped'
@@ -332,6 +353,7 @@ def delete_all_cards():
 # TODO - admin CRUD
 # Register a new administrator - WORKING!!!
 @app.route('/register-admin', methods=['POST'])
+@cross_origin()
 def register_one_admin():
   first = request.json.get("first")
   last = request.json.get("last")
@@ -352,6 +374,7 @@ def register_one_admin():
 
 # Find one administrator by id
 @app.route('/administrator/<id>', methods=['GET'])
+@cross_origin()
 def find_one_administrator(id):
   id_call = {"_id" : ObjectId(id)}
   administrator = administrators.find_one(id_call)
@@ -359,8 +382,23 @@ def find_one_administrator(id):
   
   return administrator
 
+# Find one administrator by email
+@app.route('/administrator/<email>', methods=['GET'])
+@cross_origin()
+def find_admin_by_email(email):
+  administrator = administrators.find_one({"email":email})
+  del administrator["_id"]
+
+  return Response(
+    response=json.dumps(administrator),
+    status=200,
+    mimetype="application/json"
+  )
+
+
 # Find all administrators
 @app.route('/administrators/', methods=['GET'])
+@cross_origin()
 def find_all_admins():
   results = list(administrators.find())
   for admin in results:
@@ -374,6 +412,7 @@ def find_all_admins():
 
 # Update one administrator - WORKING!!!
 @app.route('/update-administrator/<id>', methods=['PATCH'])
+@cross_origin()
 def update_one_administrator(id):
   request_params = request.get_json()
   updateObject = request_params
@@ -385,6 +424,7 @@ def update_one_administrator(id):
 
 # Delete one administrator 
 @app.route('/delete-administrator/<id>', methods=['DELETE'])
+@cross_origin()
 def delete_one_administrator(id):
   id_call = {"_id":ObjectId(id)}
 

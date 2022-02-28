@@ -1,0 +1,93 @@
+.admin-login-page-wrapper {
+  display: grid;
+  grid-template-columns: 1fr [content-s] 3fr [content-e] 1fr;
+  gap: 25px 20px;
+
+  .admin-login-form {
+    display: grid;
+    grid-column: content-s/content-e;
+    grid-template-columns: [col1-s] 1fr [col1-e col2-s] 1fr [col2-e];
+    grid-template-rows: [login-s] 80px [login-e email-label-s] auto [email-label-e email-s] auto [email-e label-password-s] auto [label-password-e password-incorrect-s] auto [password-incorrect-e password-s] auto [password-e login-button-s] 1fr [login-button-e];
+    gap: 5px 100px;
+    padding-top: 100px;
+
+
+    label {
+      font-size: 24px;
+    }
+
+    &__login-heading {
+      grid-column: col1-s/col2-e;
+      grid-row: login-s/login-e;
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+    }
+
+    &__email-label {
+      grid-column: col1-s/col1-e;
+      grid-row: email-label-s/email-label-e;
+      margin-bottom: 17px;
+    }
+
+    &__email {
+      grid-column: col1-s/col1-e;
+      grid-row: email-s/email-e;
+      border: none;
+      border-bottom: solid gray 2px;
+      font-size: 24px;
+      margin-bottom: 42px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__password-label {
+      grid-column: col1-s/col1-e;
+      grid-row: label-password-s/label-password-e;
+    }
+
+    &__password-incorrect {
+      color: red;
+      grid-column: col1-s/col1-e;
+      grid-row: password-incorrect-s/password-incorrect-e;
+      font-size: 12px;
+    }
+
+    &__password {
+      grid-column: col1-s/col1-e;
+      grid-row: password-s/password-e;
+      border: none;
+      border-bottom: solid gray 2px;
+      font-size: 24px;
+      margin-bottom: 42px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__login-button {
+      display: flex;
+      grid-column: col1-s/col1-e;
+      grid-row: login-button-s/login-button-e;
+      color: #FFFFFF;
+      font-size: 28px;
+      border-radius: 10px;
+      height: 75px;
+      width: 175px;
+      background-color: #6BD35F;
+      text-decoration: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__forgot-password {
+      grid-column: col2-s/col2-e;
+      grid-row: login-button-s/login-button-e;
+      color: gray;
+      font-size: 18px;
+      text-align: start;
+    }
+  }
+}

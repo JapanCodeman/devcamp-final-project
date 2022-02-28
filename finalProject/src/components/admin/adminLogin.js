@@ -4,13 +4,14 @@ import axios from 'axios';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
 import { Link, withRouter } from 'react-router-dom';
 
-export default class Login extends Component {
+export default class AdministratorLogin extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      role: ""
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -25,6 +26,14 @@ export default class Login extends Component {
   }
   
   handleSubmit(event) {
+    event.preventDefault();
+    axios.get(`http://127.0.0.1:5000/administrator/${this.state.email}`)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.log("There was an error", error)
+    })
     axios.post('http://127.0.0.1:5000/login',
     {
       "email": this.state.email,
@@ -39,12 +48,11 @@ export default class Login extends Component {
       const token = data.data.token
       console.log("This came from the backend", data)
       window.sessionStorage.setItem("token", token)
-      this.props.history.push("/home")
+      this.props.history.push("/admin")
     })
     .catch(error => {
       console.log("There was an error!", error);
     })
-    event.preventDefault();
   }
 
 
@@ -52,33 +60,33 @@ export default class Login extends Component {
     return (
       <div>
         <HeaderNavbar />
-        <div className='login-page-wrapper'>
-          <form className='login-form' onSubmit={this.handleSubmit}>
-            <div className='login-form__login-heading'>Login</div>
-              <label className='login-form__email-label' htmlFor='email'>Email</label>
+        <div className='admin-login-page-wrapper'>
+          <form className='admin-login-form' onSubmit={this.handleSubmit}>
+            <div className='admin-login-form__login-heading'>Administrator Login</div>
+              <label className='admin-login-form__email-label' htmlFor='email'>Email</label>
                 <input 
-                className='login-form__email'
+                className='admin-login-form__email'
                 type="email"
                 name="email"
                 placeholder="Email"
-               // value={this.state.email}
+                value={this.state.email}
                 onChange={this.handleChange}
                 required
                 />
 
-              <label className='login-form__password-label' htmlFor='password'>Password</label>
-                <p className='login-form__password-incorrect'>Password incorrect, try again</p>
+              <label className='admin-login-form__password-label' htmlFor='password'>Password</label>
+                <p className='admin-login-form__password-incorrect'>Password incorrect, try again</p>
                 <input 
-                className='login-form__password'
+                className='admin-login-form__password'
                 type="password"
                 name="password"
                 placeholder="Password"
-                // value={this.state.password}
+                value={this.state.password}
                 onChange={this.handleChange}
                 required
                 />
-              <button type="submit" className='login-form__login-button'>Login</button>
-              <Link className='login-form__forgot-password' to='/reset-password'>
+              <button type="submit" className='admin-login-form__login-button'>Login</button>
+              <Link className='admin-login-form__forgot-password' to='/reset-password'>
                 Forgot Password?
               </Link>
           </form>
@@ -88,4 +96,4 @@ export default class Login extends Component {
   }
 }
 
-withRouter(Login)
+withRouter(AdministratorLogin)
