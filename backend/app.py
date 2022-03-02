@@ -435,6 +435,18 @@ def update_one_administrator(id):
   result = administrators.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
   return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
+
+# Update one administrator by email - WORKING!!!
+@app.route('/update-administrator-by-email/<email>', methods=['PATCH'])
+@cross_origin()
+def update_one_administrator_email(email):
+  request_params = request.get_json()
+  updateObject = request_params
+  email = {"email" : email}
+
+  result = administrators.find_one_and_update(email, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
+
 # Delete one administrator 
 @app.route('/delete-administrator/<id>', methods=['DELETE'])
 @cross_origin()

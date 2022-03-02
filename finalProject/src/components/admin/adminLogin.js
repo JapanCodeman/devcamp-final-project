@@ -38,8 +38,8 @@ export default class AdministratorLogin extends Component {
     })
     axios.post('http://127.0.0.1:5000/login',
     {
-      "email": this.state.user.email,
-      "password": this.state.user.password
+      "email": this.state.email,
+      "password": this.state.password
     })
     // { withCredentials: true } // How to get this working?
     .then(response => {
