@@ -11,7 +11,7 @@ export default class AdministratorLogin extends Component {
     this.state = {
       email: "",
       password: "",
-      role: ""
+      user: {}
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -27,17 +27,19 @@ export default class AdministratorLogin extends Component {
   
   handleSubmit(event) {
     event.preventDefault();
-    axios.get(`http://127.0.0.1:5000/administrator/${this.state.email}`)
+    axios.get(`http://127.0.0.1:5000/administrator-by-email/${this.state.email}`)
     .then(response => {
-      console.log(response)
+      this.setState({
+        user: response.data
+      })
     })
     .catch(error => {
       console.log("There was an error", error)
     })
     axios.post('http://127.0.0.1:5000/login',
     {
-      "email": this.state.email,
-      "password": this.state.password
+      "email": this.state.user.email,
+      "password": this.state.user.password
     })
     // { withCredentials: true } // How to get this working?
     .then(response => {
@@ -46,7 +48,11 @@ export default class AdministratorLogin extends Component {
     })
     .then(data => {
       const token = data.data.token
+      console.log(token)
       console.log("This came from the backend", data)
+      if (this.state.user.role !== "Administrator") {
+        return alert("You are not an administrator")
+      }
       window.sessionStorage.setItem("token", token)
       this.props.history.push("/admin")
     })
@@ -69,7 +75,7 @@ export default class AdministratorLogin extends Component {
                 type="email"
                 name="email"
                 placeholder="Email"
-                value={this.state.email}
+                // value={this.state.email}
                 onChange={this.handleChange}
                 required
                 />
@@ -81,7 +87,7 @@ export default class AdministratorLogin extends Component {
                 type="password"
                 name="password"
                 placeholder="Password"
-                value={this.state.password}
+                // value={this.state.password}
                 onChange={this.handleChange}
                 required
                 />

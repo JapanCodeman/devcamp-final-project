@@ -125,7 +125,7 @@ export default class Register extends Component {
               
               <div className='button-wrapper'>
                 <Link className='create-acct-button' onClick={this.handleSubmit}>Create Account</Link>
-                <Link type='button' className='return-to-home' to={'/'}>Return to Title Screen</Link>
+                <Link type='button' className='return-to-home' to='/'>Return to Title Screen</Link>
               </div>
             </form>
           </div>

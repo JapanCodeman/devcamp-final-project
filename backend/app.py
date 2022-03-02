@@ -1,6 +1,7 @@
 import datetime
 from distutils.log import error
 import json
+from typing import Any
 
 import pymongo
 # import jwt
@@ -45,12 +46,6 @@ overall_study_calendar = [[2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], 
 def test():
   return "connected to flask"
 
-# @app.route('/token', methods=["POST"])
-# def tokentest():
-#   token = request.get_json("token")
-#   secret_data = decode_token(token)
-#   return secret_data
-
 # TODO - make login route
 @app.route("/login", methods=["POST"])
 @cross_origin()
@@ -74,7 +69,7 @@ def create_token():
 
   if check_password_hash(user["password"], password):
     try:
-      token = create_access_token(identity={"email" : email, "role": role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+      token = create_access_token(identity={"email" : email, "role" : role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
       return jsonify(token=token)
     except:
       return "Token unable to be distributed", error
@@ -226,7 +221,7 @@ def get_student(id):
 @jwt_required()
 def get_student_by_email(email):
   student = students.find_one({"email":email})
-  del student["_id"]
+  student["_id"] = str(student["_id"])
   
   return Response(
     response=json.dumps(student),
@@ -258,6 +253,17 @@ def update_one_student(id):
   id_call = {"_id" : id}
 
   result = students.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
+
+# Update one student by email - WORKING!!!
+@app.route('/update-student-by-email/<email>', methods=['PATCH'])
+@cross_origin()
+def update_one_student_email(email):
+  request_params = request.get_json()
+  updateObject = request_params
+  email = {"email" : email}
+
+  result = students.find_one_and_update(email, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
   return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
 # Delete one student - WORKING!!!
@@ -366,12 +372,14 @@ def register_one_admin():
   password = request.json.get("password")
   logged_status = "False"
 
+  _hashed_password = generate_password_hash(password, method='sha256')
+
   queryObject = {
     "first" : first,
     "last" : last,
     "email" : email,
-    "role" : '',
-    "password" : password,
+    "role" : 'Administrator',
+    "password" : _hashed_password,
     "logged_in": logged_status
   }
   query = administrators.insert_one(queryObject)
@@ -388,11 +396,11 @@ def find_one_administrator(id):
   return administrator
 
 # Find one administrator by email
-@app.route('/administrator/<email>', methods=['GET'])
+@app.route('/administrator-by-email/<email>', methods=['GET'])
 @cross_origin()
 def find_admin_by_email(email):
   administrator = administrators.find_one({"email":email})
-  del administrator["_id"]
+  administrator["_id"] = str(administrator["_id"])
 
   return Response(
     response=json.dumps(administrator),

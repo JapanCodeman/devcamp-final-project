@@ -36,17 +36,16 @@ export default class Login extends Component {
       else alert("There was an error");
     })
     .then(data => {
+      console.log("Before setting to token", data.data.token)
       const token = data.data.token
-      console.log("This came from the backend", data)
       window.sessionStorage.setItem("token", token)
       this.props.history.push("/home")
-    })
+    })    
     .catch(error => {
       console.log("There was an error!", error);
     })
     event.preventDefault();
   }
-
 
   render () {
     return (
@@ -61,7 +60,7 @@ export default class Login extends Component {
                 type="email"
                 name="email"
                 placeholder="Email"
-               // value={this.state.email}
+                value={this.state.email}
                 onChange={this.handleChange}
                 required
                 />
@@ -73,7 +72,7 @@ export default class Login extends Component {
                 type="password"
                 name="password"
                 placeholder="Password"
-                // value={this.state.password}
+                value={this.state.password}
                 onChange={this.handleChange}
                 required
                 />
