@@ -14,6 +14,18 @@
     font-size: 48px;
     font-weight: 700;
   }
+
+  &__logout-icon {
+    position: absolute;
+    right: 0;
+    padding-right: 20px;
+    color: darkgreen;
+    font-size: 4rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .SmallOgLogo {

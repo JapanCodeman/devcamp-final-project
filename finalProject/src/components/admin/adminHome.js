@@ -2,6 +2,8 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
+import GreenButton from '../helpers/greenButton';
+
 
 export default class AdministratorHome extends Component {
   constructor(props) {
@@ -24,7 +26,7 @@ export default class AdministratorHome extends Component {
       console.log("Patch log status error", error)
     })
     window.sessionStorage.clear()
-    this.props.history.push('/')
+    this.props.history.push('/admin/login')
   }
 
   componentDidMount(){
@@ -42,7 +44,6 @@ export default class AdministratorHome extends Component {
       this.setState({
         admin : Admin.data
       })
-      // window.sessionStorage.setItem("User", JSON.stringify(User))
     })
     .catch(error => {
       console.log("Error in getting admin object", error);
@@ -56,9 +57,17 @@ export default class AdministratorHome extends Component {
   render () {
     return (
       <div>
-        <HeaderNavbar />
-        AdminHome
-        {this.state.admin.first}
+        <HeaderNavbar handleLogout={this.handleLogout}/>
+        <div className="admin-home-wrapper">
+          <div className='admin-home__welcome-message'>Welcome back, {this.state.admin.first}!</div>
+            <div className='admin-home__page-name'>Home</div>
+
+          <div className="admin-home__management-tools">
+            <GreenButton className={"admin-home__management-tools__users"} to={"/admin/userstatus"} text={"Manage Users/Check Status"} />
+            <GreenButton className={"admin-home__management-tools__passwords"} to={"/admin/password-reset"} text={"Password Reset Options"} />
+            <GreenButton className={"admin-home__management-tools__placeholder"} to={"/admin/password-reset"} text={"Placeholder"} />
+          </div>
+        </div>
       </div>
     );
   }

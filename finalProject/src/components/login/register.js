@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 
 import axios from 'axios';
 import HeaderNavbar from '../headerNavbar/headerNavbar';
-import history from '../../history';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import TitlePage from './titlePage';
 
 export default class Register extends Component {
   constructor(props) {
