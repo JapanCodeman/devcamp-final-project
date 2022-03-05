@@ -11,7 +11,7 @@ import history from '../history';
 import TitlePage from './login/titlePage';
 import Register from './login/register';
 import Login from './login/login';
-import Profile from './pages/profile';
+import UserProfile from './pages/userProfile';
 import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
 import UserStatus from './admin/adminUserStatus';
@@ -32,9 +32,9 @@ constructor() {
             <Route exact path="/register" component={Register}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/home" component={Home}/>
-            <Route exact path="/profile" component={Profile}/>
+            <Route exact path="/profile" component={UserProfile}/>
             <Route exact path="/admin/login" component={AdministratorLogin} />
-            <Route exact path="/admin" component={AdministratorHome} />
+            <Route exact path="/admin/home" component={AdministratorHome} />
             <Route exact path="/admin/userstatus" component={UserStatus} />
           </Switch>
         </Router>

@@ -1,0 +1,32 @@
+.user-status-page-wrapper {
+  display: grid;
+  grid-template-rows: [label-s] auto [label-e selector-s] auto [selector-e];
+  justify-items: right;
+  padding: 20px 200px 100px 200px;
+}
+
+.user-status {
+
+  &__selector-label {
+    grid-row: label-s/label-e;
+    width: auto;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    padding-right: 20px;
+    color: #6BD35F;
+  }
+
+  &__search-params {
+    grid-row: selector-s/selector-e;
+    width: min-content;
+  }
+
+  &__search-button {
+    width: min-content;
+  }
+
+  &__results {
+    width: 90vw;
+  }
+}

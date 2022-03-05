@@ -4,11 +4,11 @@ export default class UserProfile extends Component {
   constructor(props) {
     super(props)
   }
+
   render () {
     return (
       <div>
-        <div>{this.props.first}</div>
-        <div>{this.props.last}</div>
+        {this.props.first} {this.props.last} {this.props.email} {this.props.logged_in} {this.props.role}
       </div>
     );
   }
