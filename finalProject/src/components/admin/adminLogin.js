@@ -54,7 +54,7 @@ export default class AdministratorLogin extends Component {
         return alert("You are not an administrator")
       }
       window.sessionStorage.setItem("token", token)
-      this.props.history.push("/admin")
+      this.props.history.push("/admin/home")
     })
     .catch(error => {
       console.log("There was an error!", error);
