@@ -24,15 +24,29 @@ export default class UserStatus extends Component {
   }
 
   getUsers() {
-    const query = this.state.searchParams
-    if (query in ["1-1,","2-1", "2-2", "3-1"]) {}
-      axios.get("http://127.0.0.1:5000/students/")
-      .then(response => {
-        this.setState({
-          users : [...response.data]
-        })
+    console.log(this.state.searchParams)
+    console.log(typeof(this.state.users))
+    if (this.state.users == undefined) {
+    axios.get(`http://127.0.0.1:5000/students/${this.state.searchParams}`)
+    .then(response => {
+      this.setState({
+        users : [...response.data]
       })
-    }
+    })
+    .catch(error => {console.log("Error in retrieving students based on searchParams", error)})
+  } else {
+    this.setState({
+      users: []
+    })
+    axios.get(`http://127.0.0.1:5000/students/${this.state.searchParams}`)
+    .then(response => {
+      this.setState({
+        users : [...response.data]
+      })
+    })
+    .catch(error => {console.log("Error in retrieving students based on searchParams", error)})
+  }
+}
 
   render () {
     return (

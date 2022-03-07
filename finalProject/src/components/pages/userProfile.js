@@ -29,9 +29,9 @@ export default class UserProfile extends Component {
     return (
       <div>
         <div className="user-profile-page-wrapper">
-          <label className="user-pofile-info__first-name-label" htmlFor="first-name">First Name</label>
+          <label className="user-profile-info__first-name-label" htmlFor="first-name">First Name</label>
             <input className="user-profile-info__first-name" name="first-name" value={this.state.first} onChange={this.handleChange}/>
-          <label className="user-pofile-info__last-name-label" htmlFor="last-name">Last Name</label>
+          <label className="user-profile-info__last-name-label" htmlFor="last-name">Last Name</label>
             <input className="user-profile-info__last-name" name="last-name" value={this.state.last} onChange={this.handleChange}/>
           <label className="user-profile-info__email-label" htmlFor="email">Email</label>
             <input className="user-profile-info__email" name="email" value={this.state.email} onChange={this.handleChange}/> 
