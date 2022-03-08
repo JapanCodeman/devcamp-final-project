@@ -1,6 +1,6 @@
 .user-profile-page-wrapper {
   display: grid;
-  grid-template-columns: 20px [first-s] 1fr [first-e] 20px [last-s] 1fr [last-e] 20px [email-s] 1fr [email-e] 20px [logged-s] 1fr [logged-e] 20px [course-s] 1fr [course-e] 20px [role-s] 1fr [role-e] 20px;
+  grid-template-columns: 20px [first-s] 206px [first-e] 20px [last-s] 206px [last-e] 20px [email-s] 206px [email-e] 20px [logged-s] 206px [logged-e] 20px [course-s] 206px [course-e] 20px [role-s] 206px [role-e] 20px;
   grid-template-rows: [label-s] 20px [label-e] 10px [value-s] 24px [value-e];
   background: rgb(10,36,0);
   background: linear-gradient(0deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%);  
@@ -22,6 +22,9 @@
     &__first-name {
       grid-column: first-s/first-e;
       grid-row: value-s/value-e;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     &__last-name-label {
@@ -32,6 +35,9 @@
     &__last-name {
       grid-column: last-s/last-e;
       grid-row: value-s/value-e;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     &__email-label {
@@ -42,6 +48,9 @@
     &__email {
       grid-column: email-s/email-e;
       grid-row: value-s/value-e;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     &__logged-status-label {
@@ -72,6 +81,13 @@
     &__role {
       grid-column: role-s/role-e;
       grid-row: value-s/value-e;
+    }
+
+    &__edit-button {
+      grid-column: role-s/role-e;
+      grid-row: label-s/label-e;
+      text-align: right;
+      font-size: 36px;
     }
   }
 }

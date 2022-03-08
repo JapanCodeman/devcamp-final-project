@@ -214,17 +214,17 @@ def get_student(id):
     mimetype="application/json"
   )
 
-# Find all students by class 
-@app.route('/students/<course>', methods=['GET'])
+# Find all students by class - TODO change to user search
+@app.route('/students-by-course/<course>', methods=['GET'])
 @cross_origin()
 def get_students_by_class(course):
-  query = {"course" : course}
-  student_search_results = students.find(query)
-  for student in student_search_results:
+  student_results = []
+  for student in students.find({"course":course}):
     student["_id"] = str(student["_id"])
+    student_results.append(student)
 
   return Response(
-  response=json_util.dumps(list(student_search_results)),
+  response=json_util.dumps(student_results),
   status=200,
   mimetype="application/json"
   )
@@ -425,7 +425,7 @@ def find_admin_by_email(email):
 
 
 # Find all administrators
-@app.route('/administrators/', methods=['GET'])
+@app.route('/administrators', methods=['GET'])
 @cross_origin()
 def find_all_admins():
   results = list(administrators.find())

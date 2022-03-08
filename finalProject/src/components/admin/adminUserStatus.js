@@ -15,6 +15,7 @@ export default class UserStatus extends Component {
   }
   this.handleChange = this.handleChange.bind(this)
   this.getUsers = this.getUsers.bind(this)
+  this.childHandler = this.childHandler.bind(this)
 }  
 
   handleChange(event) {
@@ -23,28 +24,45 @@ export default class UserStatus extends Component {
     });
   }
 
-  getUsers() {
-    console.log(this.state.searchParams)
-    console.log(typeof(this.state.users))
-    if (this.state.users == undefined) {
-    axios.get(`http://127.0.0.1:5000/students/${this.state.searchParams}`)
-    .then(response => {
-      this.setState({
-        users : [...response.data]
-      })
-    })
-    .catch(error => {console.log("Error in retrieving students based on searchParams", error)})
-  } else {
+  childHandler() {
     this.setState({
-      users: []
+    users: target.value
     })
-    axios.get(`http://127.0.0.1:5000/students/${this.state.searchParams}`)
+  }
+  
+  getUsers() {
+    if (this.state.searchParams === "Instructors") {
+      axios
+      .get('http://127.0.0.1:5000/instructors')
+      .then(response => {
+        this.setState({
+          users: [...response.data]
+        })
+      })
+      .catch(error => {
+        console.log("Error in getting data from instructor query", error)
+      })
+    } else if (this.state.searchParams === "Administrators") {
+      axios
+      .get('http://127.0.0.1:5000/administrators')
+      .then(response => {
+        this.setState({
+          users: [...response.data]
+        })
+      })
+      .catch(error => {
+        console.log("There was an error in the administrator query", error)
+      })
+    } else {
+    axios
+    .get(`http://127.0.0.1:5000/students-by-course/${this.state.searchParams}`)
     .then(response => {
       this.setState({
-        users : [...response.data]
+        users: [...response.data]
       })
     })
-    .catch(error => {console.log("Error in retrieving students based on searchParams", error)})
+    .catch(error => {
+      "Error in new getUsers function", error})
   }
 }
 
@@ -67,7 +85,7 @@ export default class UserStatus extends Component {
         </div>
 
         <div className='user-status__results'>
-          {this.state.users ? this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>) : null}
+          {this.state.users ? this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} handler = {this.childHandler} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>) : null}
         </div>
       </div>
     );
