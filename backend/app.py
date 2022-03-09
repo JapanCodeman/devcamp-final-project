@@ -75,6 +75,22 @@ def create_token():
 
   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
 
+# Dynamic route to return users based on role
+
+# @app.route('/users/<role>', methods=['GET'])
+# @cross_origin
+# def get_user_by_role(role):
+#   user_results = []
+#   for user in students.find({"course":course}):
+#     student["_id"] = str(student["_id"])
+#     student_results.append(student)
+
+#   return Response(
+#   response=json_util.dumps(student_results),
+#   status=200,
+#   mimetype="application/json"
+#   )
+
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
 @cross_origin()
