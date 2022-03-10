@@ -5,16 +5,17 @@ import { Router } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faRightFromBracket, faSquarePen } from '@fortawesome/free-solid-svg-icons'
 
-
-import Home from './pages/home';
-import history from '../history';
-import TitlePage from './login/titlePage';
-import Register from './login/register';
-import Login from './login/login';
-import UserProfile from './pages/userProfile';
 import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
+import history from '../history';
+import Home from './pages/home';
+import InstructorHome from './pages/instructorHome';
+import Login from './login/login';
+import Register from './login/register';
+import TitlePage from './login/titlePage';
+import UserProfile from './pages/userProfile';
 import UserStatus from './admin/adminUserStatus';
+
 
 library.add(faRightFromBracket, faSquarePen)
 
@@ -36,6 +37,7 @@ constructor() {
             <Route exact path="/admin/login" component={AdministratorLogin} />
             <Route exact path="/admin/home" component={AdministratorHome} />
             <Route exact path="/admin/userstatus" component={UserStatus} />
+            <Route exact path="/instructor/home" component={InstructorHome} />
           </Switch>
         </Router>
       </div>

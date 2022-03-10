@@ -22,6 +22,16 @@ export default class UserStatus extends Component {
     [event.target.name]: event.target.value
     });
   }
+
+  // updateStateArray = [...this.state.users]
+
+  // updateState(id) {
+  //   this.updateStateArray.forEach(function(userobj) {
+  //     if (userobj._id === id) {
+  //       console.log("true")
+  //     }
+  //   })
+  // }
   
   getUsers() {
     if (this.state.searchParams === "Instructors") {
@@ -59,6 +69,17 @@ export default class UserStatus extends Component {
   }
 }
 
+    // updateUser(id) {
+    //   this.setState({
+    //     user: {
+    //       "_id": id,
+    //       "first": first,
+    //       "last": last,
+    //       "email": email,
+    //       ""}
+    //   })
+    // }
+
   render () {
     return (
       <div>
@@ -78,7 +99,7 @@ export default class UserStatus extends Component {
         </div>
 
         <div className='user-status__results'>
-          {this.state.users ? this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} updateData={this.handleChange} id={user["_id"]} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>) : null}
+          {this.state.users ? this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} updateData={this.handleChange} id={user._id} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>) : null}
         </div>
       </div>
     );

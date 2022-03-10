@@ -89,5 +89,24 @@
       font-size: 18px;
       text-align: start;
     }
+
+    &__role-confirm {
+      grid-column: col2-s/col2-e;
+      grid-row: email-label-s/email-label-e;
+      font-size: 24px;
+      margin-bottom: 42px;
+    }
+
+    &__role-select {
+      grid-column: col2-s/col2-e;
+      grid-row: email-s/email-e;
+      border: none;
+      border-bottom: solid gray 2px;
+      font-size: 24px;
+      margin-bottom: 42px;
+      &:focus {
+        outline: none;
+      }
+    }
   }
 }

@@ -49,10 +49,6 @@ export default class AdministratorHome extends Component {
       console.log("Error in getting admin object", error);
     })
   }
-  
-  componentWillUnmount() {
-    window.sessionStorage.clear()
-  }
 
   render () {
     return (

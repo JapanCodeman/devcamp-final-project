@@ -143,6 +143,19 @@ def find_one_instructor(id):
     mimetype="application/json"
   )
 
+# Look instructor up by e-mail for after login - TODO change to user instead of instructor
+@app.route('/instructor-email/<email>', methods=['GET'])
+@cross_origin()
+def get_instructor_by_email(email):
+  instructor = instructors.find_one({"email":email})
+  instructor["_id"] = str(instructor["_id"])
+  
+  return Response(
+    response=json.dumps(instructor),
+    status=200,
+    mimetype="application/json"
+  )
+
 # Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
 @app.route('/update-instructor/<id>', methods=['PATCH'])
 @cross_origin()

@@ -10,7 +10,8 @@ export default class Login extends Component {
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      role: ""
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -39,11 +40,26 @@ export default class Login extends Component {
       console.log("Before setting to token", data.data.token)
       const token = data.data.token
       window.sessionStorage.setItem("token", token)
-      this.props.history.push("/home")
-    })    
+    })
     .catch(error => {
       console.log("There was an error!", error);
     })
+    if (this.state.role === 'instructor') {
+    axios.get(`http://127.0.0.1:5000/instructor/${this.state.email}`)
+    .then(response => {
+      if (response.status === 200) {
+        this.props.history.push('/instructor/home')
+      } else if (this.state.role === 'student') {
+        axios.get(`http://127.0.0.1:5000/student/${this.state.email}`)
+        .then(response => {
+          if (response.status === 200) {
+            this.props.history.push('/home')
+          }})
+      } else alert("You must register first. Please click the register button.")
+    })
+    .catch(error => {
+      "Error in validating student/instructor", error
+    })}
     event.preventDefault();
   }
 
@@ -64,7 +80,11 @@ export default class Login extends Component {
                 onChange={this.handleChange}
                 required
                 />
-
+              <div className='login-form__role-confirm'>Are you a...</div>
+              <select className='login-form__role-select' defaultValue={this.state.role} name="role" onChange={this.handleChange}>
+                <option value='student'>Student</option>
+                <option value='instructor'>Teacher</option>
+              </select>
               <label className='login-form__password-label' htmlFor='password'>Password</label>
                 <p className='login-form__password-incorrect'>Password incorrect, try again</p>
                 <input 
