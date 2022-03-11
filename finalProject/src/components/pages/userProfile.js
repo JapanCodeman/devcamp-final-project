@@ -26,10 +26,12 @@ export default class UserProfile extends Component {
     });
   }
 
-  saveChanges() {
+  saveChanges(id, data) {
     var token = window.sessionStorage.getItem("token")
+    console.log(id)
+    console.log(JSON.stringify(data))
     axios
-    .patch(`http://127.0.0.1:5000/update-instructor/${id}`, data, { headers: {"Authorization" : `Bearer ${token}`}})
+    .patch(`http://127.0.0.1:5000/update-instructor/${id}`, JSON.stringify(data), { headers: {"Authorization" : `Bearer ${token}`}})
     .catch(error => {
       console.log("There was an error with the patch request to instructor", error)
     })
@@ -40,21 +42,21 @@ export default class UserProfile extends Component {
   };
 
   render () {
-    console.log(this.state) - // empty
-    console.log(this.state._id) // undefined
-    console.log(this.props.id) // string/int?
-    console.log(typeof(this.state._id)) // undefined
+    // console.log(this.state) - // empty
+    // console.log(this.state._id) // undefined
+    // console.log(this.props.id) // string/int?
+    // console.log(typeof(this.state._id)) // undefined
     return (
       <div>
         <div className="user-profile-page-wrapper">
           <label className="user-profile-info__first-name-label" htmlFor="first-name">First Name</label>
-            <input className="user-profile-info__first-name" defaultValue={this.props.first} name="first-name" onChange={this.handleChange} />
+            <input className="user-profile-info__first-name" defaultValue={this.props.first} name="first" onChange={this.handleChange} />
           <label className="user-profile-info__last-name-label" htmlFor="last-name">Last Name</label>
-            <input className="user-profile-info__last-name"  defaultValue={this.props.last} name="last-name" onChange={this.handleChange} />
+            <input className="user-profile-info__last-name"  defaultValue={this.props.last} name="last" onChange={this.handleChange} />
           <label className="user-profile-info__email-label" htmlFor="email">Email</label>
             <input className="user-profile-info__email"  defaultValue={this.props.email} name="email" onChange={this.handleChange} />
           <label className="user-profile-info__logged-status-label" htmlFor="logged-status">Logged Status</label>
-            <div className="user-profile-info__logged-status" name="logged-status">{this.props.logged_in}</div> 
+            <div className="user-profile-info__logged-status" name="logged_in">{this.props.logged_in}</div> 
           <label className='user-profile-info__course-label' htmlFor='course'>Course</label>
             {this.props.role === "Administrator" ? null
 
@@ -74,7 +76,7 @@ export default class UserProfile extends Component {
               <option value="Instructor">Instructor</option>
               <option value="Administrator">Administrator</option>
             </select>
-          <div className="user-profile-info__edit-button" onClick={this.handleClick}><FontAwesomeIcon icon="pen-square" /></div>
+          <div className="user-profile-info__edit-button" onClick={() => this.saveChanges(this.props.id, this.state)}><FontAwesomeIcon icon="pen-square" /></div>
         </div>
       </div>
     );

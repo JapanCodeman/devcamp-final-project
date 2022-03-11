@@ -23,16 +23,6 @@ export default class UserStatus extends Component {
     });
   }
 
-  // updateStateArray = [...this.state.users]
-
-  // updateState(id) {
-  //   this.updateStateArray.forEach(function(userobj) {
-  //     if (userobj._id === id) {
-  //       console.log("true")
-  //     }
-  //   })
-  // }
-  
   getUsers() {
     if (this.state.searchParams === "Instructors") {
       axios
@@ -68,17 +58,6 @@ export default class UserStatus extends Component {
       "Error in new getUsers function", error})
   }
 }
-
-    // updateUser(id) {
-    //   this.setState({
-    //     user: {
-    //       "_id": id,
-    //       "first": first,
-    //       "last": last,
-    //       "email": email,
-    //       ""}
-    //   })
-    // }
 
   render () {
     return (
