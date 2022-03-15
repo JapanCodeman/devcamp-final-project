@@ -18,7 +18,7 @@ CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mon
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app)
+cors = CORS(app)
 
 app.config['JWT_SECRET_KEY'] = "f3cfe9ed8fae309f02079dbf"
 jwt = JWTManager(app)
@@ -34,8 +34,10 @@ Database = client.get_database('letsgovocab')
 
 instructors = Database.instructors
 students = Database.students
-cards = Database.cards
+users = Database.users
 administrators = Database.admin
+
+cards = Database.cards
 
 # Calendar for 64 day schedule
 overall_study_calendar = [[2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [6,1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [7,1], [2,1], [3,1], [6,2,1], [5,1], [4,2,1], [3,1], [2,1], [1]]
@@ -50,45 +52,53 @@ def test():
 def create_token():
   email = request.json.get("email", None)
   password = request.json.get("password", None)
-  role = request.json.get("role", None)
 
   if not email or not password:
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-  user = instructors.find_one({"email" : email})
-
-  if not user:
-    user = students.find_one({"email" : email})
-
-  if not user:
-    user = administrators.find_one({"email" : email})
+  
+  user = users.find_one({"email" : email})
 
   if not user:
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
   if check_password_hash(user["password"], password):
     try:
-      token = create_access_token(identity={"email" : email, "role" : role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+      token = create_access_token(identity={"email" : email, "role" : user["role"], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
       return jsonify(token=token)
     except:
       return "Token unable to be distributed", error
 
   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
 
-# Dynamic route to return users based on role
+# TODO - make login route
+# @app.route("/login", methods=["POST"])
+# def create_token():
+#   email = request.json.get("email", None)
+#   password = request.json.get("password", None)
+#   role = request.json.get("role", None)
 
-# @app.route('/users/<role>', methods=['GET'])
-# @cross_origin
-# def get_user_by_role(role):
-#   user_results = []
-#   for user in students.find({"course":course}):
-#     student["_id"] = str(student["_id"])
-#     student_results.append(student)
+#   if not email or not password:
+#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
+#   user = instructors.find_one({"email" : email})
 
-#   return Response(
-#   response=json_util.dumps(student_results),
-#   status=200,
-#   mimetype="application/json"
-#   )
+#   if not user:
+#     user = students.find_one({"email" : email})
+
+#   if not user:
+#     user = administrators.find_one({"email" : email})
+
+#   if not user:
+#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
+
+#   if check_password_hash(user["password"], password):
+#     try:
+#       token = create_access_token(identity={"email" : email, "role" : role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+#       return jsonify(token=token)
+#     except:
+#       return "Token unable to be distributed", error
+
+#   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
+
 
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
@@ -105,19 +115,32 @@ def register_one_instructor():
   queryObject = {
     "first": first,
     "last": last,
-    "role": '',
+    "role": 'Instructor',
     "email": email,
     "course": course,
     "password": _hashed_password,
     "logged_in": logged_status
   }
-  query = instructors.insert_one(queryObject)
-  return f'{first} {last} and associated data registered to Instructor database'
+  query = users.insert_one(queryObject)
+  return f'{first} {last} and associated data registered to user database as Instructor'
 
 # List all instructors - WORKING!!!
+# @app.route('/instructors/', methods=['GET'])
+# def find_all_instructors():
+#   results = list(instructors.find())
+#   for instructor in results:
+#     instructor["_id"] = str(instructor["_id"])
+
+#   return Response(
+#     response=json.dumps(results),
+#     status=200,
+#     mimetype="application/json"
+#   )
+
+# List all instructors from user database - WORKING!!!
 @app.route('/instructors/', methods=['GET'])
 def find_all_instructors():
-  results = list(instructors.find())
+  results = list(users.find({"role" : "Instructor"}))
   for instructor in results:
     instructor["_id"] = str(instructor["_id"])
 
@@ -128,54 +151,105 @@ def find_all_instructors():
   )
 
 # Find one instructor by id - WORKING!!!
-@app.route('/instructor/<id>', methods=['GET'])
-def find_one_instructor(id):
-  instructor = instructors.find_one({"_id":ObjectId(id)})
-  instructor["_id"] = str(instructor["_id"])
+# @app.route('/instructor/<id>', methods=['GET'])
+# def find_one_instructor(id):
+#   instructor = instructors.find_one({"_id":ObjectId(id)})
+#   instructor["_id"] = str(instructor["_id"])
+  
+#   return Response(
+#     response=json.dumps(instructor),
+#     status=200,
+#     mimetype="application/json"
+#   )
+
+# Find one user by id - WORKING!!!
+@app.route('/user/<id>', methods=['GET'])
+def find_one_user(id):
+  user = users.find_one({"_id":ObjectId(id)})
+  user["_id"] = str(user["_id"])
   
   return Response(
-    response=json.dumps(instructor),
+    response=json.dumps(user),
     status=200,
     mimetype="application/json"
   )
 
 # Look instructor up by e-mail for after login - TODO change to user instead of instructor
-@app.route('/instructor-email/<email>', methods=['GET'])
-def get_instructor_by_email(email):
-  instructor = instructors.find_one({"email":email})
-  instructor["_id"] = str(instructor["_id"])
+# @app.route('/instructor-email/<email>', methods=['GET'])
+# def get_instructor_by_email(email):
+#   instructor = instructors.find_one({"email":email})
+#   instructor["_id"] = str(instructor["_id"])
+  
+#   return Response(
+#     response=json.dumps(instructor),
+#     status=200,
+#     mimetype="application/json"
+#   )
+
+# Look instructor up by e-mail for after login - TODO change to user instead of instructor
+@app.route('/user-email/<email>', methods=['GET'])
+def get_user_by_email(email):
+  user = users.find_one({"email":email})
+  user["_id"] = str(user["_id"])
   
   return Response(
-    response=json.dumps(instructor),
+    response=json.dumps(user),
     status=200,
     mimetype="application/json"
   )
 
 # Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
-@app.route('/update-instructor/<id>', methods=['GET', 'PATCH'])
-def update_one_instructor(id):
+# @app.route('/update-instructor/<id>', methods=['PATCH', 'PUT'])
+# def update_one_instructor(id):
+#   id = ObjectId(id)
+#   id_call = {"_id" : id}
+
+#   updateObject = request.get_json()
+#   jsonify(updateObject)
+#   print(f'----------->{updateObject}<--------------')
+
+#   result = instructors.find_one_and_update({"_id" : id}, 
+#   { "$set" : updateObject },
+#   return_document = ReturnDocument.AFTER)
+
+#   return "Object Updated"
+
+# Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
+@app.route('/update-user/<id>', methods=['PATCH', 'PUT'])
+def update_one_user(id):
   id = ObjectId(id)
-  id_call = {"_id" : id}
 
-  request_params = request.get_json()
-  updateObject = request_params
+  updateObject = request.get_json()
+  jsonify(updateObject)
+  print(f'----------->{updateObject}<--------------')
 
-  result = instructors.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
-  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
+  result = users.find_one_and_update({"_id" : id}, 
+  { "$set" : updateObject },
+  return_document = ReturnDocument.AFTER)
+
+  return "User Updated"
 
 # Delete one instructor - WORKING!!!
-@app.route('/delete-instructor/<id>', methods=['DELETE'])
-def delete_one_instructor(id):
+# @app.route('/delete-instructor/<id>', methods=['DELETE'])
+# def delete_one_instructor(id):
+#   id = ObjectId(id)
+#   id_call = {"_id" : id}
+#   id = instructors.delete_one(id_call)
+#   return 'Instructor deleted'
+
+# Delete one user - WORKING!!!
+@app.route('/delete-user/<id>', methods=['DELETE'])
+def delete_one_user(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
-  id = instructors.delete_one(id_call)
-  return 'Instructor deleted'
+  id = users.delete_one(id_call)
+  return 'User deleted'
 
 # Delete entire instructor document - WORKING!!!
-@app.route('/delete-all-instructors/', methods=['DELETE'])
-def delete_all_instructors():
-  result = instructors.delete_many({})
-  return 'Instructor table dropped'
+@app.route('/delete-all-users/', methods=['DELETE'])
+def delete_all_users():
+  result = users.delete_many({})
+  return 'User table dropped'
 
 # TODO - students CRUD
 # Register a new student - WORKING!!!
@@ -205,7 +279,7 @@ def register_one_student():
     "first" : first,
     "last" : last,
     "email" : email,
-    "role" : '',
+    "role" : "Student",
     "course" : course,
     "password" : _hashed_password,
     "logged_in": logged_status,
@@ -218,26 +292,26 @@ def register_one_student():
     "vocabulary_box_six": vocabulary_box_six,
     "vocabulary_box_seven": vocabulary_box_seven,
   }
-  query = students.insert_one(queryObject)
+  query = users.insert_one(queryObject)
   return 'registered'
 
 # Find one student - WORKING!!!
-@app.route('/student/<id>', methods=['GET'])
-def get_student(id):
-  student = students.find_one({'_id':ObjectId(id)})
-  student["_id"] = str(student["_id"])
+# @app.route('/student/<id>', methods=['GET'])
+# def get_student(id):
+#   student = students.find_one({'_id':ObjectId(id)})
+#   student["_id"] = str(student["_id"])
   
-  return Response(
-    response=json.dumps(student),
-    status=200,
-    mimetype="application/json"
-  )
+#   return Response(
+#     response=json.dumps(student),
+#     status=200,
+#     mimetype="application/json"
+#   )
 
 # Find all students by class - TODO change to user search
 @app.route('/students-by-course/<course>', methods=['GET'])
 def get_students_by_class(course):
   student_results = []
-  for student in students.find({"course":course}):
+  for student in users.find({"course":course}):
     student["_id"] = str(student["_id"])
     student_results.append(student)
 
@@ -249,10 +323,22 @@ def get_students_by_class(course):
 
 
 # Look student up by e-mail for after login - TODO change to user instead of student
+# @app.route('/student-email/<email>', methods=['GET'])
+# @jwt_required()
+# def get_student_by_email(email):
+#   student = students.find_one({"email":email})
+#   student["_id"] = str(student["_id"])
+  
+#   return Response(
+#     response=json.dumps(student),
+#     status=200,
+#     mimetype="application/json"
+#   )
+
 @app.route('/student-email/<email>', methods=['GET'])
 @jwt_required()
 def get_student_by_email(email):
-  student = students.find_one({"email":email})
+  student = users.find_one({"email":email})
   student["_id"] = str(student["_id"])
   
   return Response(
@@ -262,9 +348,21 @@ def get_student_by_email(email):
   )
  
 # List all students - WORKING!!!
+# @app.route('/students/', methods=['GET'])
+# def find_all_students():
+#   results = list(students.find())
+#   for student in results:
+#     student["_id"] = str(student["_id"])
+
+#   return Response(
+#     response=json.dumps(results),
+#     status=200,
+#     mimetype="application/json"
+#   )
+
 @app.route('/students/', methods=['GET'])
 def find_all_students():
-  results = list(students.find())
+  results = list(users.find({"role" : "Student"}))
   for student in results:
     student["_id"] = str(student["_id"])
 
@@ -275,40 +373,40 @@ def find_all_students():
   )
 
 # Update one student - WORKING!!!
-@app.route('/update-student/<id>', methods=['PATCH'])
-def update_one_student(id):
-  request_params = request.get_json()
-  updateObject = request_params
-  id = ObjectId(id)
-  id_call = {"_id" : id}
+# @app.route('/update-student/<id>', methods=['PATCH'])
+# def update_one_student(id):
+#   request_params = request.get_json()
+#   updateObject = request_params
+#   id = ObjectId(id)
+#   id_call = {"_id" : id}
 
-  result = students.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
-  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
+#   result = students.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
+#   return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
-# Update one student by email - WORKING!!!
-@app.route('/update-student-by-email/<email>', methods=['PATCH'])
-def update_one_student_email(email):
-  request_params = request.get_json()
-  updateObject = request_params
-  email = {"email" : email}
+# Update one user by email - WORKING!!!
+@app.route('/update-user-by-email/<email>', methods=['PATCH', 'PUT', 'GET'])
+def update_one_user_email(email):
+  updateObject = request.get_json()
+  jsonify(updateObject)
 
-  result = students.find_one_and_update(email, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
-  return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
+  result = users.find_one_and_update({"email" : email}, 
+  { "$set" : updateObject }, 
+  return_document=ReturnDocument.AFTER)
+  return "User updated by email"
 
 # Delete one student - WORKING!!!
-@app.route('/delete-student/<id>', methods=['DELETE'])
-def delete_one_student(id):
-  id = ObjectId(id)
-  id_call = {"_id" : id}
-  result = students.delete_one(id_call)
-  return 'Student deleted'
+# @app.route('/delete-student/<id>', methods=['DELETE'])
+# def delete_one_student(id):
+#   id = ObjectId(id)
+#   id_call = {"_id" : id}
+#   result = students.delete_one(id_call)
+#   return 'Student deleted'
 
 # Delete entire student document - WORKING!!!
 @app.route('/delete-all-students', methods=['DELETE'])
 def delete_all_students():
-  # queryObject = {}
-  result = students.delete_many({})
-  return 'Student table dropped'
+  result = users.delete_many({"role" : "Student" })
+  return 'All students deleted'
 
 # TODO - cards CRUD
 # Create one new card with associated course - WORKING!!!
@@ -402,26 +500,38 @@ def register_one_admin():
     "password" : _hashed_password,
     "logged_in": logged_status
   }
-  query = administrators.insert_one(queryObject)
+  query = users.insert_one(queryObject)
   return f'{first} {last} registered with administrator privileges.'
 
 # Find one administrator by id
-@app.route('/administrator/<id>', methods=['GET'])
-def find_one_administrator(id):
-  id_call = {"_id" : ObjectId(id)}
-  administrator = administrators.find_one(id_call)
-  administrator["_id"] = str(administrator["_id"])
+# @app.route('/administrator/<id>', methods=['GET'])
+# def find_one_administrator(id):
+#   id_call = {"_id" : ObjectId(id)}
+#   administrator = administrators.find_one(id_call)
+#   administrator["_id"] = str(administrator["_id"])
   
-  return administrator
+#   return administrator
 
 # Find one administrator by email
-@app.route('/administrator-by-email/<email>', methods=['GET'])
+# @app.route('/administrator-by-email/<email>', methods=['GET'])
+# def find_admin_by_email(email):
+#   administrator = administrators.find_one({"email":email})
+#   administrator["_id"] = str(administrator["_id"])
+
+#   return Response(
+#     response=json.dumps(administrator),
+#     status=200,
+#     mimetype="application/json"
+#   )
+
+# Find User by email
+@app.route('/user-by-email/<email>', methods=['GET'])
 def find_admin_by_email(email):
-  administrator = administrators.find_one({"email":email})
-  administrator["_id"] = str(administrator["_id"])
+  user = users.find_one({"email":email})
+  user["_id"] = str(user["_id"])
 
   return Response(
-    response=json.dumps(administrator),
+    response=json.dumps(user),
     status=200,
     mimetype="application/json"
   )

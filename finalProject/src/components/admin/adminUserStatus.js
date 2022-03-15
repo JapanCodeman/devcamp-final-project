@@ -26,7 +26,7 @@ export default class UserStatus extends Component {
   getUsers() {
     if (this.state.searchParams === "Instructors") {
       axios
-      .get('http://127.0.0.1:5000/instructors')
+      .get('http://127.0.0.1:5000/instructors/')
       .then(response => {
         this.setState({
           users: [...response.data]
@@ -62,7 +62,6 @@ export default class UserStatus extends Component {
   render () {
     return (
       <div>
-        <HeaderNavbar/>
         <div className='page-titler-and-selector'>
           <PageTitler className='page-titler-and-selector__page-titler' title={"User Status"}/>          
           <label className='page-titler-and-selector__selector-label' htmlFor='searchParams'>Select Users</label>

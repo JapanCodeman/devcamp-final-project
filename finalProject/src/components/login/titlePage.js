@@ -15,7 +15,6 @@ export default class TitlePage extends Component {
   render () {
     return (
       <div>
-        <HeaderNavbar hideSmallLogo/> 
         <div className='title-page-wrapper'>
           <div className='title-page-text'>
             <h1>Let's Go! Vocabulary Study System</h1>

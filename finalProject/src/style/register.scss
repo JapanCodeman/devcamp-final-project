@@ -79,7 +79,22 @@
     }
 
     &__course {
+      grid-column: col2-s/col2-e;
       grid-row: email-course-s/email-course-e;
+      width: 200px;
+    }
+
+    &__label-role {
+      grid-column: col2-s/col2-e;
+      grid-row: label-email-course-s/label-email-course-e;
+      justify-self: end;
+    }
+
+    &__role {
+      grid-column: col2-s/col2-e;
+      grid-row: email-course-s/email-course-e;
+      width: 150px;
+      justify-self: end;
     }
 
     &__label-password {

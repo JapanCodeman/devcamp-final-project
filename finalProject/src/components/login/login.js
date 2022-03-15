@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import { Link, withRouter } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 export default class Login extends Component {
   constructor(props) {
@@ -11,7 +11,8 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      role: ""
+      role: "Student",
+      user: []
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -26,47 +27,36 @@ export default class Login extends Component {
   }
   
   handleSubmit(event) {
-    axios.post('http://127.0.0.1:5000/login',
-    {
-      "email": this.state.email,
-      "password": this.state.password
-    })
-    // { withCredentials: true } // How to get this working?
-    .then(response => {
-      if (response.status === 200) return response;
-      else alert("There was an error");
-    })
-    .then(data => {
-      console.log("Before setting to token", data.data.token)
-      const token = data.data.token
-      window.sessionStorage.setItem("token", token)
-    })
-    .catch(error => {
-      console.log("There was an error!", error);
-    })
-    if (this.state.role === 'instructor') {
-    axios.get(`http://127.0.0.1:5000/instructor/${this.state.email}`)
-    .then(response => {
-      if (response.status === 200) {
-        this.props.history.push('/instructor/home')
-      } else if (this.state.role === 'student') {
-        axios.get(`http://127.0.0.1:5000/student/${this.state.email}`)
-        .then(response => {
-          if (response.status === 200) {
-            this.props.history.push('/home')
-          }})
-      } else alert("You must register first. Please click the register button.")
-    })
-    .catch(error => {
-      "Error in validating student/instructor", error
-    })}
-    event.preventDefault();
-  }
+    event.preventDefault(); 
+      axios.post('http://127.0.0.1:5000/login',
+      {
+        "email": this.state.email,
+        "password": this.state.password
+      })
+      // { withCredentials: true } // How to get this working?
+      .then(response => {
+        if (response.status === 200) return response;
+        else alert("There was an error");
+      })
+      .then(data => {
+        var token = data.data.token
+        window.sessionStorage.setItem("token", token)
+        var decoded = jwtDecode(token)
+        console.log(decoded)
+        if (decoded.sub.role === "Student") {
+          this.props.history.push('/home')
+        } else {
+          this.props.history.push('/instructor/home')
+        }
+      })
+      .catch(error => {
+        console.log("There was an error!", error)
+      })
+}
 
   render () {
     return (
       <div>
-        <HeaderNavbar />
         <div className='login-page-wrapper'>
           <form className='login-form' onSubmit={this.handleSubmit}>
             <div className='login-form__login-heading'>Login</div>
@@ -81,7 +71,7 @@ export default class Login extends Component {
                 required
                 />
               <div className='login-form__role-confirm'>Are you a...</div>
-              <select className='login-form__role-select' defaultValue={this.state.role} name="role" onChange={this.handleChange}>
+              <select className='login-form__role-select' value={this.state.role} name="role" onChange={this.handleChange}>
                 <option value='student'>Student</option>
                 <option value='instructor'>Teacher</option>
               </select>

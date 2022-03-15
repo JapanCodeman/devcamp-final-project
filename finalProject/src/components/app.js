@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Switch, Route } from 'react-router-dom';
-import { Router } from 'react-router-dom';
+import { BrowserRouter as Switch, Route } from "react-router-dom";
+import { Router } from "react-router-dom";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faRightFromBracket, faSquarePen } from '@fortawesome/free-solid-svg-icons'
@@ -15,6 +15,7 @@ import Register from './login/register';
 import TitlePage from './login/titlePage';
 import UserProfile from './pages/userProfile';
 import UserStatus from './admin/adminUserStatus';
+import HeaderNavbar from './headerNavbar/headerNavbar';
 
 
 library.add(faRightFromBracket, faSquarePen)
@@ -22,12 +23,21 @@ library.add(faRightFromBracket, faSquarePen)
 export default class App extends Component {
 constructor() {
   super();
+
+  this.handleLogout = this.handleLogout.bind(this)
+}
+
+handleLogout() {
+  window.sessionStorage.clear()
+  props.history.push('/')
 }
 
   render() {
     return (
       <div>
         <Router history={history}>
+          <HeaderNavbar 
+          />
           <Switch>
             <Route exact path="/" component={TitlePage}/>
             <Route exact path="/register" component={Register}/>

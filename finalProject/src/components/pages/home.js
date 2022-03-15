@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import jwtDecode from 'jwt-decode';
 
+import PageTitler from '../helpers/pageTitler';
 
 export default class Home extends Component {
   constructor(props) {
@@ -20,7 +20,14 @@ export default class Home extends Component {
     const decoded = jwtDecode(token) 
     console.log(decoded)
     const userEmail = decoded.sub.email
-    axios.patch(`http://127.0.0.1:5000/update-student-by-email/${userEmail}`, {logged_in:"false"}, { headers: {"Authorization" : `Bearer ${token}`}})
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+        "Authorization" : `Bearer ${token}`
+        }
+      }
+    axios.patch(`http://127.0.0.1:5000/update-user-by-email/${userEmail}`, {"logged_in":"false"}, config)
     .catch(error => {
       console.log("Patch log status error", error)
     })
@@ -33,16 +40,23 @@ export default class Home extends Component {
     const decoded = jwtDecode(token) 
     console.log(decoded)
     const userEmail = decoded.sub.email
-    axios.patch(`http://127.0.0.1:5000/update-student-by-email/${userEmail}`, {logged_in:"true"}, { headers: {"Authorization" : `Bearer ${token}`}})
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+        "Authorization" : `Bearer ${token}`
+        }
+      }
+    axios.patch(`http://127.0.0.1:5000/update-user-by-email/${userEmail}`, { logged_in: "true" }, config)
     .catch(error => {
       console.log("Patch log status error", error)
     })
-    axios.get(`http://127.0.0.1:5000/student-email/${userEmail}`, { headers: {"Authorization" : `Bearer ${token}`}})
+    axios.get(`http://127.0.0.1:5000/user-email/${userEmail}`, config)
     .then (User => {
       this.setState({
         user : User.data
       })
-      // window.sessionStorage.setItem("User", JSON.stringify(User))
+      
     })
     .catch(error => {
       console.log("Error in getting user object", error);
@@ -60,8 +74,7 @@ export default class Home extends Component {
     
     return (
       <div>
-        <HeaderNavbar/>
-        <h1>Home</h1>
+        <PageTitler title="Home" />
         <h2>Welcome back, {this.state.user.first}!</h2>
         <h1>Status: {this.state.user.logged_in ? "Logged in" : "Logged out"}</h1>
         <button onClick={this.handleLogout}>Logout</button>

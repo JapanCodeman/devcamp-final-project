@@ -1,7 +1,6 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import GreenButton from '../helpers/greenButton';
 
 
@@ -21,7 +20,7 @@ export default class AdministratorHome extends Component {
     const decoded = jwtDecode(token) 
     console.log(decoded)
     const adminEmail = decoded.sub.email
-    axios.patch(`http://127.0.0.1:5000/update-admin-by-email/${adminEmail}`, {logged_in:"false"}, { headers: {"Authorization" : `Bearer ${token}`}})
+    axios.patch(`http://127.0.0.1:5000/update-user-by-email/${adminEmail}`, {logged_in:"false"}, { headers: {"Authorization" : `Bearer ${token}`}})
     .catch(error => {
       console.log("Patch log status error", error)
     })
@@ -34,11 +33,11 @@ export default class AdministratorHome extends Component {
     const decoded = jwtDecode(token) 
     const adminEmail = decoded.sub.email
     console.log(adminEmail)
-    axios.patch(`http://127.0.0.1:5000/update-administrator-by-email/${adminEmail}`, { logged_in:"true" }, { headers: {"Authorization" : `Bearer ${token}`}})
+    axios.patch(`http://127.0.0.1:5000/update-user-by-email/${adminEmail}`, { logged_in:"true" }, { headers: {"Authorization" : `Bearer ${token}`}})
     .catch(error => {
       console.log("Patch log status error", error)
     })
-    axios.get(`http://127.0.0.1:5000/administrator-by-email/${adminEmail}`, { headers: {"Authorization" : `Bearer ${token}`}})
+    axios.get(`http://127.0.0.1:5000/user-by-email/${adminEmail}`, { headers: {"Authorization" : `Bearer ${token}`}})
     .then (Admin => {
       console.log(Admin)
       this.setState({
@@ -53,7 +52,6 @@ export default class AdministratorHome extends Component {
   render () {
     return (
       <div>
-        <HeaderNavbar handleLogout={this.handleLogout}/>
         <div className="admin-home-wrapper">
           <div className='admin-home__welcome-message'>Welcome back, {this.state.admin.first}!</div>
             <div className='admin-home__page-name'>Home</div>

@@ -14,12 +14,6 @@ export default class UserProfile extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-  // componentDidMount() {
-  //   this.setState({
-  //     _id: this.props.id
-  //   })
-  // }
-
   handleChange(event) {
     this.setState({
     [event.target.name]: event.target.value
@@ -27,11 +21,18 @@ export default class UserProfile extends Component {
   }
 
   saveChanges(id, data) {
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+        // "Authorization" : `Bearer ${token}`
+        }
+      }
     var token = window.sessionStorage.getItem("token")
     console.log(id)
-    console.log(JSON.stringify(data))
-    axios
-    .patch(`http://127.0.0.1:5000/update-instructor/${id}`, JSON.stringify(data), { headers: {"Authorization" : `Bearer ${token}`}})
+    console.log(data)
+    const updata = JSON.stringify(data)
+    axios.patch(`http://127.0.0.1:5000/update-user/${id}`, JSON.stringify(data), config)
     .catch(error => {
       console.log("There was an error with the patch request to instructor", error)
     })
@@ -42,10 +43,6 @@ export default class UserProfile extends Component {
   };
 
   render () {
-    // console.log(this.state) - // empty
-    // console.log(this.state._id) // undefined
-    // console.log(this.props.id) // string/int?
-    // console.log(typeof(this.state._id)) // undefined
     return (
       <div>
         <div className="user-profile-page-wrapper">

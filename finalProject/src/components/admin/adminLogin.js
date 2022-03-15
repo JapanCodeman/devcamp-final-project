@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import { Link, withRouter } from 'react-router-dom';
 
 export default class AdministratorLogin extends Component {
@@ -27,7 +26,7 @@ export default class AdministratorLogin extends Component {
   
   handleSubmit(event) {
     event.preventDefault();
-    axios.get(`http://127.0.0.1:5000/administrator-by-email/${this.state.email}`)
+    axios.get(`http://127.0.0.1:5000/user-by-email/${this.state.email}`)
     .then(response => {
       this.setState({
         user: response.data
@@ -65,7 +64,6 @@ export default class AdministratorLogin extends Component {
   render () {
     return (
       <div>
-        <HeaderNavbar />
         <div className='admin-login-page-wrapper'>
           <form className='admin-login-form' onSubmit={this.handleSubmit}>
             <div className='admin-login-form__login-heading'>Administrator Login</div>

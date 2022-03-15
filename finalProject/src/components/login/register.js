@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
@@ -13,9 +12,10 @@ export default class Register extends Component {
       first: "",
       last: "",
       email: "",
-      course: "",
+      course: "1-1",
       password: "",
-      confirm_password: ""
+      confirm_password: "",
+      role: "Student"
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -28,7 +28,28 @@ export default class Register extends Component {
   }
   
   handleSubmit(event) {
+    if (this.state.role === "Student") {
     axios.post('http://127.0.0.1:5000/register-student',
+    {
+      "first": this.state.first,
+      "last": this.state.last,
+      "email": this.state.email,
+      "course": this.state.course,
+      "role": this.state.role,
+      "password": this.state.password
+    },
+    // { withCredentials: true } // How to get this working?
+    ).then(response => {
+      if (response.status === 200) return response;
+      else alert("There was an error");
+    })
+    .catch(error => {
+      console.log("registration error", error);
+    })
+    this.props.history.push("/login")
+    event.preventDefault();
+  } else {
+    axios.post('http://127.0.0.1:5000/register-instructor/',
     {
       "first": this.state.first,
       "last": this.state.last,
@@ -41,17 +62,16 @@ export default class Register extends Component {
       if (response.status === 200) return response;
       else alert("There was an error");
     })
-    .then(this.props.history.push("/login"))
     .catch(error => {
       console.log("registration error", error);
     })
+    this.props.history.push("/login")
     event.preventDefault();
-  }
+  }} 
 
   render () {
     return (
       <div>
-        <HeaderNavbar />
         <div className='register-page-wrapper'>
           <form className='register-form' onSubmit={this.handleSubmit}>
             <div className='register-heading'>Register</div>
@@ -92,6 +112,12 @@ export default class Register extends Component {
                   <option value="2-1">Junior High TEIE 2-1</option>
                   <option value="2-2">Junior High TEIE 2-2</option>
                   <option value="3-1">Junior High TEIE 3-1</option>
+                </select>
+
+              <label className='register-form__label-role' htmlFor='role'>Are you a...</label>
+                <select className='register-form__role' name="role" value={this.state.role} onChange={this.handleChange}>
+                  <option value="Student">Student</option>
+                  <option value="Instructor">Teacher</option>
                 </select>
 
               <label className='register-form__label-password' htmlFor='password'>Create Password</label>
