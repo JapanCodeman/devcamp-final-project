@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SmallOgLogo from '../../../static/images/small_og_logo.png';
 
-class HeaderNavbar extends Component {
+export default class HeaderNavbar extends Component {
   constructor(props) {
     super(props);
 
@@ -44,4 +44,4 @@ class HeaderNavbar extends Component {
   }
 }
 
-export default withRouter(HeaderNavbar)
+HeaderNavbar = withRouter(HeaderNavbar)

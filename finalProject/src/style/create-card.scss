@@ -1,0 +1,59 @@
+.create-card {
+  display: grid;
+  grid-template-columns: [word-s] 1fr [word-e meaning-s] 1fr [meaning-e image-s] 1fr [image-e];
+  grid-template-rows: [label-s] 50px [label-e input-s] 100px [input-e];
+  height: auto;
+  width: 80vw;
+  margin-left: 200px;
+  background: rgb(0,255,81);
+  background: linear-gradient(180deg, rgba(0,255,81,1) 0%, rgba(36,136,13,1) 100%);
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-size: 24px;
+  align-items: center;
+  justify-items: center;
+
+    input {
+      height: 36px;
+      margin-left: 24px;
+      margin-right: 24px;
+      font-size: 24px;
+      border: none;
+      border-bottom: solid gray 2px;
+      &:focus {
+        outline: none;
+      }
+  }
+
+  &__word-label {
+    grid-column: word-s/word-e;
+    grid-row: label-s/label-e;
+  }
+
+  &__word-input {
+    grid-column: word-s/word-e;
+    grid-row: input-s/input-e;
+  }
+
+  &__meaning-label {
+    grid-column: meaning-s/meaning-e;
+    grid-row: label-s/label-e;
+  }
+
+  &__meaning-input {
+    grid-column: meaning-s/meaning-e;
+    grid-row: input-s/input-e;
+  }
+
+  &__image-label {
+    grid-column: image-s/image-e;
+    grid-row: label-s/label-e;
+  }
+
+  &__image-input {
+    grid-column: image-s/image-e;
+    grid-row: input-s/input-e;
+  }
+}

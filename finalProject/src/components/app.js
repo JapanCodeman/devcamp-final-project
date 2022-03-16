@@ -12,7 +12,10 @@ import history from '../history';
 import Home from './pages/home';
 import InstructorHome from './pages/instructorHome';
 import Login from './login/login';
+import ModifyCards from './pages/modifyCards';
+import PageNotFound from './pages/pageNotFound';
 import Register from './login/register';
+import StudentProgress from './pages/studentProgress';
 import TitlePage from './login/titlePage';
 import UserProfile from './pages/userProfile';
 import UserStatus from './admin/adminUserStatus';
@@ -37,8 +40,7 @@ handleLogout() {
     return (
       <div>
         <Router history={history}>
-          <HeaderNavbar 
-          />
+          <HeaderNavbar />
           <Switch>
             <Route exact path="/" component={TitlePage}/>
             <Route exact path="/register" component={Register}/>
@@ -50,6 +52,9 @@ handleLogout() {
             <Route exact path="/admin/userstatus" component={UserStatus} />
             <Route exact path="/instructor/create" component={CreateCards} />
             <Route exact path="/instructor/home" component={InstructorHome} />
+            <Route exact path="/instructor/modify" component={ModifyCards} />
+            <Route exact path="/instructor/students" component={StudentProgress} />
+            {/* <Route component={PageNotFound} /> */}
           </Switch>
         </Router>
       </div>

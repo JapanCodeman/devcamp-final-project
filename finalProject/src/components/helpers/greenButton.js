@@ -8,7 +8,7 @@ export default class GreenButton extends Component {
   render () {
     return (
       <div>
-        <Link className='green-button' to={this.props.to} text={this.props.text}>{this.props.text}</Link>
+        <Link className='green-button' to={this.props.to} text={this.props.text} onClick={this.props.onClick}>{this.props.text}</Link>
       </div>
     );
   }

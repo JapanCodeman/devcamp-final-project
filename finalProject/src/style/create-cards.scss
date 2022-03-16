@@ -1,0 +1,14 @@
+// .create-cards-wrapper {
+//   display: grid;
+//   grid-template-columns: 1fr [content-s] 3fr [content-e] 1fr;
+//   grid-template-rows: [title-s] 100px [title-e card-s] 100px [card-e];
+
+  .create-cards-title {
+    grid-column: content-s/content-e;
+    grid-row: title-s/title-e;
+  }
+
+  .create-cards-card {
+    grid-column: content-s/content-e;
+    grid-row: card-s/card-e;
+  }

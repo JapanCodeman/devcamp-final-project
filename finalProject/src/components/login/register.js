@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
+import GreenButton from '../helpers/greenButton';
+
 export default class Register extends Component {
   constructor(props) {
     super(props);
@@ -70,6 +72,19 @@ export default class Register extends Component {
   }} 
 
   render () {
+    var password = document.getElementsByClassName('register-form__password')
+    var confirm_password = document.getElementsByClassName('register-form__label-confirm-password');
+
+    function validatePassword(){
+      if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Passwords Don't Match");
+      } else {
+        confirm_password.setCustomValidity('');
+      }
+    }
+
+    password.onChange = validatePassword;
+    confirm_password.onChange = validatePassword;
     return (
       <div>
         <div className='register-page-wrapper'>
@@ -84,6 +99,7 @@ export default class Register extends Component {
                 placeholder="first"
                 value={this.state.first}
                 onChange={this.handleChange}
+                required
                 />
 
               <label className='register-form__last-label' htmlFor='last'>Last Name</label>
@@ -94,6 +110,7 @@ export default class Register extends Component {
                 placeholder="last"
                 value={this.state.last}
                 onChange={this.handleChange}
+                required
                 />
 
               <label className='register-form__email-label' htmlFor='email'>Email</label>
@@ -128,6 +145,7 @@ export default class Register extends Component {
                 placeholder="password"
                 value={this.state.password}
                 onChange={this.handleChange}
+                required
                 />
 
               <label className='register-form__label-confirm-password' htmlFor='confirm_password'>Confirm Password</label>
@@ -138,6 +156,7 @@ export default class Register extends Component {
                 placeholder="confirm password"
                 value={this.state.confirm_password}
                 onChange={this.handleChange}
+                required
                 />
 
               <ul className='password-requirements'>Password Requirements
@@ -148,8 +167,10 @@ export default class Register extends Component {
               </ul> 
               
               <div className='button-wrapper'>
-                <Link className='create-acct-button' onClick={this.handleSubmit}>Create Account</Link>
-                <Link type='button' className='return-to-home' to='/'>Return to Title Screen</Link>
+                <GreenButton to='' onClick={this.handleSubmit} text="Create Account" />
+                <GreenButton to='/' text="Return to Title Screen" />
+                {/* <Link className='create-acct-button' onClick={this.handleSubmit}>Create Account</Link>
+                <Link type='button' className='return-to-home' to='/'>Return to Title Screen</Link> */}
               </div>
             </form>
           </div>
