@@ -52,11 +52,9 @@ export default class Home extends Component {
       console.log("Patch log status error", error)
     })
     axios.get(`http://127.0.0.1:5000/user-email/${userEmail}`, config)
-    .then (User => {
-      this.setState({
-        user : User.data
-      })
-      
+    .then (user => {
+      this.setState({...user.data}
+    )  
     })
     .catch(error => {
       console.log("Error in getting user object", error);
@@ -70,8 +68,6 @@ export default class Home extends Component {
   }
 
   render () {
- 
-    
     return (
       <div>
         <PageTitler title="Home" />

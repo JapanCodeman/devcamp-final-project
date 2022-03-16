@@ -24,8 +24,8 @@ export default class TitlePage extends Component {
           </div>
             
           <div className='button-wrapper'>
-            <GreenButton className={'green-button'} to={'/register'} text={'Register'} />
-            <GreenButton className={'green-button'} to={'/login'} text={'Login'} />
+            <GreenButton to='/register' text='Register'/>
+            <GreenButton to='/login' text='Login' />
           </div>
         </div>
       </div>

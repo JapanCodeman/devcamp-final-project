@@ -8,6 +8,9 @@ class HeaderNavbar extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      ...this.props}
+
     this.handleLogout = this.handleLogout.bind(this)
     this.handleRedirect = this.handleRedirect.bind(this)
   }
@@ -19,6 +22,10 @@ class HeaderNavbar extends Component {
 
   handleRedirect() {
     this.props.history.push('/home')
+  }
+
+  componentDidMount() {
+    console.log(this.state)
   }
 
 

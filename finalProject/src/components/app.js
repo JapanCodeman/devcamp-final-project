@@ -7,6 +7,7 @@ import { faRightFromBracket, faSquarePen } from '@fortawesome/free-solid-svg-ico
 
 import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
+import CreateCards from './pages/createCards';
 import history from '../history';
 import Home from './pages/home';
 import InstructorHome from './pages/instructorHome';
@@ -47,6 +48,7 @@ handleLogout() {
             <Route exact path="/admin/login" component={AdministratorLogin} />
             <Route exact path="/admin/home" component={AdministratorHome} />
             <Route exact path="/admin/userstatus" component={UserStatus} />
+            <Route exact path="/instructor/create" component={CreateCards} />
             <Route exact path="/instructor/home" component={InstructorHome} />
           </Switch>
         </Router>

@@ -1,0 +1,46 @@
+.instructor-home {
+  display: grid;
+  grid-template-columns: [col1-s] 1fr [col1-e col2-s] 1fr [col2-e];
+  grid-template-rows: [row1-s] 1fr [row1-e row2-s] 1fr [row2-e row3-s] 1fr [row3-e];
+
+  &__title, &__welcome-back {
+    grid-column: col1-s/col1-e;
+    grid-row: row1-s/row1-e;
+    display: flex;
+  }
+    
+  &__graph-box {
+    grid-column: col2-s/col2-e;
+    grid-row: row2-s/row3-e;
+
+    &__title {
+      grid-column: col2-s/col2-e;
+      grid-row: row2-s/row2-e;
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+  }
+    &__graph {
+      grid-column: col2-s/col2-e;
+      grid-row: row2-s/row3-e;
+      background-color: blue;
+      color: white;
+      height: 400px;
+      margin-right: 50px;
+    }
+  }
+
+  &__green-button-links {
+    grid-column: col1-s/col1-e;
+    grid-row: row2-s/row3-e;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 50px 20px 50px;
+    color: #FFF;
+  }
+}
+
+

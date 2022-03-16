@@ -70,11 +70,6 @@ export default class Login extends Component {
                 onChange={this.handleChange}
                 required
                 />
-              <div className='login-form__role-confirm'>Are you a...</div>
-              <select className='login-form__role-select' value={this.state.role} name="role" onChange={this.handleChange}>
-                <option value='student'>Student</option>
-                <option value='instructor'>Teacher</option>
-              </select>
               <label className='login-form__password-label' htmlFor='password'>Password</label>
                 <p className='login-form__password-incorrect'>Password incorrect, try again</p>
                 <input 

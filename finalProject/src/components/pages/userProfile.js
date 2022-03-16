@@ -25,13 +25,8 @@ export default class UserProfile extends Component {
       headers: {
         "Content-Type": "application/json",
         'Access-Control-Allow-Origin': '*'
-        // "Authorization" : `Bearer ${token}`
         }
       }
-    var token = window.sessionStorage.getItem("token")
-    console.log(id)
-    console.log(data)
-    const updata = JSON.stringify(data)
     axios.patch(`http://127.0.0.1:5000/update-user/${id}`, JSON.stringify(data), config)
     .catch(error => {
       console.log("There was an error with the patch request to instructor", error)
