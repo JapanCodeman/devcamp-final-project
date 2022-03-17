@@ -16,12 +16,21 @@
   justify-items: center;
 
     input {
+      color: #FFFFFF;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
       height: 36px;
       margin-left: 24px;
       margin-right: 24px;
       font-size: 24px;
       border: none;
-      border-bottom: solid gray 2px;
+      border-bottom: solid #FFFFFF 2px;
+      background: transparent;
+      &::placeholder {
+        color: #FFFFFF;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+      }
       &:focus {
         outline: none;
       }

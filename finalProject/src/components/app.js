@@ -25,8 +25,8 @@ import HeaderNavbar from './headerNavbar/headerNavbar';
 library.add(faRightFromBracket, faSquarePen)
 
 export default class App extends Component {
-constructor() {
-  super();
+constructor(props) {
+  super(props);
 
   this.handleLogout = this.handleLogout.bind(this)
 }
@@ -40,22 +40,24 @@ handleLogout() {
     return (
       <div>
         <Router history={history}>
+          <div>
           <HeaderNavbar />
           <Switch>
-            <Route exact path="/" component={TitlePage}/>
-            <Route exact path="/register" component={Register}/>
-            <Route exact path="/login" component={Login}/>
-            <Route exact path="/home" component={Home}/>
-            <Route exact path="/profile" component={UserProfile}/>
-            <Route exact path="/admin/login" component={AdministratorLogin} />
-            <Route exact path="/admin/home" component={AdministratorHome} />
-            <Route exact path="/admin/userstatus" component={UserStatus} />
-            <Route exact path="/instructor/create" component={CreateCards} />
-            <Route exact path="/instructor/home" component={InstructorHome} />
-            <Route exact path="/instructor/modify" component={ModifyCards} />
-            <Route exact path="/instructor/students" component={StudentProgress} />
+            <Route exact path="/" component={TitlePage} />
+            <Route  path="/register" component={Register} />
+            <Route  path="/login" component={Login} />
+            <Route  path="/home" component={Home} />
+            <Route  path="/profile" component={UserProfile} />
+            <Route  path="/admin/login" component={AdministratorLogin} />
+            <Route  path="/admin/home" component={AdministratorHome} />
+            <Route  path="/admin/userstatus" component={UserStatus} />
+            <Route  path="/instructor/create" component={CreateCards} />
+            <Route  path="/instructor/home" component={InstructorHome} />
+            <Route  path="/instructor/modify" component={ModifyCards} />
+            <Route  path="/instructor/students" component={StudentProgress} />
             {/* <Route component={PageNotFound} /> */}
           </Switch>
+          </div>
         </Router>
       </div>
     );

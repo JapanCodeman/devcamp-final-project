@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import axios from 'axios';
 
 import PageTitler from '../helpers/pageTitler';
@@ -26,7 +25,7 @@ export default class UserStatus extends Component {
   getUsers() {
     if (this.state.searchParams === "Instructors") {
       axios
-      .get('http://127.0.0.1:5000/instructors/')
+      .get('http://127.0.0.1:5000/instructors')
       .then(response => {
         this.setState({
           users: [...response.data]
@@ -48,7 +47,7 @@ export default class UserStatus extends Component {
       })
     } else {
     axios
-    .get(`http://127.0.0.1:5000/students-by-course/${this.state.searchParams}`)
+    .get(`http://127.0.0.1:5000/users-by-course/${this.state.searchParams}`)
     .then(response => {
       this.setState({
         users: [...response.data]

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import ogLogo from '../../../static/images/OG_logo.jpg';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 import GreenButton from '../helpers/greenButton';
 
 export default class TitlePage extends Component {
