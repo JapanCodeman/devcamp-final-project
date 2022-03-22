@@ -1,10 +1,11 @@
 .create-card {
   display: grid;
-  grid-template-columns: [word-s] 1fr [word-e meaning-s] 1fr [meaning-e image-s] 1fr [image-e];
+  grid-template-columns: [word-s] 1fr [word-e meaning-s] 1fr [meaning-e image-s] 1fr [image-e icon-s] 50px [icon-e];
   grid-template-rows: [label-s] 50px [label-e input-s] 100px [input-e];
   height: auto;
   width: 80vw;
   margin-left: 200px;
+  margin-bottom: 24px;
   background: rgb(0,255,81);
   background: linear-gradient(180deg, rgba(0,255,81,1) 0%, rgba(36,136,13,1) 100%);
   border-radius: 10px;
@@ -61,7 +62,25 @@
     grid-row: label-s/label-e;
   }
 
-  &__image-input {
+  // &__image-input {
+  //   grid-column: image-s/image-e;
+  //   grid-row: input-s/input-e;
+  // }
+
+  &__minus-icon {
+    grid-column: icon-s/icon-e;
+    grid-row: label-s/label-e;
+    color: red;
+    font-size: 36px;
+  }
+
+  &__plus-icon {
+    grid-column: icon-s/icon-e;
+    grid-row: input-s/input-e;
+    font-size: 36px;
+  }
+
+  &__submit-button {
     grid-column: image-s/image-e;
     grid-row: input-s/input-e;
   }

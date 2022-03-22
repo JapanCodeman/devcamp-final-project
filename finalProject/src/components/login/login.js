@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import HeaderNavbar from '../headerNavbar/headerNavbar';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      isLogged: false,
       email: "",
       password: "",
       role: "Student",
@@ -43,11 +45,15 @@ export default class Login extends Component {
         window.sessionStorage.setItem("token", token)
         var decoded = jwtDecode(token)
         console.log(decoded)
+        this.setState({
+          isLogged: true
+        })
         if (decoded.sub.role === "Student") {
           this.props.history.push('/home')
         } else {
           this.props.history.push('/instructor/home')
         }
+        this.forceUpdate(HeaderNavbar)
       })
       .catch(error => {
         console.log("There was an error!", error)
@@ -92,4 +98,4 @@ export default class Login extends Component {
   }
 }
 
-withRouter(Login)
+withRouter(HeaderNavbar)

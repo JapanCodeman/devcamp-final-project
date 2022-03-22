@@ -1,14 +1,46 @@
-// .create-cards-wrapper {
-//   display: grid;
-//   grid-template-columns: 1fr [content-s] 3fr [content-e] 1fr;
-//   grid-template-rows: [title-s] 100px [title-e card-s] 100px [card-e];
-
-  .create-cards-title {
-    grid-column: content-s/content-e;
-    grid-row: title-s/title-e;
+.create-cards {
+  display: grid;
+  grid-template-columns: 200px [col1-s] 1fr [col1-e col2-s] 1fr [col2-e col3-s] 1fr [col3-e] 200px;
+  grid-template-rows: [row1-s] 50px [row1-e row2-s] 50px [row2-e];
+  height: 100px;
+  margin: 24px 0px 24px 0px;
+  
+    input {
+      height: 48px;
+    }
+  &__count-label {
+    grid-column: col1-s/col1-e;
+    grid-row: row1-s/row1-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    height: 50px;
   }
 
-  .create-cards-card {
-    grid-column: content-s/content-e;
-    grid-row: card-s/card-e;
+  &__count-input {
+    grid-column: col1-s/col1-e;
+    grid-row: row2-s/row2-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    width: 50%;
+    justify-self: end;
+    text-align: right;
+    color: green;
+    border: none;
+    border-bottom: 2px grey solid;
+
   }
+
+  &__create-cards-button {
+    grid-column: col2-s/col2-e;
+    grid-row: row2-s/row2-e;
+    background-color: green;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    margin-left: 20px;
+  }
+}
