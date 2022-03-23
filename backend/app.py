@@ -17,6 +17,7 @@ from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv(find_dotenv())
+print(os.getenv("CONNECTION_STRING"))
 
 CONNECTION_URL = os.getenv('CONNECTION_STRING')
 

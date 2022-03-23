@@ -7,15 +7,10 @@ export default class CreateCards extends Component {
     super(props)
 
     this.state = {
-      numberOfCards: 1,
       cards: []
     }
 
-    this.handleAddManyCards = this.handleAddManyCards.bind(this)
-    this.handleAddCard = this.handleAddCard.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.handleNumberChange = this.handleNumberChange.bind(this)
-    this.handleWord = this.handleWord.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -37,14 +32,9 @@ export default class CreateCards extends Component {
 
   handleChange(event) {(
     this.setState({
-      [event.target.value] : event.target.value})
-  )}
-
-  handleNumberChange(event) {
-    this.setState({
-      numberOfCards: event.target.value})
-    }
-  
+      cards: {[event.target.name] : event.target.value}
+    }))
+  }
 
   handleAddCard() {
     console.log(this.state.cards)
@@ -64,34 +54,7 @@ export default class CreateCards extends Component {
 // this.setState(prevState => ({
 //   myArray: [...prevState.myArray, {"name": "object"}]
 // }))
-
-  handleAddManyCards(number) {
-    number = this.state.numberOfCards
-    console.log(this.state.cards)
-    for (let i = 0; i < number; i++) {
-    this.setState(prevState => ({
-        cards: [...prevState.cards,
-        { 
-          setName: "",
-          word: "",
-          meaning: "",
-          box_number: 0,
-          guessed_correctly_count: 0
-        }
-      ]
-    }))}
-  }
     
-  handleCallback(childData) {
-    newCardsArray.push(childData)
-    console.log(newCardsArray)
-    this.setState(prevState => ({
-      cards: [...prevState.cards,
-      {...childData}
-    ]
-    }))
-  }
-  
   handleSubmit() {
     index = index++
     console.log(this.state)
@@ -109,12 +72,16 @@ export default class CreateCards extends Component {
       <div className='create-cards-wrapper'>
         <PageTitler className="create-cards-title" title="Create Cards" />
         <div className='create-cards'>
-          <label className='create-cards__count-label' htmlFor='count-input'>How many cards would you like to make?</label>
-          <input className='create-cards__count-input' name='numberOfCards' type='number' defaultValue={1} onChange={this.handleNumberChange}/>
-          <button className='create-cards__create-cards-button' name='createCardsButton' onClick={this.handleAddManyCards}>Create Cards</button>
+          <label className='create-cards__count-label' htmlFor='count-input'>Fill out the card and press enter to submit it to the database</label>
+          <select className='create-cards__create-cards-course' value={this.state.cards.course} name='course' onChange={this.handleChange}>Create Cards
+            <option value="1-1">TEIE 1-1</option>
+            <option value="1-1">TEIE 2-1</option>
+            <option value="1-1">TEIE 2-2</option>
+            <option value="1-1">TEIE 3-1</option>
+          </select>
         </div>
         <form>
-          {this.state.cards.length>=0 ?  "Hi there": this.state.cards.map(card => <CreateCard className="create-cards__card" key={this.state.cards.indexOf(card)} handleAddCard={this.handleAddCard} handleCallback={this.handleCallback} handleWord={this.handleWord}/>)}
+          <CreateCard className="create-cards__card" />
         </form> 
       </div>
     );
