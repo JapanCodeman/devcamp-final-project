@@ -12,6 +12,7 @@ pymongo = {extras = ["srv"], version = "*"}
 dnspython = "*"
 flask-jwt-extended = "==4.3.1"
 pyjwt = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

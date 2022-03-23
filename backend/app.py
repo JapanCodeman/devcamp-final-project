@@ -2,9 +2,11 @@ import datetime
 from distutils.log import error
 import json
 
+import os
 import pymongo
 from bson.objectid import ObjectId
 from bson import json_util
+from dotenv import load_dotenv, find_dotenv
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import decode_token
 from flask_jwt_extended import JWTManager
@@ -14,18 +16,20 @@ from flask_cors import CORS, cross_origin
 from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
-CONNECTION_URL = "mongodb+srv://JapanCodeMan:6yGkgNvnhwU8WlDp@cluster0.b1d3f.mongodb.net/letsgovocab?retryWrites=true&w=majority"
+load_dotenv(find_dotenv())
+
+CONNECTION_URL = os.getenv('CONNECTION_STRING')
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
 
-app.config['JWT_SECRET_KEY'] = "f3cfe9ed8fae309f02079dbf"
+app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY')
 jwt = JWTManager(app)
 
 
 try:
-  client = pymongo.MongoClient(CONNECTION_URL, serverSelectionTimeoutMS = 10000)
+  client = pymongo.MongoClient(CONNECTION_URL, serverSelectionTimeoutMS = 2000)
 
 except:
   print("Error - cannot connect to database")

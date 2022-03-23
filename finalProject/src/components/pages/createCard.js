@@ -41,7 +41,7 @@ export default class CreateCard extends Component {
     return (
       <div className='create-card'>
         <label className='create-card__word-label'>Word</label>
-        <input className='create-card__word-input' placeholder='Your word' onChange={this.handleWord}/>
+        <input className='create-card__word-input' placeholder='Your word' onChange={this.handleWord} />
 
         <label className='create-card__meaning-label'>Meaning</label>
         <input className='create-card__meaning-input' placeholder='Meaning' onChange={this.handleMeaning}/>

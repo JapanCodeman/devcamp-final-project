@@ -11,34 +11,20 @@ export default class CreateCards extends Component {
       cards: []
     }
 
-  const newCardsArray = []
-
-    // this.generateCardSetter = this.generateCardSetter.bind(this)
     this.handleAddManyCards = this.handleAddManyCards.bind(this)
     this.handleAddCard = this.handleAddCard.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleNumberChange = this.handleNumberChange.bind(this)
+    this.handleWord = this.handleWord.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentDidMount() {
+ /* componentDidMount() {
     console.log(this.state.cards)
-    if (this.state.cards[0] == null) {
-        this.setState({
-          cards: {
-          index: 0,  
-          setName: "",
-          word: "",
-          meaning: "",
-          box_number: 0,
-          guessed_correctly_count: 0
-        }
-      })
-     } else {
-      var newIndex = this.state.cards.slice(-1)[index]++
+    if (! this.state.cards.length >= 0) {
+      
       this.setState({
       cards: this.state.cards.push({
-      index: newIndex,  
       setName: "",
       word: "",
       meaning: "",
@@ -47,7 +33,7 @@ export default class CreateCards extends Component {
     })
   })
 }
-}
+}*/
 
   handleChange(event) {(
     this.setState({
@@ -62,10 +48,8 @@ export default class CreateCards extends Component {
 
   handleAddCard() {
     console.log(this.state.cards)
-    var newIndex = this.state.cards.slice(-1).index++
     this.setState({
       cards: this.state.cards.push({
-      index: newIndex,  
       setName: "",
       word: "",
       meaning: "",
@@ -88,7 +72,6 @@ export default class CreateCards extends Component {
     this.setState(prevState => ({
         cards: [...prevState.cards,
         { 
-          index: number - 1,  
           setName: "",
           word: "",
           meaning: "",
@@ -114,6 +97,12 @@ export default class CreateCards extends Component {
     console.log(this.state)
   }
 
+  handleWord(word) {
+    this.setState({
+      cards: word
+    })
+  }
+
 
   render () {
     return (
@@ -125,7 +114,7 @@ export default class CreateCards extends Component {
           <button className='create-cards__create-cards-button' name='createCardsButton' onClick={this.handleAddManyCards}>Create Cards</button>
         </div>
         <form>
-          {this.state.cards[0] ? this.state.cards.map(card => <CreateCard className="create-cards__card" key={card.index} handleAddCard={this.handleAddCard}handleCallback={this.handleCallback}/>) : "Hi there"}
+          {this.state.cards.length>=0 ?  "Hi there": this.state.cards.map(card => <CreateCard className="create-cards__card" key={this.state.cards.indexOf(card)} handleAddCard={this.handleAddCard} handleCallback={this.handleCallback} handleWord={this.handleWord}/>)}
         </form> 
       </div>
     );
