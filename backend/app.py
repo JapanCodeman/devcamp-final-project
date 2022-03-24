@@ -17,7 +17,6 @@ from pymongo import ReturnDocument
 from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv(find_dotenv())
-print(os.getenv("CONNECTION_STRING"))
 
 CONNECTION_URL = os.getenv('CONNECTION_STRING')
 
@@ -75,36 +74,6 @@ def create_token():
 
   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
 
-# TODO - make login route
-# @app.route("/login", methods=["POST"])
-# def create_token():
-#   email = request.json.get("email", None)
-#   password = request.json.get("password", None)
-#   role = request.json.get("role", None)
-
-#   if not email or not password:
-#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-#   user = instructors.find_one({"email" : email})
-
-#   if not user:
-#     user = students.find_one({"email" : email})
-
-#   if not user:
-#     user = administrators.find_one({"email" : email})
-
-#   if not user:
-#     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
-
-#   if check_password_hash(user["password"], password):
-#     try:
-#       token = create_access_token(identity={"email" : email, "role" : role, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
-#       return jsonify(token=token)
-#     except:
-#       return "Token unable to be distributed", error
-
-#   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
-
-
 # Register a new instructor - WORKING!!!
 @app.route('/register-instructor/', methods=['POST'])
 def register_one_instructor():
@@ -128,19 +97,6 @@ def register_one_instructor():
   }
   query = users.insert_one(queryObject)
   return f'{first} {last} and associated data registered to user database as Instructor'
-
-# List all instructors - WORKING!!!
-# @app.route('/instructors/', methods=['GET'])
-# def find_all_instructors():
-#   results = list(instructors.find())
-#   for instructor in results:
-#     instructor["_id"] = str(instructor["_id"])
-
-#   return Response(
-#     response=json.dumps(results),
-#     status=200,
-#     mimetype="application/json"
-#   )
 
 # List all instructors from user database - WORKING!!!
 @app.route('/instructors', methods=['GET'])
@@ -234,14 +190,6 @@ def update_one_user(id):
 
   return "User Updated"
 
-# Delete one instructor - WORKING!!!
-# @app.route('/delete-instructor/<id>', methods=['DELETE'])
-# def delete_one_instructor(id):
-#   id = ObjectId(id)
-#   id_call = {"_id" : id}
-#   id = instructors.delete_one(id_call)
-#   return 'Instructor deleted'
-
 # Delete one user - WORKING!!!
 @app.route('/delete-user/<id>', methods=['DELETE'])
 def delete_one_user(id):
@@ -256,7 +204,6 @@ def delete_all_users():
   result = users.delete_many({})
   return 'User table dropped'
 
-# TODO - students CRUD
 # Register a new student - WORKING!!!
 @app.route('/register-student', methods=['POST'])
 # @cross_origin(origins='*')
@@ -300,32 +247,6 @@ def register_one_student():
   query = users.insert_one(queryObject)
   return 'registered'
 
-# Find one student - WORKING!!!
-# @app.route('/student/<id>', methods=['GET'])
-# def get_student(id):
-#   student = students.find_one({'_id':ObjectId(id)})
-#   student["_id"] = str(student["_id"])
-  
-#   return Response(
-#     response=json.dumps(student),
-#     status=200,
-#     mimetype="application/json"
-#   )
-
-# Find all students by class - TODO change to user search
-# @app.route('/students-by-course/<course>', methods=['GET'])
-# def get_students_by_class(course):
-#   student_results = []
-#   for student in users.find({"course":course}):
-#     student["_id"] = str(student["_id"])
-#     student_results.append(student)
-
-#   return Response(
-#   response=json_util.dumps(student_results),
-#   status=200,
-#   mimetype="application/json"
-#   )
-
 @app.route('/users-by-course/<course>', methods=['GET'])
 def get_users_by_class(course):
   user_results = []
@@ -338,20 +259,6 @@ def get_users_by_class(course):
   status=200,
   mimetype="application/json"
   )
-
-
-# Look student up by e-mail for after login - TODO change to user instead of student
-# @app.route('/student-email/<email>', methods=['GET'])
-# @jwt_required()
-# def get_student_by_email(email):
-#   student = students.find_one({"email":email})
-#   student["_id"] = str(student["_id"])
-  
-#   return Response(
-#     response=json.dumps(student),
-#     status=200,
-#     mimetype="application/json"
-#   )
 
 @app.route('/student-email/<email>', methods=['GET'])
 @jwt_required()
@@ -412,21 +319,12 @@ def update_one_user_email(email):
   return_document=ReturnDocument.AFTER)
   return "User updated by email"
 
-# Delete one student - WORKING!!!
-# @app.route('/delete-student/<id>', methods=['DELETE'])
-# def delete_one_student(id):
-#   id = ObjectId(id)
-#   id_call = {"_id" : id}
-#   result = students.delete_one(id_call)
-#   return 'Student deleted'
-
 # Delete entire student document - WORKING!!!
 @app.route('/delete-all-students', methods=['DELETE'])
 def delete_all_students():
   result = users.delete_many({"role" : "Student" })
   return 'All students deleted'
 
-# TODO - cards CRUD
 # Create one new card with associated course - WORKING!!!
 @app.route('/create-card', methods=['POST'])
 def create_card(box_number=0, guessed_correctly_count=0):
@@ -521,27 +419,6 @@ def register_one_admin():
   query = users.insert_one(queryObject)
   return f'{first} {last} registered with administrator privileges.'
 
-# Find one administrator by id
-# @app.route('/administrator/<id>', methods=['GET'])
-# def find_one_administrator(id):
-#   id_call = {"_id" : ObjectId(id)}
-#   administrator = administrators.find_one(id_call)
-#   administrator["_id"] = str(administrator["_id"])
-  
-#   return administrator
-
-# Find one administrator by email
-# @app.route('/administrator-by-email/<email>', methods=['GET'])
-# def find_admin_by_email(email):
-#   administrator = administrators.find_one({"email":email})
-#   administrator["_id"] = str(administrator["_id"])
-
-#   return Response(
-#     response=json.dumps(administrator),
-#     status=200,
-#     mimetype="application/json"
-#   )
-
 # Find User by email
 @app.route('/user-by-email/<email>', methods=['GET'])
 def find_admin_by_email(email):
@@ -553,7 +430,6 @@ def find_admin_by_email(email):
     status=200,
     mimetype="application/json"
   )
-
 
 # Find all administrators
 @app.route('/administrators', methods=['GET'])

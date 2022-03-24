@@ -7,8 +7,11 @@
   
     input {
       height: 48px;
+      text-align: right;
+      padding: 5px;
+      border: none;
     }
-  &__count-label {
+  &__instruction-label {
     grid-column: col1-s/col1-e;
     grid-row: row1-s/row1-e;
     font-family: 'Roboto', sans-serif;
@@ -17,22 +20,17 @@
     height: 50px;
   }
 
-  &__count-input {
-    grid-column: col1-s/col1-e;
-    grid-row: row2-s/row2-e;
+  &__course-label {
+    grid-column: col2-s/col2-e;
+    grid-row: row1-s/row1-e;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
-    font-size: 48px;
-    width: 50%;
-    justify-self: end;
-    text-align: right;
-    color: green;
-    border: none;
-    border-bottom: 2px grey solid;
-
+    font-size: 24px;
+    height: 50px;
+    justify-self: center;
   }
 
-  &__create-cards-course {
+  &__course {
     grid-column: col2-s/col2-e;
     grid-row: row2-s/row2-e;
     background-color: #6BD35F;
@@ -42,5 +40,32 @@
     font-weight: 700;
     font-size: 24px;
     margin-left: 20px;
+    width: 150px;
+    justify-self: center;
+  }
+
+  &__set-name-label {
+    grid-column: col3-s/col3-e;
+    grid-row: row1-s/row1-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    height: 50px;
+    justify-self: end;
+  }
+
+  &__set-name-input {
+    grid-column: col3-s/col3-e;
+    grid-row: row2-s/row2-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    height: 50px;
+    justify-self: center;
+    background-color: #6BD35F;
+    border-radius: 5px;
+    color: white;
+    width: 250px;
+    justify-self: end;
   }
 }
