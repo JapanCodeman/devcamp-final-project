@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -23,18 +23,18 @@ export default class HeaderNavbar extends Component {
   handleLogout() {
     this.setState({role: ""})
     window.sessionStorage.clear();
-    window.location.replace('/');
+    this.props.history.push('/');
   }
 
   handleRedirect() {
     console.log(this.state.role)
-    if(this.state.role === "Student") {
+    if(this.state.role == 'Student') {
     this.props.history.push('/home') 
-    };
-    if(this.state.role === 'Instructor') {
+    }
+    if(this.state.role == 'Instructor') {
     this.props.history.push('/instructor/home')
     }
-    if(this.state.role === 'Administrator') {
+    if(this.state.role == 'Administrator') {
       this.props.history.push('/admin/home')
     } else {
       this.props.history.push('/')

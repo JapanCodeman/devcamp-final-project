@@ -9,7 +9,6 @@ export default class Home extends Component {
     super(props)
 
      this.state = {
-       user:{}
      }
 
     this.handleLogout = this.handleLogout.bind(this)
@@ -71,7 +70,7 @@ export default class Home extends Component {
     return (
       <div>
         <PageTitler title="Home" />
-        <h2>Welcome back, {this.state.user.first}!</h2>
+        <h2>Welcome back, {this.state.first}!</h2>
         <h1>Status: {this.state.user.logged_in ? "Logged in" : "Logged out"}</h1>
         <button onClick={this.handleLogout}>Logout</button>
       </div>

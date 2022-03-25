@@ -11,6 +11,7 @@
       padding: 5px;
       border: none;
     }
+
   &__instruction-label {
     grid-column: col1-s/col1-e;
     grid-row: row1-s/row1-e;
@@ -54,6 +55,17 @@
     justify-self: end;
   }
 
+  &__set-name-required {
+    grid-column: col3-s/col3-e;
+    grid-row: row1-s/row1-e;
+    display: grid;
+    font-size: 18px;
+    height: 50px;
+    justify-self: end;
+    align-content: end;
+    color: red;
+  }
+
   &__set-name-input {
     grid-column: col3-s/col3-e;
     grid-row: row2-s/row2-e;
@@ -67,5 +79,63 @@
     color: white;
     width: 250px;
     justify-self: end;
+  }
+
+  &__card-and-created {
+    grid-column: col1-s/col3-e;
+    display: grid;
+    grid-template-columns: 200px [entry-s] 1fr [title-s] 1fr [title-e] 1fr [entry-e] 200px;
+  }
+
+  &__clear-list {
+    grid-column: entry-s/title-s;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    text-align: left;
+    align-items: center;
+    color: red;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__created-cards-list {
+    grid-column: title-s/title-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    justify-self: center;
+    align-items: center;
+  }
+
+  &__card-entry {
+    grid-column: entry-s/entry-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    justify-self: center;
+    background: rgb(0,255,81);
+    background: linear-gradient(180deg, rgb(45, 119, 69) 0%, rgba(36,136,13,1) 100%);
+    border-radius: 5px;
+    color: #FFFFFF;
+    width: 200px;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  &__upload-cards {
+    grid-column: title-e/entry-e;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    text-align: right;
+    align-items: center;
+    color: #6BD35F;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

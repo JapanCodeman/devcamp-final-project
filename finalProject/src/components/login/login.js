@@ -53,7 +53,6 @@ export default class Login extends Component {
         } else {
           this.props.history.push('/instructor/home')
         }
-        this.forceUpdate(HeaderNavbar)
       })
       .catch(error => {
         console.log("There was an error!", error)

@@ -343,12 +343,9 @@ def create_card(box_number=0, guessed_correctly_count=0):
   return f'{lang1}/{lang2} card created for course: {course}'
 
 # Create many cards - WORKING!!!
-@app.route('/create-cards', methods=['PUT'])
-def create_cards(box_number=0, guessed_correctly_count=0):
+@app.route('/create-cards', methods=['POST'])
+def create_cards():
   cards_list = request.get_json()
-  for card in cards_list:
-    card["box_number"] = box_number
-    card["guessed_correctly_count"] = guessed_correctly_count
   result = cards.insert_many(cards_list)
   return 'Multiple cards uploaded'
 

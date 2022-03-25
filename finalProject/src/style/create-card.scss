@@ -1,6 +1,6 @@
 .create-card {
   display: grid;
-  grid-template-columns: [word-s] 1fr [word-e meaning-s] 1fr [meaning-e image-s] 1fr [image-e icon-s] 50px [icon-e];
+  grid-template-columns: [word-s] 1fr [word-e meaning-s] 1fr [meaning-e image-s] 1fr [image-e];
   grid-template-rows: [label-s] 50px [label-e input-s] 100px [input-e];
   height: auto;
   width: 80vw;

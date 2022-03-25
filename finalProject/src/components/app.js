@@ -3,7 +3,7 @@ import { BrowserRouter as Switch, Route } from "react-router-dom";
 import { Router } from "react-router-dom";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faMinus, faRightFromBracket, faSquarePen } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faRightFromBracket, faSquarePen, faUpload, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
@@ -21,8 +21,7 @@ import UserProfile from './pages/userProfile';
 import UserStatus from './admin/adminUserStatus';
 import HeaderNavbar from './headerNavbar/headerNavbar';
 
-
-library.add(faRightFromBracket, faSquarePen, faPlus, faMinus)
+library.add(faRightFromBracket, faSquarePen, faPlus, faMinus, faUpload, faTrashCan)
 
 export default class App extends Component {
 constructor(props) {
