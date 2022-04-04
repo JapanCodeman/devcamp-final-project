@@ -1,5 +1,7 @@
+from audioop import cross
 import datetime
 from distutils.log import error
+from enum import unique
 import json
 
 import os
@@ -325,22 +327,22 @@ def delete_all_students():
   result = users.delete_many({"role" : "Student" })
   return 'All students deleted'
 
-# Create one new card with associated course - WORKING!!!
-@app.route('/create-card', methods=['POST'])
-def create_card(box_number=0, guessed_correctly_count=0):
-  course = request.json.get('course')
-  lang1 = request.json.get('lang1')
-  lang2 = request.json.get('lang2')
-  queryObject = {
-    'course': course,
-    'front': lang1,
-    'back': lang2,
-    'box_number': box_number,
-    'guessed_correctly_count': guessed_correctly_count
-  }
+# Create one new card with associated course - WORKING!!! - TODO - unnecessary?
+# @app.route('/create-card', methods=['POST'])
+# def create_card(box_number=0, guessed_correctly_count=0):
+#   course = request.json.get('course')
+#   lang1 = request.json.get('lang1')
+#   lang2 = request.json.get('lang2')
+#   queryObject = {
+#     'course': course,
+#     'front': lang1,
+#     'back': lang2,
+#     'box_number': box_number,
+#     'guessed_correctly_count': guessed_correctly_count
+#   }
   
-  result = cards.insert_one(queryObject)
-  return f'{lang1}/{lang2} card created for course: {course}'
+#   result = cards.insert_one(queryObject)
+#   return f'{lang1}/{lang2} card created for course: {course}'
 
 # Create many cards - WORKING!!!
 @app.route('/create-cards', methods=['POST'])
@@ -361,6 +363,46 @@ def get_all_cards():
     status=200,
     mimetype="application/json"
   )
+
+# Get cards by course
+@app.route('/cards-course/<course>', methods=['GET'])
+def get_cards_by_course(course):
+  results = list(cards.find({'course' : course}))
+  for card in results:
+    card["_id"] = str(card["_id"])
+
+  return Response(
+    response=json.dumps(results),
+    status=200,
+    mimetype="application/json"
+  )
+
+
+# Get card sets by instructor
+@app.route('/sets-by-instructor/<user>', methods=['GET', 'POST'])
+def get_sets_by_instructor(user):
+  
+  card_sets = cards.find({
+    "created_by" : user
+  })
+
+  card_sets_cur = list(card_sets)
+
+  unique_sets = []
+
+  for card in card_sets_cur:
+    card["_id"] = str(card["_id"])
+    if card["set_name"] in unique_sets:
+      pass
+    else:
+      unique_sets.append(card)
+
+  return Response(
+    response=json.dumps(unique_sets),
+    status=200,
+    mimetype="application/json"
+  )
+
 
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])

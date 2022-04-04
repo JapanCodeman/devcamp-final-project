@@ -5,6 +5,7 @@ export default class CreateCard extends Component {
     super(props)
 
     this.state = {
+      created_by: this.props.user,
       set_name: this.props.setName,
       course: this.props.course,
       word: "",
@@ -35,6 +36,7 @@ export default class CreateCard extends Component {
       {this.props.handleAddCardToSet(this.state)}
 
       this.setState({
+          created_by: this.props.user,
           set_name: this.props.setName,
           word: "",
           meaning: "",

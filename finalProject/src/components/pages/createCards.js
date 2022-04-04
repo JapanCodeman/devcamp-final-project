@@ -3,12 +3,14 @@ import PageTitler from '../helpers/pageTitler';
 import CreateCard from './createCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 export default class CreateCards extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      user: "",
       set_name: "",
       course: "1-1",
       cards: []
@@ -21,8 +23,18 @@ export default class CreateCards extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
+  componentDidMount() {
+    const token = window.sessionStorage.getItem("token")
+    const decoded = jwtDecode(token)
+    const email = decoded.sub.email
+    this.setState({
+      user: email
+    })
+  }
+
   handleAddCardToSet(card) {
     this.setState(prevState => ({
+      created_by: this.state.user,
       set_name: this.state.set_name,
       cards: [...prevState.cards, card]
     }))
@@ -84,12 +96,12 @@ export default class CreateCards extends Component {
           <input className='create-cards__set-name-input' name='set_name' onChange={this.handleChange} value={this.state.set_name} />
         </div>
         
-        {this.state.set_name ? <CreateCard className="create-cards__card" handleAddCardToSet={this.handleAddCardToSet} setName={this.state.set_name} course={this.state.course}/> : null}
+        {this.state.set_name ? <CreateCard className="create-cards__card" handleAddCardToSet={this.handleAddCardToSet} user={this.state.user} setName={this.state.set_name} course={this.state.course}/> : null}
 
         <div className='create-cards__card-and-created'>
           <div className='create-cards__clear-list'>Click to clear list <FontAwesomeIcon icon="fa-solid fa-trash-can" onClick={this.handleClearState}/></div>
           <div className="create-cards__created-cards-list">Cards created this session</div>
-          <div className="create-cards__upload-cards">Click to upload cards to database <FontAwesomeIcon icon="fa-solid fa-upload" onClick={() => this.handleUploadCards(this.state.cards)} /></div>
+          <div className="create-cards__upload-cards" onClick={() => this.handleUploadCards(this.state.cards)}>Click to upload cards to database <FontAwesomeIcon icon="fa-solid fa-upload"/></div>
           {this.state.cards.map((card) => <div className="create-cards__card-entry" key={card.word + card.meaning}>{card.word} = {card.meaning}</div>)}
         </div> 
       </div>
