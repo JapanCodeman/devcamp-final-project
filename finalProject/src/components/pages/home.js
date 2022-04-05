@@ -71,7 +71,6 @@ export default class Home extends Component {
       <div>
         <PageTitler title="Home" />
         <h2>Welcome back, {this.state.first}!</h2>
-        <h1>Status: {this.state.user.logged_in ? "Logged in" : "Logged out"}</h1>
         <button onClick={this.handleLogout}>Logout</button>
       </div>
     );

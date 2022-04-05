@@ -273,19 +273,6 @@ def get_student_by_email(email):
     status=200,
     mimetype="application/json"
   )
- 
-# List all students - WORKING!!!
-# @app.route('/students/', methods=['GET'])
-# def find_all_students():
-#   results = list(students.find())
-#   for student in results:
-#     student["_id"] = str(student["_id"])
-
-#   return Response(
-#     response=json.dumps(results),
-#     status=200,
-#     mimetype="application/json"
-#   )
 
 @app.route('/students/', methods=['GET'])
 def find_all_students():
@@ -298,17 +285,6 @@ def find_all_students():
     status=200,
     mimetype="application/json"
   )
-
-# Update one student - WORKING!!!
-# @app.route('/update-student/<id>', methods=['PATCH'])
-# def update_one_student(id):
-#   request_params = request.get_json()
-#   updateObject = request_params
-#   id = ObjectId(id)
-#   id_call = {"_id" : id}
-
-#   result = students.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
-#   return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
 # Update one user by email - WORKING!!!
 @app.route('/update-user-by-email/<email>', methods=['PATCH', 'PUT', 'GET'])
@@ -326,23 +302,6 @@ def update_one_user_email(email):
 def delete_all_students():
   result = users.delete_many({"role" : "Student" })
   return 'All students deleted'
-
-# Create one new card with associated course - WORKING!!! - TODO - unnecessary?
-# @app.route('/create-card', methods=['POST'])
-# def create_card(box_number=0, guessed_correctly_count=0):
-#   course = request.json.get('course')
-#   lang1 = request.json.get('lang1')
-#   lang2 = request.json.get('lang2')
-#   queryObject = {
-#     'course': course,
-#     'front': lang1,
-#     'back': lang2,
-#     'box_number': box_number,
-#     'guessed_correctly_count': guessed_correctly_count
-#   }
-  
-#   result = cards.insert_one(queryObject)
-#   return f'{lang1}/{lang2} card created for course: {course}'
 
 # Create many cards - WORKING!!!
 @app.route('/create-cards', methods=['POST'])
@@ -392,16 +351,34 @@ def get_sets_by_instructor(user):
 
   for card in card_sets_cur:
     card["_id"] = str(card["_id"])
-    if card["set_name"] in unique_sets:
-      pass
+    if card["set_name"] not in unique_sets:
+      unique_sets.append(card["set_name"])
     else:
-      unique_sets.append(card)
+      continue
 
   return Response(
     response=json.dumps(unique_sets),
     status=200,
     mimetype="application/json"
   )
+
+# Get cards by set name
+@app.route('/cards-by-setname/<setname>', methods=['GET'])
+def cards_by_setname(setname):
+  set = cards.find({
+    "set_name" : setname
+  })
+
+  card_sets = list(set)
+
+  for card in card_sets:
+    card["_id"] = str(card["_id"])
+
+  return Response(
+  response=json.dumps(card_sets),
+  status=200,
+  mimetype="application/json"
+)
 
 
 # Update a card - WORKING!!!

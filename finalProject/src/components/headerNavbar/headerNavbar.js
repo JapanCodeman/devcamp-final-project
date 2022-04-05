@@ -11,7 +11,7 @@ export default class HeaderNavbar extends Component {
     super(props);
 
     this.state = {
-      isLogged: false,
+      loggedInStatus: "NOT_LOGGED_IN",
       role: ""
     }
 
@@ -24,17 +24,18 @@ export default class HeaderNavbar extends Component {
     this.setState({role: ""})
     window.sessionStorage.clear();
     this.props.history.push('/');
+    location.reload()
   }
 
-  handleRedirect() {
+  handleRedirect(role) {
     console.log(this.state.role)
-    if(this.state.role == 'Student') {
-    this.props.history.push('/home') 
+    if (role === 'Student') {
+    this.props.history.push('/home')
     }
-    if(this.state.role == 'Instructor') {
+    else if (role === 'Instructor') {
     this.props.history.push('/instructor/home')
     }
-    if(this.state.role == 'Administrator') {
+    else if (role === 'Administrator') {
       this.props.history.push('/admin/home')
     } else {
       this.props.history.push('/')
@@ -42,29 +43,18 @@ export default class HeaderNavbar extends Component {
 }
 
   componentDidMount() {
-    if(window.sessionStorage.getItem("token")){
+    if (window.sessionStorage.getItem("token")) {
     let token = window.sessionStorage.getItem("token")
     var decoded = jwtDecode(token)
-    this.setState({isLogged: true})
+    this.setState({loggedInStatus: "LOGGED_IN"})
     this.setState({role:decoded.sub.role})
     }
+
   }
 
   logState() {
     console.log("this is headerNavbar's state---->", this.state)
   }
-
-
-//   shouldComponentUpdate() {
-//     console.log(this.state)
-//     if(window.sessionStorage.getItem("token")){
-//     let token = window.sessionStorage.getItem("token")
-//     var decoded = jwtDecode(token)
-//     console.log( "-->",decoded.sub.role)
-//     this.setState({role:decoded.sub.role})
-//   }
-// }
-
 
   render () {
     return (
@@ -73,8 +63,8 @@ export default class HeaderNavbar extends Component {
           <div>
             {this.props.hideSmallLogo ? null  : <img className='SmallOgLogo' src={SmallOgLogo}/>} 
           </div>
-          <div className='header-navbar__title' onClick={this.handleRedirect}>Onomichi Junior and Senior High School</div>
-          <div className='header-navbar__logout-button'>{this.state.isLogged ? <FontAwesomeIcon onClick={this.handleLogout} className='header-navbar__logout-icon' icon="right-from-bracket" /> : null}</div>
+          <div className='header-navbar__title' onClick={() => this.handleRedirect(this.state.role)}>Onomichi Junior and Senior High School</div>
+          <div className='header-navbar__logout-button'>{this.state.loggedInStatus === "LOGGED_IN" ? <FontAwesomeIcon onClick={this.handleLogout} className='header-navbar__logout-icon' icon="right-from-bracket" /> : null}</div>
           <button onClick={this.logState}>See State</button>
         </div>
       </div>
