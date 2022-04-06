@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 
+import EditCard from './editCard';
+import PageTitler from '../helpers/pageTitler';
+
 export default class EditCards extends Component {
   constructor(props) {
     super(props);
@@ -30,10 +33,19 @@ export default class EditCards extends Component {
     this.getCards()
   }
 
+  handleUpdateCard(updateData, id) {
+    axios
+    .patch(`http://127.0.0.1:5000/update-card/${id}`, updateData)
+    .catch(error => {
+      "There was an error updating the card", error
+    })
+  }
+
   render () {
     return (
       <div>
-        {this.state.cards.map(card => <div className="card">{card.word}</div>)}
+        <PageTitler title="Edit Cards" />
+        {this.state.cards.map(card => <EditCard key={card._id} id={card._id} handleUpdateCard={this.handleUpdateCard} created_by={card.created_by} set_name={card.set_name} course={card.course} word={card.word} meaning={card.meaning} />)}
       </div>
     );
   }

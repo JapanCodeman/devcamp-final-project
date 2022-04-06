@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import PageTitler from '../helpers/pageTitler';
-import UserProfile from '../pages/userProfile';
+import UserProfile from '../helpers/userProfile';
 
 export default class UserStatus extends Component {
   constructor(props) {

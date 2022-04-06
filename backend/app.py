@@ -383,13 +383,11 @@ def cards_by_setname(setname):
 
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])
-def update_a_card(id, box_number=0, guessed_correctly_count=0):
+def update_a_card(id):
   id = ObjectId(id)
   id_call = {"_id" : id}
   request_params = request.get_json()
   updateObject = request_params
-  updateObject["box_number"] = box_number
-  updateObject["guessed_correctly_count"] = guessed_correctly_count
 
   result = cards.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
   return f'Card information updated {updateObject}'
