@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
-import HeaderNavbar from '../headerNavbar/headerNavbar';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isLogged: false,
       email: "",
       password: "",
       role: "Student",
@@ -35,9 +33,9 @@ export default class Login extends Component {
         "email": this.state.email,
         "password": this.state.password
       })
-      // { withCredentials: true } // How to get this working?
       .then(response => {
-        if (response.status === 200) return response;
+        if (response.status === 200) {
+          return response}
         else alert("There was an error");
       })
       .then(data => {
@@ -45,9 +43,6 @@ export default class Login extends Component {
         window.sessionStorage.setItem("token", token)
         var decoded = jwtDecode(token)
         console.log(decoded)
-        this.setState({
-          isLogged: true
-        })
         if (decoded.sub.role === "Student") {
           this.props.history.push('/home')
         } else {
@@ -97,4 +92,4 @@ export default class Login extends Component {
   }
 }
 
-withRouter(HeaderNavbar)
+withRouter(Login)

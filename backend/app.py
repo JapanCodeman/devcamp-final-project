@@ -184,7 +184,6 @@ def update_one_user(id):
 
   updateObject = request.get_json()
   jsonify(updateObject)
-  print(f'----------->{updateObject}<--------------')
 
   result = users.find_one_and_update({"_id" : id}, 
   { "$set" : updateObject },
@@ -244,7 +243,7 @@ def register_one_student():
     "vocabulary_box_four": vocabulary_box_four,
     "vocabulary_box_five": vocabulary_box_five,
     "vocabulary_box_six": vocabulary_box_six,
-    "vocabulary_box_seven": vocabulary_box_seven,
+    "vocabulary_box_seven": vocabulary_box_seven
   }
   query = users.insert_one(queryObject)
   return 'registered'
@@ -380,6 +379,20 @@ def cards_by_setname(setname):
   mimetype="application/json"
 )
 
+# Get all unboxed cards
+@app.route('/get-unboxed-cards/<course>', methods=['GET'])
+def get_unboxed_cards(course):
+# Make a JSON request for cards with box_number == 0 and student's class
+  new_cards = cards.find({
+    "box_number" : 0,
+    "course" : course
+  })
+
+  return Response(
+    response=json.dumps(new_cards),
+    status=200,
+    mimetype="application/json"
+  )  
 
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])

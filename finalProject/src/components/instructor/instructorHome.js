@@ -12,9 +12,6 @@ export default class InstructorHome extends Component {
     this.state = {
 
     }
-
-    
-
   }
 
   componentDidMount() {
@@ -35,18 +32,17 @@ export default class InstructorHome extends Component {
 
   render () {
     return (
-      <div>
-        <div className='instructor-home'>
-          <PageTitler className='instructor-home__title' title={`Instructor Home Welcome back, ${this.state.first}!`}/>
-          <div className='instructor-home__graph-box'>
-            <div className='instructor-home__graph-box__title'>Student Progress at a Glance</div>
-            <div className='instructor-home__graph-box__graph'>Graph goes here</div>
-          </div>
-          <div className='instructor-home__green-button-links'>
-            <GreenButton to='/instructor/create' text="Create a Set" />
-            <GreenButton to='/instructor/modify' text="Modify a Set" />
-            <GreenButton to='/instructor/students' text="View Student Progress" />
-          </div>
+      <div className='instructor-home'>
+        <PageTitler className='instructor-home__title' title={`Instructor Home Welcome back, ${this.state.first}!`}/>
+        <div className='instructor-home__graph-box'>
+          <div className='instructor-home__graph-box__title'>Student Progress at a Glance</div>
+          <div className='instructor-home__graph-box__graph'>Graph goes here</div>
+        </div>
+        <div className='instructor-home__green-button-links'>
+          <GreenButton to='/instructor/create' text="Create a Set" />
+          <GreenButton to='/instructor/modify' text="Modify a Set" />
+          <GreenButton to='/instructor/students' text="View Student Progress" />
+          <button onClick={() => this.props.handleLogin}>Click</button>
         </div>
       </div>
     );

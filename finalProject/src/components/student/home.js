@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import jwtDecode from 'jwt-decode';
 
 import PageTitler from '../helpers/pageTitler';
+import GreenButton from '../helpers/greenButton';
 
 export default class Home extends Component {
   constructor(props) {
@@ -61,17 +62,15 @@ export default class Home extends Component {
     const user = JSON.parse(window.sessionStorage.getItem("User"))
   }
 
-
-  componentWillUnmount() {
-    window.sessionStorage.clear()
-  }
-
   render () {
     return (
-      <div>
+      <div className="student-home">
         <PageTitler title="Home" />
-        <h2>Welcome back, {this.state.first}!</h2>
-        <button onClick={this.handleLogout}>Logout</button>
+        <PageTitler title={`Welcome back, ${this.state.first}`} />
+        <h1 className="student-home__agenda">Would you like to study or take your daily test?</h1>
+        <GreenButton to="/study" text="Study" user={this.state} />
+        <GreenButton to="/test" text="Daily Test" />
+        <GreenButton to='' text="Logout" onClick={this.handleLogout} />
       </div>
     );
   }
