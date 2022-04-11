@@ -40,15 +40,6 @@ constructor(props) {
   this.handleLogout = this.handleLogout.bind(this)
 }
 
-componentDidUpdate() {
-  if (window.sessionStorage.getItem("token")) {
-    let token = window.sessionStorage.getItem("token")
-    var decoded = jwtDecode(token)
-    this.setState({loggedInStatus: "LOGGED_IN"})
-    this.setState({role:decoded.sub.role})
-  }
-}
-
 handleLogin() {      
   this.setState({
     loggedInStatus: "LOGGED_IN"
@@ -60,7 +51,7 @@ handleLogout() {
     loggedInStatus: "NOT_LOGGED_IN"
   })
   window.sessionStorage.clear()
-  props.history.push('/')
+  this.props.history.push('/')
 }
 
   render() {
@@ -68,15 +59,16 @@ handleLogout() {
       <div>
         <Router history={history} >
           <Switch>
-            <Route component={HeaderNavbar}/>
+            <Route render={(props) => (<HeaderNavbar {...props} handleLogin={this.handleLogin} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus}/>)}/>
+            {/* <Route component={HeaderNavbar}/> */}
             <Route exact path="/" component={TitlePage} />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
+            <Route exact path="/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin}/>)}/>
             <Route exact path="/home" component={Home} />
             <Route exact path="/study" component={StudentStudy} />
             <Route exact path="/test" component={StudentTest} />
             <Route exact path="/profile" component={UserProfile} />
-            <Route exact path="/admin/login" component={AdministratorLogin} />
+            <Route exact path="/admin/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin}/>)}/>
             <Route exact path="/admin/home" component={AdministratorHome} />
             <Route exact path="/admin/userstatus" component={UserStatus} />
             <Route exact path="/instructor/create" component={CreateCards} />

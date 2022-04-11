@@ -19,6 +19,8 @@ export default class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
+  // getDerivedStateFromProps() {}
+
 
   handleChange(event) {
     this.setState({
@@ -52,6 +54,10 @@ export default class Login extends Component {
       .catch(error => {
         console.log("There was an error!", error)
       })
+}
+
+getDerivedStateFromProps() {
+
 }
 
   render () {

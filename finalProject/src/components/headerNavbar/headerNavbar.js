@@ -11,7 +11,7 @@ export default class HeaderNavbar extends Component {
     super(props);
 
     this.state = {
-      loggedInStatus: "NOT_LOGGED_IN",
+      loggedInStatus: "",
       role: ""
     }
 
@@ -20,6 +20,15 @@ export default class HeaderNavbar extends Component {
     this.logState = this.logState.bind(this)
   }
   
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.loggedInStatus !== nextProps.loggedInStatus) {
+      return {
+        loggedInStatus: nextProps.loggedInStatus
+      }
+    }
+    return null
+  }
+
   handleLogout() {
     this.setState({role: ""})
     window.sessionStorage.clear();
@@ -56,6 +65,8 @@ export default class HeaderNavbar extends Component {
     console.log("this is headerNavbar's state---->", this.state)
   }
 
+  
+
   render () {
     return (
       <div>
@@ -64,8 +75,8 @@ export default class HeaderNavbar extends Component {
             {this.props.hideSmallLogo ? null  : <img className='SmallOgLogo' src={SmallOgLogo}/>} 
           </div>
           <div className='header-navbar__title' onClick={() => this.handleRedirect(this.state.role)}>Onomichi Junior and Senior High School</div>
-          <div className='header-navbar__logout-button'>{this.state.loggedInStatus === "LOGGED_IN" ? <FontAwesomeIcon onClick={this.handleLogout} className='header-navbar__logout-icon' icon="right-from-bracket" /> : null}</div>
-          <button onClick={this.logState}>See State</button>
+          <div className='header-navbar__logout-button'>{this.state.loggedInStatus === "LOGGED_IN" ? <FontAwesomeIcon onClick={this.props.handleLogout} className='header-navbar__logout-icon' icon="right-from-bracket" /> : null}</div>
+          <button onClick={this.props.handleLogin}>See State</button>
         </div>
       </div>
     );
