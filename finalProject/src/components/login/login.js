@@ -19,8 +19,6 @@ export default class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  // getDerivedStateFromProps() {}
-
 
   handleChange(event) {
     this.setState({
@@ -44,7 +42,10 @@ export default class Login extends Component {
         var token = data.data.token
         window.sessionStorage.setItem("token", token)
         var decoded = jwtDecode(token)
-        console.log(decoded)
+        this.setState({
+          role: decoded.sub.role
+        })
+        this.props.handleLogin(this.state.role)
         if (decoded.sub.role === "Student") {
           this.props.history.push('/home')
         } else {
@@ -54,10 +55,6 @@ export default class Login extends Component {
       .catch(error => {
         console.log("There was an error!", error)
       })
-}
-
-getDerivedStateFromProps() {
-
 }
 
   render () {

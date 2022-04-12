@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 export default class AdministratorLogin extends Component {
   constructor(props) {
@@ -10,7 +11,8 @@ export default class AdministratorLogin extends Component {
     this.state = {
       email: "",
       password: "",
-      user: {}
+      role: "",
+      user: []
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -29,7 +31,7 @@ export default class AdministratorLogin extends Component {
     axios.get(`http://127.0.0.1:5000/user-by-email/${this.state.email}`)
     .then(response => {
       this.setState({
-        user: response.data
+        user: [...response.data]
       })
     })
     .catch(error => {
@@ -47,12 +49,15 @@ export default class AdministratorLogin extends Component {
     })
     .then(data => {
       const token = data.data.token
-      console.log(token)
-      console.log("This came from the backend", data)
-      if (this.state.user.role !== "Administrator") {
+      const decoded = jwtDecode(token)
+      const role = decoded.sub.role
+      if (role !== "Administrator") {
         return alert("You are not an administrator")
       }
       window.sessionStorage.setItem("token", token)
+      this.setState({
+        role: role
+      })
       this.props.history.push("/admin/home")
     })
     .catch(error => {
@@ -73,7 +78,7 @@ export default class AdministratorLogin extends Component {
                 type="email"
                 name="email"
                 placeholder="Email"
-                // value={this.state.email}
+                value={this.state.email}
                 onChange={this.handleChange}
                 required
                 />
@@ -85,7 +90,7 @@ export default class AdministratorLogin extends Component {
                 type="password"
                 name="password"
                 placeholder="Password"
-                // value={this.state.password}
+                value={this.state.password}
                 onChange={this.handleChange}
                 required
                 />

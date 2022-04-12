@@ -38,7 +38,6 @@ export default class Home extends Component {
   componentDidMount(){
     var token = window.sessionStorage.getItem("token")
     const decoded = jwtDecode(token) 
-    console.log(decoded)
     const userEmail = decoded.sub.email
     let config = {
       headers: {

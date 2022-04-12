@@ -17,7 +17,6 @@ export default class InstructorHome extends Component {
   componentDidMount() {
     var token = window.sessionStorage.getItem("token")
     var decoded = jwtDecode(token)
-    console.log(decoded)
     const userEmail = decoded.sub.email
     axios
     .get(`http://127.0.0.1:5000/user-by-email/${userEmail}`)
@@ -27,7 +26,6 @@ export default class InstructorHome extends Component {
     .catch(error => {
       console.log("There was an error in retrieiving the instructor's profile info", error)
     })
-    this.state.logged_in = "True"
   }
 
   render () {

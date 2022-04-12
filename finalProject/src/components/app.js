@@ -33,25 +33,28 @@ constructor(props) {
   super(props);
 
   this.state = {
-    loggedInStatus: "NOT_LOGGED_IN"
+    loggedInStatus: "NOT_LOGGED_IN",
+    role: ""
   }
 
   this.handleLogin = this.handleLogin.bind(this)
   this.handleLogout = this.handleLogout.bind(this)
 }
 
-handleLogin() {      
+handleLogin(role) {      
   this.setState({
-    loggedInStatus: "LOGGED_IN"
+    loggedInStatus: "LOGGED_IN",
+    role: role
   })
 }
 
 handleLogout() {
   this.setState({
-    loggedInStatus: "NOT_LOGGED_IN"
+    loggedInStatus: "NOT_LOGGED_IN",
+    role: ""
   })
+  window.location.assign('http://localhost:3000/')
   window.sessionStorage.clear()
-  this.props.history.push('/')
 }
 
   render() {
@@ -59,7 +62,7 @@ handleLogout() {
       <div>
         <Router history={history} >
           <Switch>
-            <Route render={(props) => (<HeaderNavbar {...props} handleLogin={this.handleLogin} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus}/>)}/>
+            <Route render={(props) => (<HeaderNavbar {...props} handleLogin={this.handleLogin} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus} role={this.state.role}/>)}/>
             {/* <Route component={HeaderNavbar}/> */}
             <Route exact path="/" component={TitlePage} />
             <Route exact path="/register" component={Register} />
@@ -68,7 +71,7 @@ handleLogout() {
             <Route exact path="/study" component={StudentStudy} />
             <Route exact path="/test" component={StudentTest} />
             <Route exact path="/profile" component={UserProfile} />
-            <Route exact path="/admin/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin}/>)}/>
+            <Route exact path="/admin/login" render={(props) => (<AdministratorLogin {...props} handleLogin={this.handleLogin}/>)}/>
             <Route exact path="/admin/home" component={AdministratorHome} />
             <Route exact path="/admin/userstatus" component={UserStatus} />
             <Route exact path="/instructor/create" component={CreateCards} />
