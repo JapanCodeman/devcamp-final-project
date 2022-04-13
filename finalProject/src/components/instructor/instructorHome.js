@@ -40,7 +40,6 @@ export default class InstructorHome extends Component {
           <GreenButton to='/instructor/create' text="Create a Set" />
           <GreenButton to='/instructor/modify' text="Modify a Set" />
           <GreenButton to='/instructor/students' text="View Student Progress" />
-          <button onClick={() => this.props.handleLogin}>Click</button>
         </div>
       </div>
     );

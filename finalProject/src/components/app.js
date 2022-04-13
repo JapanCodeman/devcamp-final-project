@@ -57,29 +57,54 @@ handleLogout() {
   window.sessionStorage.clear()
 }
 
+adminAuthorizedPages() {
+  return [
+    <Route exact path="/admin/login" render={(props) => (<AdministratorLogin {...props} handleLogin={this.handleLogin}/>)}/>,
+    <Route exact path="/admin/home" component={AdministratorHome} />,
+    <Route exact path="/admin/userstatus" component={UserStatus} />
+  ]
+}
+
+instructorAuthorizedPages() {
+  return [
+    <Route exact path="/instructor/create" component={CreateCards} />,
+    <Route exact path="/instructor/home" render={(props) => (<InstructorHome {...props} handleLogin={this.handleLogin}/>)}/>,
+    <Route exact path="/instructor/modify" component={ModifyCards} />,
+    <Route exact path="/instructor/modify/:slug" component={EditCards} />,
+    <Route exact path="/instructor/students" component={StudentProgress} />
+  ]
+}
+
+studentAuthorizedPages() {
+  return [
+    <Route exact path="/home" component={Home} />,
+    <Route exact path="/study" component={StudentStudy} />,
+    <Route exact path="/test" component={StudentTest} />
+  ]
+}
+
   render() {
     return (
       <div>
         <Router history={history} >
           <Switch>
             <Route render={(props) => (<HeaderNavbar {...props} handleLogin={this.handleLogin} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus} role={this.state.role}/>)}/>
-            {/* <Route component={HeaderNavbar}/> */}
             <Route exact path="/" component={TitlePage} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin}/>)}/>
-            <Route exact path="/home" component={Home} />
-            <Route exact path="/study" component={StudentStudy} />
-            <Route exact path="/test" component={StudentTest} />
+            {this.state.role === "Student" ? (
+              this.studentAuthorizedPages()) :
+              null}
             <Route exact path="/profile" component={UserProfile} />
-            <Route exact path="/admin/login" render={(props) => (<AdministratorLogin {...props} handleLogin={this.handleLogin}/>)}/>
-            <Route exact path="/admin/home" component={AdministratorHome} />
-            <Route exact path="/admin/userstatus" component={UserStatus} />
-            <Route exact path="/instructor/create" component={CreateCards} />
-            <Route exact path="/instructor/home" render={(props) => (<InstructorHome {...props} handleLogin={this.handleLogin}/>)}/>
-            <Route exact path="/instructor/modify" component={ModifyCards} />
-            <Route exact path="/instructor/modify/:slug" component={EditCards} />
-            <Route exact path="/instructor/students" component={StudentProgress} />
-            {/* <Route path="*" component={PageNotFound} /> */}
+            {this.state.role === "Instructor" ? (
+              this.instructorAuthorizedPages()) :
+              null}
+            
+            {this.state.role==="Administrator" ? (
+              this.adminAuthorizedPages()) :
+              null}
+
+            <Route component={PageNotFound} />
           </Switch>
         </Router>
       </div>
