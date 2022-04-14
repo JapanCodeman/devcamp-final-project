@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import jwtDecode from 'jwt-decode';
-
 import SmallOgLogo from '../../../static/images/small_og_logo.png';
 
 export default class HeaderNavbar extends Component {
@@ -15,7 +13,6 @@ export default class HeaderNavbar extends Component {
       role: this.props.role
     }
 
-    // this.handleLogout = this.handleLogout.bind(this)
     this.handleRedirect = this.handleRedirect.bind(this)
     this.logState = this.logState.bind(this)
   }
@@ -45,7 +42,6 @@ export default class HeaderNavbar extends Component {
       this.props.history.push('/')
     }
 }
-
 
   logState() {
     console.log("this is headerNavbar's state---->", this.state)

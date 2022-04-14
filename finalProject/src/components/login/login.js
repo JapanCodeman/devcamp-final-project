@@ -45,7 +45,7 @@ export default class Login extends Component {
         this.setState({
           role: decoded.sub.role
         })
-        this.props.handleLogin(this.state.role)
+        this.props.handleLogin(this.state.email)
         if (decoded.sub.role === "Student") {
           this.props.history.push('/home')
         } else {

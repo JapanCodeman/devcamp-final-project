@@ -1,0 +1,29 @@
+.study-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+
+  &__green-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 400px;
+    background:  rgb(10,36,0);
+    background: linear-gradient(0deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%);
+    border-radius: 20px;
+
+    padding: 50px;
+    margin-top: 100px;
+
+    text-align: center;
+  }
+
+  &__study-explanation {
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+  }
+}

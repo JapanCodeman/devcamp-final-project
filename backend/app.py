@@ -113,18 +113,6 @@ def find_all_instructors():
     mimetype="application/json"
   )
 
-# Find one instructor by id - WORKING!!!
-# @app.route('/instructor/<id>', methods=['GET'])
-# def find_one_instructor(id):
-#   instructor = instructors.find_one({"_id":ObjectId(id)})
-#   instructor["_id"] = str(instructor["_id"])
-  
-#   return Response(
-#     response=json.dumps(instructor),
-#     status=200,
-#     mimetype="application/json"
-#   )
-
 # Find one user by id - WORKING!!!
 @app.route('/user/<id>', methods=['GET'])
 def find_one_user(id):
@@ -137,19 +125,7 @@ def find_one_user(id):
     mimetype="application/json"
   )
 
-# Look instructor up by e-mail for after login - TODO change to user instead of instructor
-# @app.route('/instructor-email/<email>', methods=['GET'])
-# def get_instructor_by_email(email):
-#   instructor = instructors.find_one({"email":email})
-#   instructor["_id"] = str(instructor["_id"])
-  
-#   return Response(
-#     response=json.dumps(instructor),
-#     status=200,
-#     mimetype="application/json"
-#   )
-
-# Look instructor up by e-mail for after login - TODO change to user instead of instructor
+# Look user up by e-mail
 @app.route('/user-email/<email>', methods=['GET'])
 def get_user_by_email(email):
   user = users.find_one({"email":email})
@@ -160,22 +136,6 @@ def get_user_by_email(email):
     status=200,
     mimetype="application/json"
   )
-
-# Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
-# @app.route('/update-instructor/<id>', methods=['PATCH', 'PUT'])
-# def update_one_instructor(id):
-#   id = ObjectId(id)
-#   id_call = {"_id" : id}
-
-#   updateObject = request.get_json()
-#   jsonify(updateObject)
-#   print(f'----------->{updateObject}<--------------')
-
-#   result = instructors.find_one_and_update({"_id" : id}, 
-#   { "$set" : updateObject },
-#   return_document = ReturnDocument.AFTER)
-
-#   return "Object Updated"
 
 # Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
 @app.route('/update-user/<id>', methods=['PATCH', 'PUT'])
@@ -217,6 +177,7 @@ def register_one_student():
   logged_status = "False"
   # This will use an index call on overall_study_calendar to pull today's study sets
   scheduled_study_set = 0
+  current_box_index = 0
   # Boxes will hold IDs of cards to be studied (maybe something else to avoid dealing with ObjectID)
   vocabulary_box_one = []
   vocabulary_box_two = []
@@ -236,6 +197,7 @@ def register_one_student():
     "course" : course,
     "password" : _hashed_password,
     "logged_in": logged_status,
+    "current_box_index": 0,
     "scheduled_study_set": scheduled_study_set,
     "vocabulary_box_one": vocabulary_box_one,
     "vocabulary_box_two": vocabulary_box_two,
@@ -262,7 +224,7 @@ def get_users_by_class(course):
   )
 
 @app.route('/student-email/<email>', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def get_student_by_email(email):
   student = users.find_one({"email":email})
   student["_id"] = str(student["_id"])
