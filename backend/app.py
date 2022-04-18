@@ -350,8 +350,13 @@ def get_unboxed_cards(course):
     "course" : course
   })
 
+  new_card_ids = []
+
+  for card in new_cards:
+    new_card_ids.append(str(card["_id"]))
+
   return Response(
-    response=json.dumps(new_cards),
+    response=json.dumps(new_card_ids),
     status=200,
     mimetype="application/json"
   )  

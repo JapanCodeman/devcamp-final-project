@@ -11,6 +11,7 @@ import { faPlus, faMinus, faRightFromBracket, faSquarePen, faUpload, faTrashCan 
 import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
 import CreateCards from './cards/createCards';
+import DialogBox from './modals/dialogBoxModal';
 import EditCards from './cards/editCards';
 import history from '../history';
 import Home from './student/home';
@@ -89,9 +90,9 @@ handleLogin(email) {
     role: response.data.role,
     id: response.data._id
   })
-  .catch(error => {
-    console.log("There was an error in App.js with the handleLogin function", error)
-  })
+  // .catch(error => {
+  //   console.log("There was an error in App.js with the handleLogin function", error)
+  // })
   })
 }
 
@@ -131,7 +132,7 @@ instructorAuthorizedPages() {
   try {
   return [
       <Route exact path="/instructor/create" component={CreateCards} key="instructor-create-cards"/>,
-      <Route exact path="/instructor/home" render={(props) => (<InstructorHome {...props} handleLogin={this.handleLogin} key="instructor-home"/>)}/>,
+      <Route exact path="/instructor/home" key="instructor-home" render={(props) => (<InstructorHome {...props} handleLogin={this.handleLogin} key="instructor-home"/>)}/>,
       <Route exact path="/instructor/modify" component={ModifyCards} key="instructor-modify"/>,
       <Route exact path="/instructor/modify/:slug" component={EditCards} key="instructor-modify-slug"/>,
       <Route exact path="/instructor/students" component={StudentProgress} key="instructor-student-progress"/>
