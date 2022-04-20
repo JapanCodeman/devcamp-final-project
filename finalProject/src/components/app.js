@@ -11,7 +11,6 @@ import { faPlus, faMinus, faRightFromBracket, faSquarePen, faUpload, faTrashCan 
 import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
 import CreateCards from './cards/createCards';
-import DialogBox from './modals/dialogBoxModal';
 import EditCards from './cards/editCards';
 import history from '../history';
 import Home from './student/home';

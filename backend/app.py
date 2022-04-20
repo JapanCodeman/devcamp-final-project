@@ -361,6 +361,24 @@ def get_unboxed_cards(course):
     mimetype="application/json"
   )  
 
+@app.route('/get-cards-by-id', methods=['GET'])
+def get_cards_by_id():
+  ids = request.get_json()
+  called_cards = []
+
+  # for id in ids:
+  #   # ids["_id"] = ObjectId(ids["_id"])
+  #   card = cards.find({
+  #     "_id" : ObjectId(id["_id"])
+  #   })
+  #   called_cards.append(card)
+
+  return Response(
+  response=json.dumps(ids),
+  status=200,
+  mimetype="application/json"
+)  
+
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])
 def update_a_card(id):

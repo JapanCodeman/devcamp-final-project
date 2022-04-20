@@ -1,0 +1,41 @@
+.study-card {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  height: 500px;
+  width: 600px;
+  background:  rgb(10,36,0);
+  background: linear-gradient(0deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%);
+  border-radius: 20px;
+
+  &__word {
+    margin-top: 200px;
+  }
+
+  &__answer {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 100px;
+    background: transparent;
+    border: none;
+    border-bottom: solid white 2px;
+    font-size: 24px;
+    outline: none;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      color: white;
+      text-align: center;
+    }
+  }
+}
