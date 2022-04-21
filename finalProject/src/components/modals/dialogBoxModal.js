@@ -2,18 +2,23 @@ import React, { Component } from 'react';
 import ReactModal from 'react-modal';
 import GreenButton from '../helpers/greenButton';
 
+ReactModal.setAppElement(".app-wrapper");
+
 export default class DialogBox extends Component {
   constructor(props) {
     super(props)
 
     this.customStyles = {
+      overlay: {
+        position: "fixed"
+      },
       content: {
+        position: "absolute",
         top: "50%",
         left: "50%",
-        right: "auto",
-        marginRight: "-50%",
         transform: "translate(-50%, -50%)",
         width: "800px",
+        height: "375px",
         borderRadius: "20px",
         background:  "rgb(10,36,0)",
         backgroundColor: "linear-gradient(0 deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%)",
@@ -24,7 +29,8 @@ export default class DialogBox extends Component {
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
+        flexShrink: "0"
       }
     };
 

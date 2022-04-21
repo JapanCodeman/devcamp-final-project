@@ -1,7 +1,5 @@
-from audioop import cross
 import datetime
 from distutils.log import error
-from enum import unique
 import json
 
 import os
@@ -341,12 +339,30 @@ def cards_by_setname(setname):
   mimetype="application/json"
 )
 
+# Get all new cards so they can be assigned to box 1
+@app.route('/get-todays-cards/<id>')
+def get_todays_cards(id):
+  id = ObjectId()
+
+  student = users.find({
+    "_id" : id,
+  })
+  student["_id"] = str(student["_id"])
+
+  # todays_boxes = overall_study_calendar[student["current_box_index"]]
+
+  return Response(
+  response=json.dumps(student),
+  status=200,
+  mimetype="application/json"
+)
+
 # Get all unboxed cards
 @app.route('/get-unboxed-cards/<course>', methods=['GET'])
 def get_unboxed_cards(course):
 # Make a JSON request for cards with box_number == 0 and student's class
+# Creating cards with an original state of box_number = 0 isn't going to work because they will "reset" every time they are called
   new_cards = cards.find({
-    "box_number" : 0,
     "course" : course
   })
 
@@ -405,8 +421,6 @@ def delete_a_card(id):
 def delete_all_cards():
   result = cards.delete_many({})
   return 'Cards table dropped'
-
-# TODO - Get today's cards based on vocab study calendar
 
 # TODO - admin CRUD
 # Register a new administrator - WORKING!!!

@@ -68,6 +68,7 @@ export default class Login extends Component {
                 className='login-form__email'
                 type="email"
                 name="email"
+                autoComplete="username"
                 placeholder="Email"
                 value={this.state.email}
                 onChange={this.handleChange}
@@ -79,6 +80,7 @@ export default class Login extends Component {
                 className='login-form__password'
                 type="password"
                 name="password"
+                autoComplete="current-password"
                 placeholder="Password"
                 value={this.state.password}
                 onChange={this.handleChange}

@@ -54,11 +54,12 @@ export default class StudentStudy extends Component {
   }
 
   render () {
+    let studyCardsArr = []
     return (
       <div className='study-page'>
         <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
-        <StudyCard />
-        <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={null} />
+        <StudyCard word="test"/>
+        <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
       </div>
     );
   }

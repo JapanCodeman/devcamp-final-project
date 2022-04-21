@@ -10,7 +10,6 @@ export default class CreateCard extends Component {
       course: this.props.course,
       word: "",
       meaning: "",
-      box_number: 0,
       guessed_correctly_count: 0 
       } 
   
@@ -40,7 +39,6 @@ export default class CreateCard extends Component {
           set_name: this.props.setName,
           word: "",
           meaning: "",
-          box_number: 0,
           guessed_correctly_count: 0 
       })} else {
         alert("You must fill in both the word and meaning fields before submitting")
