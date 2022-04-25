@@ -119,6 +119,7 @@ export default class Register extends Component {
                 type="email"
                 name="email"
                 placeholder="email"
+                autoComplete="username"
                 value={this.state.email}
                 onChange={this.handleChange}
                 />
@@ -143,6 +144,7 @@ export default class Register extends Component {
                 type="password"
                 name="password"
                 placeholder="password"
+                autoComplete="new-password"
                 value={this.state.password}
                 onChange={this.handleChange}
                 required
@@ -154,6 +156,7 @@ export default class Register extends Component {
                 type="password"
                 name="confirm_password"
                 placeholder="confirm password"
+                autoComplete="new-password"
                 value={this.state.confirm_password}
                 onChange={this.handleChange}
                 required

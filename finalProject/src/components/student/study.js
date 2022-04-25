@@ -34,7 +34,7 @@ export default class StudentStudy extends Component {
       console.log("Error in retrieving user info on component mount", error)
     })
     await axios
-    .get(`http://127.0.0.1:5000/get-unboxed-cards/${this.state.course}`)
+    .get(`http://127.0.0.1:5000/get-new-cards/${this.state.course}`)
     .then(response => {
       this.setState({
         cardIds: [...response.data]
@@ -43,9 +43,15 @@ export default class StudentStudy extends Component {
     .catch (error => {
       console.log("Error in getting student data", error)
     })
+    {this.state.cardIds.forEach(card =>
+      this.state.vocabulary_box_one.push(card))}
     await axios
-    .get(`http://127.0.0.1:5000/`)
-  }
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[0]}`)
+    .then(response => 
+      this.setState({
+        cards: [...response.data]
+      }))
+    }
 
   handleModalClose() {
     this.setState({
@@ -53,12 +59,22 @@ export default class StudentStudy extends Component {
     })
   }
 
+  handleLoadNextCard() {
+    axios
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[0]}`)
+    .then(response => 
+      this.setState({
+        cards: [...response.data.data]
+      }))
+  }
+
   render () {
     let studyCardsArr = []
     return (
       <div className='study-page'>
         <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
-        <StudyCard word="test"/>
+        {/* {this.state.cards.map(card => <EditCard key={card._id} id={card._id} handleUpdateCard={this.handleUpdateCard} created_by={card.created_by} set_name={card.set_name} course={card.course} word={card.word} meaning={card.meaning} />)} */}
+        <StudyCard word={this.state.cards.word}/>
         <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
       </div>
     );

@@ -14,6 +14,7 @@ from flask_jwt_extended import jwt_required
 from flask import Flask, jsonify, make_response, Response, request
 from flask_cors import CORS, cross_origin
 from pymongo import ReturnDocument
+import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv(find_dotenv())
@@ -90,6 +91,7 @@ def register_one_instructor():
     "first": first,
     "last": last,
     "role": 'Instructor',
+    "public_id": str(uuid.uuid4()),
     "email": email,
     "course": course,
     "password": _hashed_password,
@@ -117,6 +119,19 @@ def find_one_user(id):
   user = users.find_one({"_id":ObjectId(id)})
   user["_id"] = str(user["_id"])
   
+  return Response(
+    response=json.dumps(user),
+    status=200,
+    mimetype="application/json"
+  )
+
+# Find one user by public id (uuid)
+@app.route('/user-by-public-id', methods=['GET'])
+def user_by_public_id():
+  public_id = request.json.get("public_id")
+  user = users.find_one({"public_id": public_id})
+  del user["_id"]
+
   return Response(
     response=json.dumps(user),
     status=200,
@@ -195,6 +210,7 @@ def register_one_student():
     "course" : course,
     "password" : _hashed_password,
     "logged_in": logged_status,
+    "public_id": str(uuid.uuid4()),
     "current_box_index": 0,
     "scheduled_study_set": scheduled_study_set,
     "vocabulary_box_one": vocabulary_box_one,
@@ -266,6 +282,10 @@ def delete_all_students():
 @app.route('/create-cards', methods=['POST'])
 def create_cards():
   cards_list = request.get_json()
+
+  for card in cards_list:
+    card["public_id"] = str(uuid.uuid4())
+
   result = cards.insert_many(cards_list)
   return 'Multiple cards uploaded'
 
@@ -345,7 +365,7 @@ def get_todays_cards(id):
   id = ObjectId()
 
   student = users.find({
-    "_id" : id,
+    "_id" : id
   })
   student["_id"] = str(student["_id"])
 
@@ -358,8 +378,8 @@ def get_todays_cards(id):
 )
 
 # Get all unboxed cards
-@app.route('/get-unboxed-cards/<course>', methods=['GET'])
-def get_unboxed_cards(course):
+@app.route('/get-new-cards/<course>', methods=['GET'])
+def get_new_cards(course):
 # Make a JSON request for cards with box_number == 0 and student's class
 # Creating cards with an original state of box_number = 0 isn't going to work because they will "reset" every time they are called
   new_cards = cards.find({
@@ -369,7 +389,7 @@ def get_unboxed_cards(course):
   new_card_ids = []
 
   for card in new_cards:
-    new_card_ids.append(str(card["_id"]))
+    new_card_ids.append(str(card["public_id"]))
 
   return Response(
     response=json.dumps(new_card_ids),
@@ -377,20 +397,16 @@ def get_unboxed_cards(course):
     mimetype="application/json"
   )  
 
-@app.route('/get-cards-by-id', methods=['GET'])
-def get_cards_by_id():
-  ids = request.get_json()
-  called_cards = []
+@app.route('/get-card-by-id/<public_id>', methods=['GET'])
+def get_cards_by_id(public_id):
 
-  # for id in ids:
-  #   # ids["_id"] = ObjectId(ids["_id"])
-  #   card = cards.find({
-  #     "_id" : ObjectId(id["_id"])
-  #   })
-  #   called_cards.append(card)
+  card = cards.find_one({
+    "public_id" : public_id
+  })
+  card.pop("_id")
 
   return Response(
-  response=json.dumps(ids),
+  response=json.dumps(card),
   status=200,
   mimetype="application/json"
 )  
