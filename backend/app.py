@@ -398,7 +398,7 @@ def get_new_cards(course):
   )  
 
 @app.route('/get-card-by-id/<public_id>', methods=['GET'])
-def get_cards_by_id(public_id):
+def get_card_by_id(public_id):
 
   card = cards.find_one({
     "public_id" : public_id
@@ -409,7 +409,26 @@ def get_cards_by_id(public_id):
   response=json.dumps(card),
   status=200,
   mimetype="application/json"
-)  
+)
+
+# Takes an array of ids and returns all the cards associated with those as objects in an array
+@app.route('/get-cards-by-ids', methods=['GET', 'POST'])
+def get_cards_by_ids():
+  list_of_cards = request.get_json()
+  return_cards = []
+
+  for card in list_of_cards:
+    card = cards.find({
+      "public_id" : card
+    })
+    del card["_id"]
+    return_cards.append(card)
+
+  return Response(
+  response=json.dumps(return_cards),
+  status=200,
+  mimetype="application/json"
+)
 
 # Update a card - WORKING!!!
 @app.route('/update-card/<id>', methods=['PATCH'])

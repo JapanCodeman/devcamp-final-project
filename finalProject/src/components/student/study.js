@@ -17,6 +17,7 @@ export default class StudentStudy extends Component {
     }
 
     this.handleModalClose = this.handleModalClose.bind(this)
+    this.handleLoadNextCard = this.handleLoadNextCard.bind(this)
   }
 
   async componentDidMount() {
@@ -45,13 +46,20 @@ export default class StudentStudy extends Component {
     })
     {this.state.cardIds.forEach(card =>
       this.state.vocabulary_box_one.push(card))}
+    
+    const studyArray = []
+    for (let i = 0; i < this.state.vocabulary_box_one.length; i++) {
     await axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[0]}`)
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[i]}`)
     .then(response => 
-      this.setState({
-        cards: [...response.data]
-      }))
+      studyArray.push(response.data)
+      )
     }
+    this.setState({
+      cards: [...studyArray]
+    })
+  }
+    
 
   handleModalClose() {
     this.setState({
@@ -60,21 +68,21 @@ export default class StudentStudy extends Component {
   }
 
   handleLoadNextCard() {
+    let card_number = 0
     axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[0]}`)
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[card_number]}`)
     .then(response => 
-      this.setState({
-        cards: [...response.data.data]
-      }))
+      console.log(response.data.word))
+      card_number++
   }
 
   render () {
-    let studyCardsArr = []
     return (
       <div className='study-page'>
         <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
         {/* {this.state.cards.map(card => <EditCard key={card._id} id={card._id} handleUpdateCard={this.handleUpdateCard} created_by={card.created_by} set_name={card.set_name} course={card.course} word={card.word} meaning={card.meaning} />)} */}
-        <StudyCard word={this.state.cards.word}/>
+        {this.state.cards.map(card => <StudyCard key={card.public_id} word={card.word} meaning={card.meaning} />)}
+        <button onClick={this.handleLoadNextCard}>Click to load next card</button>
         <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
       </div>
     );

@@ -14,7 +14,6 @@ export default class HeaderNavbar extends Component {
     }
 
     this.handleRedirect = this.handleRedirect.bind(this)
-    this.logState = this.logState.bind(this)
   }
   
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -43,10 +42,6 @@ export default class HeaderNavbar extends Component {
     }
 }
 
-  logState() {
-    console.log("this is headerNavbar's state---->", this.state)
-  }
-
   render () {
     return (
       <div>
@@ -56,7 +51,6 @@ export default class HeaderNavbar extends Component {
           </div>
           <div className='header-navbar__title' onClick={() => this.handleRedirect(this.state.role)}>Onomichi Junior and Senior High School</div>
           <div className='header-navbar__logout-button'>{this.state.loggedInStatus === "LOGGED_IN" ? <FontAwesomeIcon onClick={this.props.handleLogout} className='header-navbar__logout-icon' icon="right-from-bracket" /> : null}</div>
-          <button onClick={this.logState}>See State</button>
         </div>
       </div>
     );
