@@ -37,27 +37,56 @@ export default class StudentStudy extends Component {
     await axios
     .get(`http://127.0.0.1:5000/get-new-cards/${this.state.course}`)
     .then(response => {
+      let checkerArray = []
+      response.data.forEach(id => {
+        checkerArray = checkerArray.filter(id => !this.state.full_card_collection.includes(id))
+        // if (this.state.full_card_collection.includes(id)) {
+          checkerArray.push(id)
+        // }
+      }
+      )
       this.setState({
-        cardIds: [...response.data]
+        cardIds: [...checkerArray],
+        full_card_collection: [...checkerArray]
       })
     })
     .catch (error => {
       console.log("Error in getting student data", error)
     })
     {this.state.cardIds.forEach(card =>
-      this.state.vocabulary_box_one.push(card))}
+    this.state.vocabulary_box_one.push(card))}
     
     const studyArray = []
     for (let i = 0; i < this.state.vocabulary_box_one.length; i++) {
     await axios
     .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[i]}`)
-    .then(response => 
+    .then(response =>
       studyArray.push(response.data)
       )
+      console.log(studyArray)
     }
-    this.setState({
-      cards: [...studyArray]
-    })
+    studyArray.forEach(card => {
+      if (studyArray.includes(card) === false) {
+        this.setState({
+          cards: [...studyArray]
+        })
+      }
+    }) 
+
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+        "Authorization" : `Bearer ${token}`
+        }
+    }
+    await axios
+    .patch(`http://127.0.0.1:5000/update-user/${this.state._id}`, 
+    {
+      vocabulary_box_one : this.state.vocabulary_box_one,
+      full_card_collection : this.state.full_card_collection
+    }, config
+    )
   }
     
 

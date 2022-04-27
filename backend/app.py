@@ -37,10 +37,10 @@ except:
 
 Database = client.get_database('letsgovocab')
 
-instructors = Database.instructors
-students = Database.students
+# instructors = Database.instructors
+# students = Database.students
 users = Database.users
-administrators = Database.admin
+# administrators = Database.admin
 
 cards = Database.cards
 
@@ -190,7 +190,7 @@ def register_one_student():
   logged_status = "False"
   # This will use an index call on overall_study_calendar to pull today's study sets
   scheduled_study_set = 0
-  current_box_index = 0
+  full_card_collection = []
   # Boxes will hold IDs of cards to be studied (maybe something else to avoid dealing with ObjectID)
   vocabulary_box_one = []
   vocabulary_box_two = []
@@ -212,6 +212,7 @@ def register_one_student():
     "logged_in": logged_status,
     "public_id": str(uuid.uuid4()),
     "current_box_index": 0,
+    "full_card_collection": full_card_collection,
     "scheduled_study_set": scheduled_study_set,
     "vocabulary_box_one": vocabulary_box_one,
     "vocabulary_box_two": vocabulary_box_two,

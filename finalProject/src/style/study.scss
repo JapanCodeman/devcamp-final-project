@@ -4,6 +4,7 @@
   justify-content: center;
   align-content: center;
   flex-direction: column;
+  margin-top: 300px;
 
   &__green-square {
     display: flex;
@@ -32,5 +33,6 @@
   &__quit-button {
     align-self: flex-end;
     justify-content: right;
+    margin-top: 500px;
   }
 }
