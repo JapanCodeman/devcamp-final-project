@@ -46,8 +46,15 @@ export default class Home extends Component {
         <PageTitler title="Home" />
         <PageTitler title={`Welcome back, ${this.state.first}`} />
         <h1 className="student-home__agenda">Would you like to study or take your daily test?</h1>
-        <GreenButton to="/study" text="Study" />
-        <GreenButton to="/test" text="Daily Test" />
+        <div className="button-wrapper">
+          <GreenButton className="green-button-study" to="/study" text="Study" />
+          <GreenButton className="green-button-test" to="/test" text="Daily Test" />
+        </div>
+
+        <div className="explanations-wrapper">
+          <div className="explanations-wrapper__study">In study mode, you can view the cards that will be on your daily test. You can do this for as long as you like without making any permanent changes to your study record. It is best to study throughout the day in small batches and to be sure and give it a final go before taking your daily test so you can do as best as you can!</div>
+          <div className="explanations-wrapper__test">For "Let's Go!" to work properly, you need to take a test everyday. This is known as your daily test and shouldn't take too much of your time. Words that you consistently answer correctly will be shown to you less often. Words that you are having a hard time with will be shown to you more often. Be aware, although a word may come very rarely, they never completely go out of your word bank, so keep studying!</div>
+        </div>
       </div>
     );
   }
