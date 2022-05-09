@@ -45,10 +45,10 @@ export default class Home extends Component {
       <div className="student-home">
         <PageTitler title="Home" />
         <PageTitler title={`Welcome back, ${this.state.first}`} />
-        <h1 className="student-home__agenda">Would you like to study or take your daily test?</h1>
-        <div className="button-wrapper">
-          <GreenButton className="green-button-study" to="/study" text="Study" />
-          <GreenButton className="green-button-test" to="/test" text="Daily Test" />
+        <div className="student-home__agenda">Would you like to study or take your daily test?</div>
+        <div className="student-home-button-wrapper">
+          <GreenButton className="student-home-button-wrapper__green-button-study" to="/study" text="Study" />
+          <GreenButton className="student-home-button-wrapper__green-button-test" to="/test" text="Daily Test" />
         </div>
 
         <div className="explanations-wrapper">

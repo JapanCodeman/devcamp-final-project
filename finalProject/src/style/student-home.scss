@@ -1,49 +1,59 @@
-.student-home {
-
-  &__agenda {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-    margin-left: 200px;
-    font-size: 48px;
-  }
+.student-home__agenda {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  margin-left: 200px;
+  font-size: 48px;
 }
 
-.button-wrapper {
+.student-home-button-wrapper {
   display: flex;
   justify-content: center;
 
-  .green-button {
-    grid-column: study-s/study-e;
-    grid-row: buttons-s/buttons-e;
+  &__green-button-study {
+    color: green;
+    background-color: green;
+    text-decoration: none;
+    width: 300px;
+    height: 300px;
+    margin-top: 40px;
+}
+
+  &__green-button-test {
+    color: green;
+    background-color: green;
+    text-decoration: none;
     width: 300px;
     height: 300px;
     margin-top: 40px;
   }
 }
 
+
 .explanations-wrapper {
-  display: flex;
-  justify-content: center;
-  align-content: space-between;
-  flex-direction: row;
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-size: 24px;
+display: flex;
+justify-content: center;
+align-content: space-between;
+flex-direction: row;
+font-family: "Roboto", sans-serif;
+font-weight: 700;
+font-size: 24px;
 
   &__study {
-    display: hidden;
+    color: green;
+    width: 500px;
+    margin-left: 50px;
   }
 
   &__test {
     color: green;
     width: 500px;
-
     margin-left: 50px;
   }
 }
 
-.green-button:hover + .explanations-wrapper__study {
-  color: green;
-  width: 500px;
-  display: block;
-}
+
+// .green-button:hover + .explanations-wrapper__study {
+//   color: green;
+//   width: 500px;
+//   display: block;
+// }

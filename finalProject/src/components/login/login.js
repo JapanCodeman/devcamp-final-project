@@ -48,7 +48,9 @@ export default class Login extends Component {
         this.props.handleLogin(this.state.email)
         if (decoded.sub.role === "Student") {
           this.props.history.push('/home')
-        } else {
+        } else if (decoded.sub.role === "Administrator") {
+          this.props.history.push('/admin/home') }
+          else {
           this.props.history.push('/instructor/home')
         }
       })

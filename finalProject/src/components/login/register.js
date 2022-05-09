@@ -170,8 +170,8 @@ export default class Register extends Component {
               </ul> 
               
               <div className='button-wrapper'>
-                <GreenButton to='' onClick={this.handleSubmit} text="Create Account" />
-                <GreenButton to='/' text="Return to Title Screen" />
+                <GreenButton className='green-button' to='' onClick={this.handleSubmit} text="Create Account" />
+                <GreenButton className='green-button' to='/' text="Return to Title Screen" />
                 {/* <Link className='create-acct-button' onClick={this.handleSubmit}>Create Account</Link>
                 <Link type='button' className='return-to-home' to='/'>Return to Title Screen</Link> */}
               </div>

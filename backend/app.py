@@ -40,7 +40,7 @@ Database = client.get_database('letsgovocab')
 # instructors = Database.instructors
 # students = Database.students
 users = Database.users
-# administrators = Database.admin
+administrators = Database.admin
 
 cards = Database.cards
 
