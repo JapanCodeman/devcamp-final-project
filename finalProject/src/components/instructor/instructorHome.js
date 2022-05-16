@@ -37,9 +37,9 @@ export default class InstructorHome extends Component {
           <div className='instructor-home__graph-box__graph'>Graph goes here</div>
         </div>
         <div className='instructor-home__green-button-links'>
-          <GreenButton to='/instructor/create' text="Create a Set" />
-          <GreenButton to='/instructor/modify' text="Modify a Set" />
-          <GreenButton to='/instructor/students' text="View Student Progress" />
+          <GreenButton className='green-button' to='/instructor/create' text="Create a Set" />
+          <GreenButton className='green-button' to='/instructor/modify' text="Modify a Set" />
+          <GreenButton className='green-button' to='/instructor/students' text="View Student Progress" />
         </div>
       </div>
     );

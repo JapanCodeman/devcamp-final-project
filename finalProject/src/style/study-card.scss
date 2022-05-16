@@ -1,3 +1,7 @@
+#root {
+  $bg: linear-gradient(0deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%);
+}
+
 .study-card {
   margin-top: 100px;
   display: flex;
@@ -11,8 +15,7 @@
   font-weight: 700;
   height: 500px;
   width: 600px;
-  background:  rgb(10,36,0);
-  background: linear-gradient(0deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%);
+  background: var($bg);
   border-radius: 20px;
 
   &__word {

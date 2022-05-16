@@ -5,26 +5,30 @@
   font-size: 48px;
 }
 
-.student-home-button-wrapper {
+.student-home-button-wrapper, a {
   display: flex;
   justify-content: center;
 
-  &__green-button-study {
-    color: green;
-    background-color: green;
-    text-decoration: none;
-    width: 300px;
-    height: 300px;
-    margin-top: 40px;
-}
+    &__green-button-study, &__green-button-test {
+      color: #fff;
+      background-color: green;
+      text-decoration: none;
+      width: 300px;
+      height: 300px;
+      margin-top: 40px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      border-radius: 10px;
+      justify-content: center;
+      text-align: center;
+      align-items: center;
+      margin: 20px;
+      transition: 0.3s;
 
-  &__green-button-test {
-    color: green;
-    background-color: green;
-    text-decoration: none;
-    width: 300px;
-    height: 300px;
-    margin-top: 40px;
+        &:hover {
+          background-color: #349429;
+    }
   }
 }
 
@@ -37,12 +41,16 @@ flex-direction: row;
 font-family: "Roboto", sans-serif;
 font-weight: 700;
 font-size: 24px;
+margin-right: 50px;
 
   &__study {
     color: green;
+    text-align: right;
     width: 500px;
     margin-left: 50px;
-  }
+    transition: 0.3s;
+    }
+
 
   &__test {
     color: green;
@@ -52,7 +60,7 @@ font-size: 24px;
 }
 
 
-// .green-button:hover + .explanations-wrapper__study {
+// .student-home-button-wrapper__green-button-study:hover + .explanations-wrapper__study {
 //   color: green;
 //   width: 500px;
 //   display: block;
