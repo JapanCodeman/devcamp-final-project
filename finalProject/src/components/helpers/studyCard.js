@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 
+import ReactCardFlip from 'react-card-flip';
+
+import GreenButton from './greenButton';
+
 export default class StudyCard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      styleName: "study-card",
+      isFlipped: false,
       answer: ""
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleCheckAnswer = this.handleCheckAnswer.bind(this)
-
-    const root = document.documentElement;
-    root?.style.setProperty(
-      "--bg",
-      styleName ? "#262833" : "#fff"
-    );
   };
 
   handleChange(event) {
@@ -26,13 +24,12 @@ export default class StudyCard extends Component {
   }
 
   handleCheckAnswer(e) {
-    if (e.keyCode === 13) 
+    if (e.keyCode === 13)
     if (this.props.meaning === this.state.answer) {
+      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
       console.log("Answer is correct")
     } else {
-      // this.setState({
-      //   styleName: "study-card-wrong"
-      // })
+      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
       console.log("Answer is incorrect")
     }
   }
@@ -41,12 +38,13 @@ export default class StudyCard extends Component {
 
   render () {
     return (
-      <div className={this.state.styleName}>
-        <div className='study-card__word'>
+      <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection="horizontal">
+      <div className="study-card__front">
+        <div className="study-card__front__word">
           {this.props.word}
         </div>
         <input 
-          className='study-card__answer'
+          className="study-card__front__answer"
           type="text"
           name="answer"
           placeholder="Your answer"
@@ -56,8 +54,21 @@ export default class StudyCard extends Component {
           onKeyDown={this.handleCheckAnswer}
           required
           />
-          {/* <button button type="submit" onKeyDown={(e) => e.key === this.handleLoadNextCard}>Submit Answer</button> */}
+        <button className="study-card__front__submit-answer-button" onClick={this.handleCheckAnswer}>Submit Answer (or press Enter)</button>
       </div>
+
+        <div className="study-card__back">
+          <div className="study-card__back__word">
+            Word: {this.props.word}
+          </div>
+          <div className="study-card__back__answer">
+            Your answer: {this.state.answer}
+          </div>
+          <div className="study-card__back__meaning">
+            Definition: {this.props.meaning}
+          </div>
+        </div>
+      </ReactCardFlip>
     );
   }
 }

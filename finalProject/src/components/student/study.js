@@ -89,8 +89,7 @@ export default class StudentStudy extends Component {
     return (
       <div className='study-page'>
         <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
-        {/* {this.state.cards.map(card => <EditCard key={card._id} id={card._id} handleUpdateCard={this.handleUpdateCard} created_by={card.created_by} set_name={card.set_name} course={card.course} word={card.word} meaning={card.meaning} />)} */}
-        {this.state.cards.map(card => <StudyCard key={card.public_id} word={card.word} meaning={card.meaning} />)}
+        {this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
         <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
       </div>
     );
