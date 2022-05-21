@@ -18,4 +18,22 @@
   &:hover {
     background-color: #349429;
   }
+
+  &__inactive {
+    display: flex;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    border-radius: 10px;
+    height: 75px;
+    width: 175px;
+    background-color: gray;
+    text-decoration: none;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin: 20px;
+    pointer-events: none;
+  }
 }

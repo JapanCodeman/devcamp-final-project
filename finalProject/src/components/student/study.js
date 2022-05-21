@@ -13,10 +13,12 @@ export default class StudentStudy extends Component {
     this.state = {
       dialogBoxOpen: true,
       cardIds: [],
+      card_number: 0,
       cards: []
     }
 
     this.handleModalClose = this.handleModalClose.bind(this)
+    this.handleLoadCard = this.handleLoadCard.bind(this)
     this.handleLoadNextCard = this.handleLoadNextCard.bind(this)
   }
 
@@ -65,11 +67,8 @@ export default class StudentStudy extends Component {
       full_card_collection : this.state.full_card_collection
     }, config)
 
-    this.handleLoadNextCard()
+    this.handleLoadCard()
   }
- 
-  
-  
 
   handleModalClose() {
     this.setState({
@@ -77,10 +76,24 @@ export default class StudentStudy extends Component {
     })
   }
 
-  handleLoadNextCard() {
-    let card_number = 0
+  handleLoadCard() {
     axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.vocabulary_box_one[card_number]}`)
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.full_card_collection[this.state.card_number]}`)
+    .then(response => 
+      this.setState({cards : [response.data]}))
+    .catch(error => ("There was an error loading the card", error))
+  }
+
+  handleLoadNextCard() {
+    let num = this.state.card_number + 1
+    if (num > this.state.full_card_collection.length) {
+      num = 0
+    }
+    this.setState({
+      card_number: num
+  })
+    axios
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.full_card_collection[this.state.card_number]}`)
     .then(response => 
       this.setState({cards : [response.data]}))
   }
@@ -89,8 +102,11 @@ export default class StudentStudy extends Component {
     return (
       <div className='study-page'>
         <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
-        {this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
-        <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
+        {this.state.cards.length === 0 ? <div className='study-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
+        <div className='study-page__button-wrapper'>
+          <button className='study-page__next' onClick={this.handleLoadNextCard}>Next</button>
+          <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
+        </div>
       </div>
     );
   }

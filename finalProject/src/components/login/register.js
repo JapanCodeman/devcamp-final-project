@@ -20,6 +20,7 @@ export default class Register extends Component {
       role: "Student"
     }
     this.handleChange = this.handleChange.bind(this)
+    // this.handlePassword = this.handlePassword.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -28,6 +29,16 @@ export default class Register extends Component {
     [event.target.name]: event.target.value
     });
   }
+
+  // handlePassword() {
+  //   let regex = /^[a-zA-Z]+$/
+  //   if (this.state.password.length < 7 || this.state.password.length > 15) {
+  //     return "green"
+  //   }
+  //   else if (.test(this.state.password)) {
+  //     console.log("letters only")
+  //   }
+  // }
   
   handleSubmit(event) {
     if (this.state.role === "Student") {
@@ -72,19 +83,19 @@ export default class Register extends Component {
   }} 
 
   render () {
-    var password = document.getElementsByClassName('register-form__password')
-    var confirm_password = document.getElementsByClassName('register-form__label-confirm-password');
+    // var password = document.getElementsByClassName('register-form__password')
+    // var confirm_password = document.getElementsByClassName('register-form__label-confirm-password');
 
-    function validatePassword(){
-      if(password.value != confirm_password.value) {
-        confirm_password.setCustomValidity("Passwords Don't Match");
-      } else {
-        confirm_password.setCustomValidity('');
-      }
-    }
+    // function validatePassword() {
+    //   if (password.value !== confirm_password.value) {
+    //     confirm_password.setCustomValidity("Passwords Don't Match");
+    //   } else {
+    //     confirm_password.setCustomValidity('');
+    //   }
+    // }
 
-    password.onChange = validatePassword;
-    confirm_password.onChange = validatePassword;
+    // password.onChange = validatePassword;
+    // confirm_password.onChange = validatePassword;
     return (
       <div>
         <div className='register-page-wrapper'>
@@ -146,6 +157,7 @@ export default class Register extends Component {
                 placeholder="password"
                 autoComplete="new-password"
                 value={this.state.password}
+                // onChange={(e) => {this.handleChange(e); this.handlePassword()}}
                 onChange={this.handleChange}
                 required
                 />
@@ -162,18 +174,17 @@ export default class Register extends Component {
                 required
                 />
 
-              <ul className='password-requirements'>Password Requirements
+              <ul className='password-requirements'>Password Security Suggestions
                 <li>8-16 characters</li>
                 <li>Roman characters only</li>
                 <li>At least one number</li>
                 <li>At least one symbol</li>
               </ul> 
               
+              {this.state.password === this.state.confirm_password ? null : <div className='passwords-match'>Password and Confirm Password Fields Must Match</div>}
               <div className='button-wrapper'>
-                <GreenButton className='green-button' to='' onClick={this.handleSubmit} text="Create Account" />
+                <GreenButton className={this.state.password === this.state.confirm_password ? 'green-button' : 'green-button__inactive'} to='' onClick={this.handleSubmit} text="Create Account" />
                 <GreenButton className='green-button' to='/' text="Return to Title Screen" />
-                {/* <Link className='create-acct-button' onClick={this.handleSubmit}>Create Account</Link>
-                <Link type='button' className='return-to-home' to='/'>Return to Title Screen</Link> */}
               </div>
             </form>
           </div>

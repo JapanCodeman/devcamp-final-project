@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import ReactCardFlip from 'react-card-flip';
 
-import GreenButton from './greenButton';
-
 export default class StudyCard extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +13,7 @@ export default class StudyCard extends Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleCheckAnswer = this.handleCheckAnswer.bind(this)
+    this.handleCheckAnswerButtonClick = this.handleCheckAnswerButtonClick.bind(this)
   };
 
   handleChange(event) {
@@ -25,6 +24,16 @@ export default class StudyCard extends Component {
 
   handleCheckAnswer(e) {
     if (e.keyCode === 13)
+    if (this.props.meaning.toLowerCase === this.state.answer.toLowerCase) {
+      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+      console.log("Answer is correct")
+    } else {
+      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+      console.log("Answer is incorrect")
+    }
+  }
+
+  handleCheckAnswerButtonClick(e) {
     if (this.props.meaning === this.state.answer) {
       this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
       console.log("Answer is correct")
@@ -54,7 +63,7 @@ export default class StudyCard extends Component {
           onKeyDown={this.handleCheckAnswer}
           required
           />
-        <button className="study-card__front__submit-answer-button" onClick={this.handleCheckAnswer}>Submit Answer (or press Enter)</button>
+        <button className="study-card__front__submit-answer-button" onClick={this.handleCheckAnswerButtonClick}>Submit Answer (or press Enter)</button>
       </div>
 
         <div className="study-card__back">
