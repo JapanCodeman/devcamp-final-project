@@ -12,18 +12,18 @@ export default class StudentTest extends Component {
 
     this.state = {
       dialogBoxOpen: true,
-      cardIds: [],
       card_number: 0,
-      cards: []
+      card: [],
+      todaysTestCards: []
     }
 
     this.handleModalClose = this.handleModalClose.bind(this)
-    this.handleLoadCard = this.handleLoadCard.bind(this)
-    this.handleLoadNextCard = this.handleLoadNextCard.bind(this)
+    this.handleSubmitAnswerAndLoadNextCard = this.handleSubmitAnswerAndLoadNextCard.bind(this)
   }
 
   async componentDidMount() {
-    const overall_study_calendar = [[2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [6,1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [7,1], [2,1], [3,1], [6,2,1], [5,1], [4,2,1], [3,1], [2,1], [1]]
+    const overall_study_calendar = [[1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [6,1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [7,1], [2,1], [3,1], [6,2,1], [5,1], [4,2,1], [3,1], [2,1], [1]] 
+    console.log("Overall_study_calendar length is: ", overall_study_calendar.length) 
     const token = window.sessionStorage.getItem("token")
     const decoded = jwtDecode(token)
     const email = decoded.sub.email
@@ -37,38 +37,86 @@ export default class StudentTest extends Component {
     .catch(error => {
       console.log("Error in retrieving user info on component mount", error)
     })
-    await axios
-    .get(`http://127.0.0.1:5000/get-new-cards/${this.state.course}`)
-    .then(response => {
-      response.data.forEach(id => {
-        if (!this.state.full_card_collection.includes(id)) {
-          this.state.full_card_collection.push(id)
-        }
+
+    
+    const todaysBoxes = overall_study_calendar[this.state.current_box_index]
+    console.log("todaysBoxes is assigned to ", todaysBoxes)
+    const cardGatherForStateUpdate = []
+    todaysBoxes.forEach(box => {
+      if (box === 1) {
+        this.state.vocabulary_box_one.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      } 
+      else if (box === 2) {
+        this.state.vocabulary_box_two.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      } 
+      else if (box === 3) {
+        this.state.vocabulary_box_three.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      } 
+      else if (box === 4) {
+        this.state.vocabulary_box_four.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      } 
+      else if (box === 5) {
+        this.state.vocabulary_box_five.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      } 
+      else if (box === 6) {
+        this.state.vocabulary_box_six.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      }
+      else if (box === 7) {
+        this.state.vocabulary_box_seven.forEach(card => {
+          axios
+          .get(`http://127.0.0.1:5000/get-card-by-id/${card}`)
+          .then(response => {
+            cardGatherForStateUpdate.push(response.data.public_id)
+          })
+        })
+      } else {
+        console.log("No cards for test found")
+      }
+      this.setState({
+        todaysTestCards: cardGatherForStateUpdate
       })
     })
-    .catch (error => {
-      console.log("Error in getting student data", error)
-    })
-    // {this.state.cardIds.forEach(card =>
-    // this.state.vocabulary_box_one.push(card))}
-    
-
-    let config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-        "Authorization" : `Bearer ${token}`
-        }
-    }
-    
-    await axios
-    .patch(`http://127.0.0.1:5000/update-user/${this.state._id}`, 
-    {
-      vocabulary_box_one : this.state.vocabulary_box_one,
-      full_card_collection : this.state.full_card_collection
-    }, config)
-
-    this.handleLoadCard()
+    axios
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.todaysTestCards[this.state.card_number]}`)
+    .then(response => 
+      this.setState({card : [response.data]}))
+    .catch(error => ("There was an error loading the card", error))
   }
 
   handleModalClose() {
@@ -77,36 +125,30 @@ export default class StudentTest extends Component {
     })
   }
 
-  handleLoadCard() {
-    axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.full_card_collection[this.state.card_number]}`)
-    .then(response => 
-      this.setState({cards : [response.data]}))
-    .catch(error => ("There was an error loading the card", error))
-  }
-
-  handleLoadNextCard() {
+  handleSubmitAnswerAndLoadNextCard() {
     let num = this.state.card_number + 1
-    if (num > this.state.full_card_collection.length) {
-      num = 0
+    if (num >= this.state.todaysTestCards.length) {
+      num = 0 // change this to axios patch request since this will indicate the end of the daily test? Upload results and append cardIds to appropriate vboxes
     }
     this.setState({
       card_number: num
   })
     axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.full_card_collection[this.state.card_number]}`)
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.todaysTestCards[this.state.card_number]}`)
     .then(response => 
-      this.setState({cards : [response.data]}))
+      this.setState({card : [response.data]}))
+    .catch(error => (
+      console.log("Error loading card by id", error)))
   }
 
   render () {
     return (
-      <div className='study-page'>
+      <div className='test-page'>
         <DailyTestModal modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
-        {this.state.cards.length === 0 ? <div className='study-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
-        <div className='study-page__button-wrapper'>
-          <button className='study-page__next' onClick={this.handleLoadNextCard}>Next</button>
-          <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
+        {this.state.card.length === 0 ? <div className='test-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.card.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
+        <div className='test-page__button-wrapper'>
+          <button className='test-page__next' onClick={this.handleSubmitAnswerAndLoadNextCard}>Next</button>
+          <GreenButton className='test-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />
         </div>
       </div>
     );
