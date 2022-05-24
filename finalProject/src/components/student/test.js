@@ -112,7 +112,7 @@ export default class StudentTest extends Component {
         todaysTestCards: cardGatherForStateUpdate
       })
     })
-    axios
+    await axios
     .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.todaysTestCards[this.state.card_number]}`)
     .then(response => 
       this.setState({card : [response.data]}))

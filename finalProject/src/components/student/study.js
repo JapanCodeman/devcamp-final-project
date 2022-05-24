@@ -48,9 +48,6 @@ export default class StudentStudy extends Component {
     .catch (error => {
       console.log("Error in getting student data", error)
     })
-    // {this.state.cardIds.forEach(card =>
-    // this.state.vocabulary_box_one.push(card))}
-    
 
     let config = {
       headers: {
