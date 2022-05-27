@@ -27,7 +27,7 @@ body {
     justify-items: center;
 }
 
-@import 'admin-login.scss';
+// @import 'admin-login.scss';
 @import 'admin-home.scss';
 @import 'admin-user-status.scss';
 @import 'create-card.scss';
@@ -37,6 +37,7 @@ body {
 @import 'instructor-home.scss';
 @import 'modify-cards.scss';
 @import 'page-titler.scss';
+@import 'view-sets.scss';
 @import 'student-home.scss';
 @import 'study.scss';
 @import 'study-card.scss';

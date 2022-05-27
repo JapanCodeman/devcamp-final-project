@@ -6,7 +6,7 @@ import GreenButton from '../helpers/greenButton';
 import StudyCard from '../helpers/studyCard';
 import DialogBox from '../modals/dialogBoxModal';
 
-export default class StudentStudy extends Component {
+export default class StudySet extends Component {
   constructor(props) {
     super(props);
 
@@ -14,7 +14,8 @@ export default class StudentStudy extends Component {
       dialogBoxOpen: true,
       cardIds: [],
       card_number: 0,
-      cards: []
+      cards: [],
+      set: []
     }
 
     this.handleModalClose = this.handleModalClose.bind(this)
@@ -23,6 +24,7 @@ export default class StudentStudy extends Component {
   }
 
   async componentDidMount() {
+    const studySet = window.sessionStorage.getItem("studySet")
     const token = window.sessionStorage.getItem("token")
     const decoded = jwtDecode(token)
     const email = decoded.sub.email
@@ -36,35 +38,15 @@ export default class StudentStudy extends Component {
     .catch(error => {
       console.log("Error in retrieving user info on component mount", error)
     })
+
     await axios
-    .get(`http://127.0.0.1:5000/get-new-cards/${this.state.course}`)
+    .get(`http://127.0.0.1:5000/card-public-id-by-setname/${studySet}`)
     .then(response => {
-      response.data.forEach(id => {
-        if (!this.state.full_card_collection.includes(id)) {
-          this.state.full_card_collection.push(id)
-        }
+      this.setState({
+        set: [...response.data]
       })
     })
-    .catch (error => {
-      console.log("Error in getting student data", error)
-    })
-
-    let config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-        "Authorization" : `Bearer ${token}`
-        }
-    }
-    
-    await axios
-    .patch(`http://127.0.0.1:5000/update-user/${this.state._id}`, 
-    {
-      vocabulary_box_one : this.state.vocabulary_box_one,
-      full_card_collection : this.state.full_card_collection
-    }, config)
-
-    this.handleLoadCard()
+    this.handleLoadNextCard()
   }
 
   handleModalClose() {
@@ -74,23 +56,27 @@ export default class StudentStudy extends Component {
   }
 
   handleLoadCard() {
+    
     axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.full_card_collection[this.state.card_number]}`)
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.set[this.state.card_number]}`)
     .then(response => 
       this.setState({cards : [response.data]}))
     .catch(error => ("There was an error loading the card", error))
+    this.setState({
+      card_number : card_number + 1
+    })
   }
 
   handleLoadNextCard() {
     let num = this.state.card_number + 1
-    if (num >= this.state.full_card_collection.length) {
+    if (num >= this.state.set.length) {
       num = 0
     }
     this.setState({
       card_number: num
   })
     axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.full_card_collection[this.state.card_number]}`)
+    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.set[this.state.card_number]}`)
     .then(response => 
       this.setState({cards : [response.data]}))
   }
@@ -98,8 +84,8 @@ export default class StudentStudy extends Component {
   render () {
     return (
       <div className='study-page'>
-        <DialogBox modalIsOpen={this.state.dialogBoxOpen} to={"/study"} handleModalClose={this.handleModalClose}/>
-        {this.state.cards.length === 0 ? <div className='study-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
+        <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
+        {this.state.set.length === 0 ? <div className='study-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
         <div className='study-page__button-wrapper'>
           <button className='study-page__next' onClick={this.handleLoadNextCard}>Next</button>
           <GreenButton className='study-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />

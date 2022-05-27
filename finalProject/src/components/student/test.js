@@ -11,7 +11,7 @@ export default class StudentTest extends Component {
     super(props);
 
     this.state = {
-      dialogBoxOpen: true,
+      dialogBoxOpen: false,
       card_number: 0,
       card: [],
       todaysTestCards: []
@@ -37,7 +37,6 @@ export default class StudentTest extends Component {
     .catch(error => {
       console.log("Error in retrieving user info on component mount", error)
     })
-
     
     const todaysBoxes = overall_study_calendar[this.state.current_box_index]
     console.log("todaysBoxes is assigned to ", todaysBoxes)
@@ -111,21 +110,23 @@ export default class StudentTest extends Component {
       this.setState({
         todaysTestCards: cardGatherForStateUpdate
       })
-    })
-    await axios
-    .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.todaysTestCards[this.state.card_number]}`)
-    .then(response => 
-      this.setState({card : [response.data]}))
-    .catch(error => ("There was an error loading the card", error))
+  })
+  axios
+  .get(`http://127.0.0.1:5000/get-card-by-id/${this.state.todaysTestCards[this.state.card_number]}`)
+  .then(response => 
+    this.setState({card : [response.data]}))
+  .catch(error => (
+    console.log("Error loading card by id", error)))
   }
-
+  
   handleModalClose() {
     this.setState({
       dialogBoxOpen: false
     })
   }
+ 
 
-  handleSubmitAnswerAndLoadNextCard() {
+  handleSubmitAnswerAndLoadNextCard(answer) {
     let num = this.state.card_number + 1
     if (num >= this.state.todaysTestCards.length) {
       num = 0 // change this to axios patch request since this will indicate the end of the daily test? Upload results and append cardIds to appropriate vboxes
@@ -139,13 +140,18 @@ export default class StudentTest extends Component {
       this.setState({card : [response.data]}))
     .catch(error => (
       console.log("Error loading card by id", error)))
+    
+    if (answer === "correct" && this.state.vocabulary_box_one.includes(this.state.card.public_id)) {
+      console.log("correct")
+      
+    }
   }
 
   render () {
     return (
       <div className='test-page'>
         <DailyTestModal modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
-        {this.state.card.length === 0 ? <div className='test-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.card.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
+        {this.state.card.length === 0 ? <div className='test-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.card.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} handleSubmitAnswerAndLoadNextCard={this.handleSubmitAnswerAndLoadNextCard} />)}
         <div className='test-page__button-wrapper'>
           <button className='test-page__next' onClick={this.handleSubmitAnswerAndLoadNextCard}>Next</button>
           <GreenButton className='test-page__quit-button' to='/home' text="Quit" onClick={this.handleModalClose} />

@@ -8,11 +8,9 @@ from bson.objectid import ObjectId
 from bson import json_util
 from dotenv import load_dotenv, find_dotenv
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import decode_token
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import jwt_required
 from flask import Flask, jsonify, make_response, Response, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from pymongo import ReturnDocument
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -37,22 +35,17 @@ except:
 
 Database = client.get_database('letsgovocab')
 
-# instructors = Database.instructors
-# students = Database.students
 users = Database.users
 administrators = Database.admin
 
 cards = Database.cards
-
-# Calendar for 64 day schedule
-overall_study_calendar = [[2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [6,1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [5,1], [4,2,1], [3,1], [2,1], [1], [2,1], [3,1], [2,1], [4,1], [2,1], [3,1], [2,1], [7,1], [2,1], [3,1], [6,2,1], [5,1], [4,2,1], [3,1], [2,1], [1]]
 
 # Test to see if flask is working
 @app.route('/')
 def test():
   return "connected to flask"
 
-# TODO - make login route
+# Login route
 @app.route("/login", methods=["POST"])
 def create_token():
   email = request.json.get("email", None)
@@ -75,7 +68,7 @@ def create_token():
 
   return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
 
-# Register a new instructor - WORKING!!!
+# Register a new instructor
 @app.route('/register-instructor/', methods=['POST'])
 def register_one_instructor():
   first = request.json.get("first")
@@ -100,7 +93,7 @@ def register_one_instructor():
   query = users.insert_one(queryObject)
   return f'{first} {last} and associated data registered to user database as Instructor'
 
-# List all instructors from user database - WORKING!!!
+# List all instructors from user database
 @app.route('/instructors', methods=['GET'])
 def find_all_instructors():
   results = list(users.find({"role" : "Instructor"}))
@@ -113,7 +106,7 @@ def find_all_instructors():
     mimetype="application/json"
   )
 
-# Find one user by id - WORKING!!!
+# Find one user by id
 @app.route('/user/<id>', methods=['GET'])
 def find_one_user(id):
   user = users.find_one({"_id":ObjectId(id)})
@@ -150,7 +143,7 @@ def get_user_by_email(email):
     mimetype="application/json"
   )
 
-# Update one instructor - WORKING!!! - TODO how to update and keep password hashed?
+# Update one instructor
 @app.route('/update-user/<id>', methods=['PATCH', 'PUT'])
 def update_one_user(id):
   id = ObjectId(id)
@@ -164,7 +157,7 @@ def update_one_user(id):
 
   return "User Updated"
 
-# Delete one user - WORKING!!!
+# Delete one user
 @app.route('/delete-user/<id>', methods=['DELETE'])
 def delete_one_user(id):
   id = ObjectId(id)
@@ -172,15 +165,14 @@ def delete_one_user(id):
   id = users.delete_one(id_call)
   return 'User deleted'
 
-# Delete entire instructor document - WORKING!!!
+# Delete entire instructor document
 @app.route('/delete-all-users/', methods=['DELETE'])
 def delete_all_users():
   result = users.delete_many({})
   return 'User table dropped'
 
-# Register a new student - WORKING!!!
+# Register a new student
 @app.route('/register-student', methods=['POST'])
-# @cross_origin(origins='*')
 def register_one_student():
   first = request.json.get("first")
   last = request.json.get("last")
@@ -188,17 +180,15 @@ def register_one_student():
   course = request.json.get("course")
   password = request.json.get("password")
   logged_status = "False"
-  # This will use an index call on overall_study_calendar to pull today's study sets
-  scheduled_study_set = 0
+  # scheduled_study_set = 0
   full_card_collection = []
-  # Boxes will hold IDs of cards to be studied (maybe something else to avoid dealing with ObjectID)
-  vocabulary_box_one = []
-  vocabulary_box_two = []
-  vocabulary_box_three = []
-  vocabulary_box_four = []
-  vocabulary_box_five = []
-  vocabulary_box_six = []
-  vocabulary_box_seven = []
+  # vocabulary_box_one = []
+  # vocabulary_box_two = []
+  # vocabulary_box_three = []
+  # vocabulary_box_four = []
+  # vocabulary_box_five = []
+  # vocabulary_box_six = []
+  # vocabulary_box_seven = []
 
   _hashed_password = generate_password_hash(password, method='sha256')
 
@@ -211,16 +201,16 @@ def register_one_student():
     "password" : _hashed_password,
     "logged_in": logged_status,
     "public_id": str(uuid.uuid4()),
-    "current_box_index": 0,
+    # "current_box_index": 0,
     "full_card_collection": full_card_collection,
-    "scheduled_study_set": scheduled_study_set,
-    "vocabulary_box_one": vocabulary_box_one,
-    "vocabulary_box_two": vocabulary_box_two,
-    "vocabulary_box_three": vocabulary_box_three,
-    "vocabulary_box_four": vocabulary_box_four,
-    "vocabulary_box_five": vocabulary_box_five,
-    "vocabulary_box_six": vocabulary_box_six,
-    "vocabulary_box_seven": vocabulary_box_seven
+    # "scheduled_study_set": scheduled_study_set,
+    # "vocabulary_box_one": vocabulary_box_one,
+    # "vocabulary_box_two": vocabulary_box_two,
+    # "vocabulary_box_three": vocabulary_box_three,
+    # "vocabulary_box_four": vocabulary_box_four,
+    # "vocabulary_box_five": vocabulary_box_five,
+    # "vocabulary_box_six": vocabulary_box_six,
+    # "vocabulary_box_seven": vocabulary_box_seven
   }
   query = users.insert_one(queryObject)
   return 'registered'
@@ -239,7 +229,6 @@ def get_users_by_class(course):
   )
 
 @app.route('/student-email/<email>', methods=['GET'])
-# @jwt_required()
 def get_student_by_email(email):
   student = users.find_one({"email":email})
   student["_id"] = str(student["_id"])
@@ -262,7 +251,7 @@ def find_all_students():
     mimetype="application/json"
   )
 
-# Update one user by email - WORKING!!!
+# Update one user by email
 @app.route('/update-user-by-email/<email>', methods=['PATCH', 'PUT', 'GET'])
 def update_one_user_email(email):
   updateObject = request.get_json()
@@ -273,13 +262,13 @@ def update_one_user_email(email):
   return_document=ReturnDocument.AFTER)
   return "User updated by email"
 
-# Delete entire student document - WORKING!!!
+# Delete entire student document
 @app.route('/delete-all-students', methods=['DELETE'])
 def delete_all_students():
   result = users.delete_many({"role" : "Student" })
   return 'All students deleted'
 
-# Create many cards - WORKING!!!
+# Create many cards
 @app.route('/create-cards', methods=['POST'])
 def create_cards():
   cards_list = request.get_json()
@@ -290,7 +279,7 @@ def create_cards():
   result = cards.insert_many(cards_list)
   return 'Multiple cards uploaded'
 
-# View all cards - WORKING!!!
+# View all cards
 @app.route('/cards', methods=['GET'])
 def get_all_cards():
   results = list(cards.find())
@@ -360,6 +349,44 @@ def cards_by_setname(setname):
   mimetype="application/json"
 )
 
+# Get card public ids by set name
+@app.route('/card-public-id-by-setname/<setname>', methods=['GET'])
+def cards_by_public_id(setname):
+  setname = cards.find({
+    "set_name" : setname
+  })
+
+  card_ids = []
+
+  for card in setname:
+    card_ids.append(card["public_id"])
+
+  return Response(
+  response=json.dumps(card_ids),
+  status=200,
+  mimetype="application/json"
+)
+
+# Get cards by course
+@app.route('/cards-by-course/<course>', methods=['GET'])
+def cards_by_course(course):
+  set = cards.find({
+    "course" : course
+  })
+
+  deck_name = []
+
+  for card in set:
+    set_name = card["set_name"]
+    if set_name not in deck_name: 
+      deck_name.append(set_name)
+
+  return Response(
+    response=json.dumps(deck_name),
+    status=200,
+    mimetype="application/json"
+  )
+
 # Get all new cards so they can be assigned to box 1
 @app.route('/get-todays-cards/<id>')
 def get_todays_cards(id):
@@ -370,19 +397,15 @@ def get_todays_cards(id):
   })
   student["_id"] = str(student["_id"])
 
-  # todays_boxes = overall_study_calendar[student["current_box_index"]]
-
   return Response(
   response=json.dumps(student),
   status=200,
   mimetype="application/json"
 )
 
-# Get all unboxed cards
+# Get all unboxed cards - needed for future revisions
 @app.route('/get-new-cards/<course>', methods=['GET'])
 def get_new_cards(course):
-# Make a JSON request for cards with box_number == 0 and student's class
-# Creating cards with an original state of box_number = 0 isn't going to work because they will "reset" every time they are called
   new_cards = cards.find({
     "course" : course
   })
@@ -431,7 +454,7 @@ def get_cards_by_ids():
   mimetype="application/json"
 )
 
-# Update a card - WORKING!!!
+# Update a card 
 @app.route('/update-card/<id>', methods=['PATCH'])
 def update_a_card(id):
   id = ObjectId(id)
@@ -442,8 +465,6 @@ def update_a_card(id):
   result = cards.find_one_and_update(id_call, {"$set":updateObject}, return_document=ReturnDocument.AFTER)
   return f'Card information updated {updateObject}'
 
-# TODO - How to do update_many? Submit via form? Necessary?
-# TODO - also, delete_many? Add "deck" key or perhaps timestamp to each card?
 @app.route('/delete-card/<id>', methods=['DELETE'])
 def delete_a_card(id):
   id = ObjectId(id)
@@ -452,14 +473,13 @@ def delete_a_card(id):
   result = cards.find_one_and_delete(id_call)
   return "Card deleted"
 
-# Delete all cards - WORKING!!!
+# Delete all cards
 @app.route('/delete-all-cards', methods=['DELETE'])
 def delete_all_cards():
   result = cards.delete_many({})
   return 'Cards table dropped'
 
-# TODO - admin CRUD
-# Register a new administrator - WORKING!!!
+# Register a new administrator
 @app.route('/register-admin', methods=['POST'])
 def register_one_admin():
   first = request.json.get("first")
@@ -506,7 +526,7 @@ def find_all_admins():
     mimetype="application/json"
   )
 
-# Update one administrator - WORKING!!!
+# Update one administrator
 @app.route('/update-administrator/<id>', methods=['PATCH'])
 def update_one_administrator(id):
   request_params = request.get_json()
@@ -518,7 +538,7 @@ def update_one_administrator(id):
   return f'{result["first"]} {result["last"]}\'s information updated {updateObject}'
 
 
-# Update one administrator by email - WORKING!!!
+# Update one administrator by email
 @app.route('/update-administrator-by-email/<email>', methods=['PATCH'])
 def update_one_administrator_email(email):
   request_params = request.get_json()
@@ -538,4 +558,4 @@ def delete_one_administrator(id):
   return f'Administrator removed from database.'
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run(debug=True) # Change to false before deploying?

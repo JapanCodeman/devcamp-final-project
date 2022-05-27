@@ -8,10 +8,10 @@ import jwtDecode from 'jwt-decode';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faMinus, faRightFromBracket, faSquarePen, faUpload, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
-import AdministratorLogin from './admin/adminLogin';
 import AdministratorHome from './admin/adminHome';
 import CreateCards from './cards/createCards';
 import EditCards from './cards/editCards';
+import HeaderNavbar from './headerNavbar/headerNavbar';
 import history from '../history';
 import Home from './student/home';
 import InstructorHome from './instructor/instructorHome';
@@ -21,11 +21,13 @@ import PageNotFound from './pages/pageNotFound';
 import Register from './login/register';
 import StudentProgress from './pages/studentProgress';
 import StudentStudy from './student/study';
-import StudentTest from './student/test';
+import StudySet from './student/studySet';
+// import StudentTest from './student/test'; //Future versions
 import TitlePage from './login/titlePage';
 import UserProfile from './helpers/userProfile';
-import UserStatus from './admin/adminUserStatus';
-import HeaderNavbar from './headerNavbar/headerNavbar';
+// import UserStatus from './admin/adminUserStatus'; //Future versions
+import ViewSets from './student/viewSets';
+
 
 library.add(faRightFromBracket, faSquarePen, faPlus, faMinus, faUpload, faTrashCan)
 
@@ -89,9 +91,9 @@ handleLogin(email) {
     role: response.data.role,
     id: response.data._id
   })
-  // .catch(error => {
-  //   console.log("There was an error in App.js with the handleLogin function", error)
-  // })
+  })  
+  .catch(error => {
+    console.log("There was an error in App.js with the handleLogin function", error)
   })
 }
 
@@ -121,9 +123,9 @@ handleLogout() {
 
 adminAuthorizedPages() {
   return [
-      <Route exact path="/admin/login" render={(props) => (<AdministratorLogin {...props} handleLogin={this.handleLogin} key="admin-login"/>)}/>,
+      // <Route exact path="/admin/login" render={(props) => (<AdministratorLogin {...props} handleLogin={this.handleLogin} key="admin-login"/>)}/>,
       <Route exact path="/admin/home" component={AdministratorHome} key="admin-home"/>,
-      <Route exact path="/admin/userstatus" component={UserStatus} key="admin-userstatus"/>
+      // <Route exact path="/admin/userstatus" component={UserStatus} key="admin-userstatus"/>
   ]
 }
 
@@ -146,7 +148,9 @@ studentAuthorizedPages() {
   return [
       <Route exact path="/home" component={Home} key="student-home" />,
       <Route exact path="/study" component={StudentStudy} key="student-study" />,
-      <Route exact path="/test" component={StudentTest} key="student-test" />
+      <Route exact path="/study-set/:slug" component={StudySet} key="student-study-set" />,
+      <Route exact path="/view-sets" component={ViewSets} key="student-view-sets" />
+      // <Route exact path="/test" component={StudentTest} key="student-test" /> // future versions
   ]
 }
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
 import GreenButton from '../helpers/greenButton';
@@ -30,7 +29,7 @@ export default class Register extends Component {
     });
   }
 
-  // handlePassword() {
+  // handlePassword() { // future versions
   //   let regex = /^[a-zA-Z]+$/
   //   if (this.state.password.length < 7 || this.state.password.length > 15) {
   //     return "green"
@@ -40,9 +39,9 @@ export default class Register extends Component {
   //   }
   // }
   
-  handleSubmit(event) {
+  async handleSubmit(event) {
     if (this.state.role === "Student") {
-    axios.post('http://127.0.0.1:5000/register-student',
+    await axios.post('http://127.0.0.1:5000/register-student',
     {
       "first": this.state.first,
       "last": this.state.last,
@@ -60,7 +59,7 @@ export default class Register extends Component {
       console.log("registration error", error);
     })
     this.props.history.push("/login")
-    event.preventDefault();
+    // event.preventDefault();
   } else {
     axios.post('http://127.0.0.1:5000/register-instructor/',
     {
@@ -79,7 +78,7 @@ export default class Register extends Component {
       console.log("registration error", error);
     })
     this.props.history.push("/login")
-    event.preventDefault();
+    // event.preventDefault();
   }} 
 
   render () {

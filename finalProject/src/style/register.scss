@@ -157,3 +157,21 @@
   }
 }
 
+@media screen and (max-width: 1180px) {
+  .register-form {
+    display: grid;
+    grid-column: content-s/content-e;
+    grid-template-columns: [col1-s] 1fr [col1-e col2-s] 1fr [col2-e]; 
+    grid-template-rows: [label-names-s] 1fr [label-names-e names-s] 1fr [names-e label-email-course-s] 1fr [label-email-course-e email-course-s] 1fr [email-course-e label-password-s] 1fr [label-password-e] 12px [password-s] 1fr [password-e label-confirm-password-s] 1fr [label-confirm-password-e confirm-s] 1fr [confirm-e button-s] 1fr [button-e];
+    gap: 0px 100px;
+    align-items: end;
+
+    .register-heading {
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      grid-column: col1-s/col1-e;
+    }
+  }
+}

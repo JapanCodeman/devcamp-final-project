@@ -12,7 +12,8 @@ export default class Login extends Component {
       email: "",
       password: "",
       role: "Student",
-      user: []
+      user: [],
+      userOrPassIncorrect: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -54,9 +55,11 @@ export default class Login extends Component {
           this.props.history.push('/instructor/home')
         }
       })
-      .catch(error => {
-        console.log("There was an error!", error)
-      })
+      .catch(
+        this.setState({
+          userOrPassIncorrect: true
+        })
+      )
 }
 
   render () {
@@ -77,7 +80,7 @@ export default class Login extends Component {
                 required
                 />
               <label className='login-form__password-label' htmlFor='password'>Password</label>
-                <p className='login-form__password-incorrect'>Password incorrect, try again</p>
+                {this.state.userOrPassIncorrect ? <p className='login-form__password-incorrect'>Username or Password incorrect, try again</p> : null}
                 <input 
                 className='login-form__password'
                 type="password"
@@ -89,9 +92,9 @@ export default class Login extends Component {
                 required
                 />
               <button type="submit" className='login-form__login-button'>Login</button>
-              <Link className='login-form__forgot-password' to='/reset-password'>
+              {/* <Link className='login-form__forgot-password' to='/reset-password'>
                 Forgot Password?
-              </Link>
+              </Link> */}
           </form>
         </div>
       </div>

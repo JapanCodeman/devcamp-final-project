@@ -49,7 +49,7 @@ export default class HeaderNavbar extends Component {
           <div>
             {this.props.loggedInStatus === "LOGGED_IN" ? <img className='SmallOgLogo' src={SmallOgLogo} /> : null } 
           </div>
-          <div className='header-navbar__title' onClick={() => this.handleRedirect(this.state.role)}>Onomichi Junior and Senior High School</div>
+          <div className='header-navbar__title' onClick={() => this.handleRedirect(this.state.role)}>Junior and Senior High School</div>
           <div className='header-navbar__logout-button'>{this.state.loggedInStatus === "LOGGED_IN" ? <FontAwesomeIcon onClick={this.props.handleLogout} className='header-navbar__logout-icon' icon="right-from-bracket" /> : null}</div>
         </div>
       </div>

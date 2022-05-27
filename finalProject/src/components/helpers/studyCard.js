@@ -8,7 +8,8 @@ export default class StudyCard extends Component {
 
     this.state = {
       isFlipped: false,
-      answer: ""
+      answer: "",
+      lastAnswerResult: ""
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -23,23 +24,30 @@ export default class StudyCard extends Component {
   }
 
   handleCheckAnswer(e) {
+    this.setState({
+      lastAnswerResult: ""
+    })
     if (e.keyCode === 13)
-    if (this.props.meaning.toLowerCase === this.state.answer.toLowerCase) {
-      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-      console.log("Answer is correct")
+    if (this.props.meaning.toLowerCase() === this.state.answer.toLowerCase()) {
+      this.setState(prevState => ({ isFlipped: !prevState.isFlipped,
+      lastAnswerResult: "correct" }));
     } else {
       this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-      console.log("Answer is incorrect")
     }
   }
 
-  handleCheckAnswerButtonClick(e) {
-    if (this.props.meaning === this.state.answer) {
-      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-      console.log("Answer is correct")
+  handleCheckAnswerButtonClick() {
+    this.setState({
+      lastAnswerResult: ""
+    })
+    if (this.props.meaning.toLowerCase() === this.state.answer.toLowerCase()) {
+      this.setState(
+        prevState => ({ 
+          isFlipped: !prevState.isFlipped,
+          lastAnswerResult: "correct"}));
+      
     } else {
       this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-      console.log("Answer is incorrect")
     }
   }
 
@@ -72,6 +80,9 @@ export default class StudyCard extends Component {
           </div>
           <div className="study-card__back__answer">
             Your answer: {this.state.answer}
+          </div>
+          <div>
+            {this.state.lastAnswerResult === "correct" ? <div>Correct!</div> : <div>Incorrect!</div>}
           </div>
           <div className="study-card__back__meaning">
             Definition: {this.props.meaning}

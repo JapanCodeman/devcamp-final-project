@@ -55,9 +55,9 @@ export default class CreateCard extends Component {
         <label className='create-card__meaning-label'>Meaning</label>
         <input className='create-card__meaning-input' placeholder='Meaning' name="meaning" value={this.state.meaning} onChange={this.handleChange} onFocus={this.handleSetName} />
 
-        <label className='create-card__image-label'>Image Dropzone</label>
+        <label className='create-card__image-label'>Add Card to Set</label>
         <div className='create-card__image-drop' />
-        <button className='create-card__submit-button' onClick={this.setAndCreateCard}>Click Me</button>
+        <button className='create-card__submit-button' onClick={this.setAndCreateCard}>Submit This Card</button>
       </div>
     );
   }

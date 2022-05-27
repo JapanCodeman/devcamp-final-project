@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
 
-    &__green-button-study, &__green-button-test {
+    &__green-button-study, &__green-button-view-sets {
       color: #fff;
       background-color: green;
       text-decoration: none;
@@ -52,16 +52,9 @@ margin-right: 50px;
     }
 
 
-  &__test {
+  &__view-sets {
     color: green;
     width: 500px;
     margin-left: 50px;
   }
 }
-
-
-// .student-home-button-wrapper__green-button-study:hover + .explanations-wrapper__study {
-//   color: green;
-//   width: 500px;
-//   display: block;
-// }
