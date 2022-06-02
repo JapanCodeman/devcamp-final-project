@@ -1,3 +1,8 @@
+.admin-home-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .admin-home {
   &__welcome-message {
     color: #6BD35F;
@@ -39,6 +44,52 @@
   font-size: 64px;
 }
 
+@media screen and (max-width: 1180px) and (orientation: portrait) {
+  .user-status__user-profile-component {
+    width: 800px;
+  }
+  
+  .admin-home {
+  &__welcome-message {
+    color: #6BD35F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    padding-left: 20px;
+  }
+
+  &__page-name {
+    padding-left: 20px;
+  }
+}
+
+  .page-titler-and-selector {
+    display: flex;
+    justify-items: space-between;
+  }
+
+  .save-changes-button {
+    display: flex;
+    color: #6BD35F;
+    font-weight: 700;
+    font-size: 48px;
+    margin-right: 10px;
+  
+    &__description {
+      color: #6BD35F;
+      font-weight: 700;
+      font-size: 32px;
+    }
+  }
+
+  .user-not-found {
+    display: flex;
+    justify-content: center;
+    color: #6BD35F;
+    font-weight: 700;
+    font-size: 64px;
+  }
+}
 
 // below code left in for future versions
   // .admin-home__management-tools {

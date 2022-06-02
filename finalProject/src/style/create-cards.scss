@@ -1,7 +1,8 @@
 .create-cards {
   display: grid;
-  grid-template-columns: 200px [col1-s] 1fr [col1-e col2-s] 1fr [col2-e col3-s] 1fr [col3-e] 200px;
+  grid-template-columns: 10px [col1-s] 1fr [col1-e col2-s] 1fr [col2-e col3-s] 1fr [col3-e] 10px;
   grid-template-rows: [row1-s] 50px [row1-e row2-s] 50px [row2-e];
+  column-gap: 20px;
   height: 100px;
   margin: 24px 0px 24px 0px;
   
@@ -84,7 +85,7 @@
   &__card-and-created {
     grid-column: col1-s/col3-e;
     display: grid;
-    grid-template-columns: 200px [entry-s] 1fr [title-s] 1fr [title-e] 1fr [entry-e] 200px;
+    grid-template-columns: 10px [entry-s] 1fr [title-s] 1fr [title-e] 1fr [entry-e] 10px;
   }
 
   &__clear-list {
@@ -126,7 +127,7 @@
   }
 
   &__upload-cards {
-    grid-column: title-e/entry-e;
+    // grid-column: title-e/entry-e;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 36px;
@@ -136,6 +137,74 @@
 
     &:hover {
       cursor: pointer;
+    }
+  }
+}
+
+@media screen and (max-width: 1180px) and (orientation: portrait) {
+  .create-cards {
+    display: grid;
+    grid-template-columns: 20px [col1-s] 1fr [col1-e col2-s] 1fr [col2-e col3-s] 1fr [col3-e] 20px;
+    grid-template-rows: [row1-s] 50px [row1-e] 50px [row2-s] 50px [row2-e] 50px [row3-s] 50px [row3-e];
+    height: 100px;
+    margin: 24px 0px 24px 0px;
+    gap: 10px 10px;
+    
+      input {
+        height: 48px;
+        text-align: right;
+        padding: 5px;
+        border: none;
+      }
+  
+    &__instruction-label {
+      grid-column: col1-s/col3-e;
+      grid-row: row1-s/row1-e;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      height: 50px;
+    }
+  
+    &__course-label {
+      grid-column: col1-s/col1-e;
+      grid-row: row1-e/row2-s;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      height: 50px;
+      justify-self: center;
+    }
+  
+    &__course {
+      grid-column: col1-s/col1-e;
+      grid-row: row2-s/row2-e;
+      justify-self: left;
+      margin-top: 10px;
+    }
+  
+    &__set-name-label {
+      grid-column: col3-s/col3-e;
+      grid-row: row1-e/row2-s;
+    }
+  
+    &__set-name-required {
+      grid-column: col3-s/col3-e;
+      grid-row: row1-e/row2-s;
+      display: grid;
+      font-size: 18px;
+      height: 50px;
+      justify-self: end;
+      align-content: end;
+      color: red;
+    }
+  
+    &__card-and-created {
+      grid-column: col1-s/col3-e;
+      grid-row: row3-s/row3-e;
+      display: grid;
+      grid-template-columns: 20px [entry-s] 1fr [title-s] 1fr [title-e] 1fr [entry-e] 20px;
+      margin-top: 100px;
     }
   }
 }

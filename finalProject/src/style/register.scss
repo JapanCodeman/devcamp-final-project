@@ -125,7 +125,7 @@
       }
     }
 
-    .password-requirements {
+    .password-suggestions {
       grid-column: col2-s/col2-e;
       grid-row: password-s/password-e;
       justify-content: left;
@@ -158,20 +158,39 @@
 }
 
 @media screen and (max-width: 1180px) {
-  .register-form {
+  .register-page-wrapper {
     display: grid;
-    grid-column: content-s/content-e;
-    grid-template-columns: [col1-s] 1fr [col1-e col2-s] 1fr [col2-e]; 
-    grid-template-rows: [label-names-s] 1fr [label-names-e names-s] 1fr [names-e label-email-course-s] 1fr [label-email-course-e email-course-s] 1fr [email-course-e label-password-s] 1fr [label-password-e] 12px [password-s] 1fr [password-e label-confirm-password-s] 1fr [label-confirm-password-e confirm-s] 1fr [confirm-e button-s] 1fr [button-e];
-    gap: 0px 100px;
-    align-items: end;
+    grid-template-columns: 1fr [content-s] 3fr [content-e] 1fr;
+    gap: 25px 20px;
 
-    .register-heading {
-      color: #6BD35F;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 700;
-      font-size: 64px;
-      grid-column: col1-s/col1-e;
+    .register-form {
+      display: grid;
+      grid-column: content-s/content-e;
+      grid-template-columns: [col1-s] 1fr [col1-e col2-s] 1fr [col2-e]; 
+      grid-template-rows: 50px [register-s] 40px [register-e label-names-s] 1fr [label-names-e names-s] 1fr [names-e label-email-course-s] 1fr [label-email-course-e email-course-s] 1fr [email-course-e label-password-s] 1fr [label-password-e] 12px [password-s] 1fr [password-e label-confirm-password-s] 1fr [label-confirm-password-e confirm-s] 1fr [confirm-e button-s] 1fr [button-e];
+      gap: 0px 100px;
+      align-items: end;
+
+      .register-heading {
+        color: #6BD35F;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        font-size: 48px;
+        grid-column: col1-s/col1-e;
+        grid-row: register-s/register-e;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1180px) and (orientation: portrait) {
+  .register-page-wrapper {
+    display: grid;
+    grid-template-columns: 20px [content-s] 3fr [content-e] 20px;
+    gap: 25px 5px;
+
+    .register-form {
+      gap: 0px 50px;
     }
   }
 }

@@ -96,97 +96,95 @@ export default class Register extends Component {
     // password.onChange = validatePassword;
     // confirm_password.onChange = validatePassword;
     return (
-      <div>
-        <div className='register-page-wrapper'>
-          <form className='register-form' onSubmit={this.handleSubmit}>
-            <div className='register-heading'>Register</div>
-              <label className='register-form__first-label' htmlFor='first'>First name</label>
-                <input 
-                className='register-form__first-name'
-                label='First Name'
-                type="text"
-                name="first"
-                placeholder="first"
-                value={this.state.first}
-                onChange={this.handleChange}
-                required
-                />
+      <div className='register-page-wrapper'>
+        <form className='register-form' onSubmit={this.handleSubmit}>
+          <div className='register-heading'>Register</div>
+            <label className='register-form__first-label' htmlFor='first'>First name</label>
+              <input 
+              className='register-form__first-name'
+              label='First Name'
+              type="text"
+              name="first"
+              placeholder="first"
+              value={this.state.first}
+              onChange={this.handleChange}
+              required
+              />
 
-              <label className='register-form__last-label' htmlFor='last'>Last Name</label>
-                <input 
-                className='register-form__last-name'
-                type="text"
-                name="last"
-                placeholder="last"
-                value={this.state.last}
-                onChange={this.handleChange}
-                required
-                />
+            <label className='register-form__last-label' htmlFor='last'>Last Name</label>
+              <input 
+              className='register-form__last-name'
+              type="text"
+              name="last"
+              placeholder="last"
+              value={this.state.last}
+              onChange={this.handleChange}
+              required
+              />
 
-              <label className='register-form__email-label' htmlFor='email'>Email</label>
-                <input 
-                className='register-form__e-mail'
-                type="email"
-                name="email"
-                placeholder="email"
-                autoComplete="username"
-                value={this.state.email}
-                onChange={this.handleChange}
-                />
+            <label className='register-form__email-label' htmlFor='email'>Email</label>
+              <input 
+              className='register-form__e-mail'
+              type="email"
+              name="email"
+              placeholder="email"
+              autoComplete="username"
+              value={this.state.email}
+              onChange={this.handleChange}
+              />
 
-              <label className='register-form__label-course' htmlFor='course'>Course</label>
-                <select className='register-form__course' name="course" value={this.state.course} onChange={this.handleChange}>
-                  <option value="1-1">Junior High TEIE 1-1</option>
-                  <option value="2-1">Junior High TEIE 2-1</option>
-                  <option value="2-2">Junior High TEIE 2-2</option>
-                  <option value="3-1">Junior High TEIE 3-1</option>
-                </select>
+            <label className='register-form__label-course' htmlFor='course'>Course</label>
+              <select className='register-form__course' name="course" value={this.state.course} onChange={this.handleChange}>
+                <option value="1-1">Junior High TEIE 1-1</option>
+                <option value="2-1">Junior High TEIE 2-1</option>
+                <option value="2-2">Junior High TEIE 2-2</option>
+                <option value="3-1">Junior High TEIE 3-1</option>
+              </select>
 
-              <label className='register-form__label-role' htmlFor='role'>Are you a...</label>
-                <select className='register-form__role' name="role" value={this.state.role} onChange={this.handleChange}>
-                  <option value="Student">Student</option>
-                  <option value="Instructor">Teacher</option>
-                </select>
+            <label className='register-form__label-role' htmlFor='role'>Are you a...</label>
+              <select className='register-form__role' name="role" value={this.state.role} onChange={this.handleChange}>
+                <option value="Student">Student</option>
+                <option value="Instructor">Teacher</option>
+              </select>
 
-              <label className='register-form__label-password' htmlFor='password'>Create Password</label>
-                <input
-                className='register-form__password'
-                type="password"
-                name="password"
-                placeholder="password"
-                autoComplete="new-password"
-                value={this.state.password}
-                // onChange={(e) => {this.handleChange(e); this.handlePassword()}}
-                onChange={this.handleChange}
-                required
-                />
+            <label className='register-form__label-password' htmlFor='password'>Create Password</label>
+              <input
+              className='register-form__password'
+              type="password"
+              name="password"
+              placeholder="password"
+              autoComplete="new-password"
+              value={this.state.password}
+              // onChange={(e) => {this.handleChange(e); this.handlePassword()}}
+              onChange={this.handleChange}
+              required
+              />
 
-              <label className='register-form__label-confirm-password' htmlFor='confirm_password'>Confirm Password</label>
-                <input
-                className='register-form__confirm-password'
-                type="password"
-                name="confirm_password"
-                placeholder="confirm password"
-                autoComplete="new-password"
-                value={this.state.confirm_password}
-                onChange={this.handleChange}
-                required
-                />
+            <label className='register-form__label-confirm-password' htmlFor='confirm_password'>Confirm Password</label>
+              <input
+              className='register-form__confirm-password'
+              type="password"
+              name="confirm_password"
+              placeholder="confirm password"
+              autoComplete="new-password"
+              value={this.state.confirm_password}
+              onChange={this.handleChange}
+              required
+              />
 
-              <ul className='password-requirements'>Password Security Suggestions
-                <li>8-16 characters</li>
-                <li>Roman characters only</li>
-                <li>At least one number</li>
-                <li>At least one symbol</li>
-              </ul> 
-              
-              {this.state.password === this.state.confirm_password ? null : <div className='passwords-match'>Password and Confirm Password Fields Must Match</div>}
-              <div className='button-wrapper'>
-                <GreenButton className={this.state.password === this.state.confirm_password ? 'green-button' : 'green-button__inactive'} to='' onClick={this.handleSubmit} text="Create Account" />
-                <GreenButton className='green-button' to='/' text="Return to Title Screen" />
-              </div>
-            </form>
-          </div>
+            <ul className='password-suggestions'>Password Security Suggestions
+              <li>8-16 characters</li>
+              <li>Roman characters only</li>
+              <li>At least one number</li>
+              <li>At least one symbol</li>
+            </ul> 
+            
+            {this.state.password === this.state.confirm_password ? null : <div className='passwords-match'>Password and Confirm Password Fields Must Match</div>}
+            <div className='button-wrapper'>
+              <GreenButton className={this.state.password === this.state.confirm_password ? 'green-button' : 'green-button__inactive'} to='' onClick={this.handleSubmit} text="Create Account" />
+              <GreenButton className='green-button' to='/' text="Return to Title Screen" />
+            </div>
+          </form>
         </div>
     );
   }

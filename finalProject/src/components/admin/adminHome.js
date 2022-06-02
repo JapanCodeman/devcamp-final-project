@@ -85,8 +85,8 @@ export default class AdministratorHome extends Component {
       <div className='admin-home__welcome-message'>Welcome back, {this.state.admin.first}!</div>
         <div className='admin-home__page-name'>Home</div>
         <div className='page-titler-and-selector'>
-          <PageTitler className='page-titler-and-selector__page-titler' title={"User Status"}/>
-          <div>          
+          <PageTitler className='page-titler-and-selector__page-titler' title={"User Status"}/>   
+          <div>   
             <label className='page-titler-and-selector__selector-label' htmlFor='searchParams'>Select Users</label>
               <select className='page-titler-and-selector__search-params' name="searchParams" value={this.state.searchParams} onChange={this.handleChange}>
                 <option value="1-1">Junior High TEIE 1-1</option>
@@ -105,7 +105,7 @@ export default class AdministratorHome extends Component {
         </div>
 
         <div className='user-status__results'>
-          {this.state.users ? this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} updateData={this.handleChange} id={user._id} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>) : console.log("user not found")}
+          {this.state.users.length === 0 ? <div className='user-not-found'>User Not Found</div> : this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} updateData={this.handleChange} id={user._id} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>)}
         </div>
       </div>
     );

@@ -34,12 +34,19 @@ export default class Login extends Component {
         "email": this.state.email,
         "password": this.state.password
       })
-      .then(response => {
-        if (response.status === 200) {
-          return response}
-        else alert("There was an error");
-      })
+      // .then(data => {
+      //   if (data.status === 200) {
+      //     return data}
+      //     else {
+      //       console.log(data)
+      //     };
+      // })
       .then(data => {
+        if (data.status === 401) {
+          this.setState({
+            userOrPassIncorrect: true
+          })
+        }
         var token = data.data.token
         window.sessionStorage.setItem("token", token)
         var decoded = jwtDecode(token)
@@ -55,10 +62,13 @@ export default class Login extends Component {
           this.props.history.push('/instructor/home')
         }
       })
-      .catch(
-        this.setState({
-          userOrPassIncorrect: true
-        })
+      .catch(error => {
+        if (error.response.status === 401) {
+          this.setState({
+            userOrPassIncorrect: true
+          })
+        }
+      }
       )
 }
 

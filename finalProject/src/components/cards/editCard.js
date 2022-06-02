@@ -70,8 +70,8 @@ export default class EditCard extends Component {
         <label className='create-card__meaning-label'>Meaning</label>
         <input className='create-card__meaning-input' placeholder='Meaning' name="meaning" value={this.state.meaning} onChange={this.handleChange} onFocus={this.handleSetName} />
 
-        <label className='create-card__image-label'>Image Dropzone</label>
-        <div className='create-card__image-drop' />
+        <label className='create-card__submit-label'>Click Below to Update Card</label>
+        {/* <div className='create-card__submit-button' /> */}
         <button className='create-card__submit-button' onClick={this.setAndUpdateCard}>Update Card</button>
       </div>
     );
