@@ -81,6 +81,9 @@ export default class StudyCard extends Component {
           <div className="study-card__back__answer">
             Your answer: {this.state.answer}
           </div>
+          {/* <div className="study-card__back__correct-answer">
+            Correct Answer: {this.props.meaning}
+          </div> */}
           <div>
             {this.state.lastAnswerResult === "correct" ? <div>Correct!</div> : <div>Incorrect!</div>}
           </div>

@@ -22,6 +22,15 @@
     height: 50px;
   }
 
+  &-title {
+    display: flex;
+    color: #6BD35F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    padding-left: 20px;
+  }
+
   &__course-label {
     grid-column: col2-s/col2-e;
     grid-row: row1-s/row1-e;
@@ -156,6 +165,15 @@
         padding: 5px;
         border: none;
       }
+
+    &-title {
+      display: flex;
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      padding-left: 20px;
+    }
   
     &__instruction-label {
       grid-column: col1-s/col3-e;
@@ -205,6 +223,19 @@
       display: grid;
       grid-template-columns: 20px [entry-s] 1fr [title-s] 1fr [title-e] 1fr [entry-e] 20px;
       margin-top: 100px;
+    }
+  }
+}
+
+@media screen and (max-width: 1180px) and (orientation: landscape) {
+  .create-cards {
+    &-title {
+      display: flex;
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      padding-left: 20px;
     }
   }
 }

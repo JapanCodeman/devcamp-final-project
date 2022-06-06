@@ -53,7 +53,7 @@ export default class ViewSets extends Component {
   render () {
     return (
       <div className='view-sets-wrapper'>
-        <PageTitler title={"View Sets"}/>
+        <PageTitler className="page-titler" title={"View Sets"}/>
         <div className='setnames-wrapper'>
           {this.state.sets ? this.state.sets.map(set => <GreenButton className="modify-cards__set-entry" to={`/study-set/${set}`} key={set} text={set} onClick={() => this.selectedStudySet(set)}>{set}</GreenButton>) : null}
         </div>

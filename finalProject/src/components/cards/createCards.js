@@ -75,7 +75,7 @@ export default class CreateCards extends Component {
       if (response.status === 200) return response
       else alert("There was an error")})
     window.alert("Cards Uploaded to Database")
-    this.props.history.push('/instructor/home')
+    window.location.assign('/instructor/home')
   }
 
 

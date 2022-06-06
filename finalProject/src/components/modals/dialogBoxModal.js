@@ -40,8 +40,9 @@ export default class DialogBox extends Component {
         <ReactModal 
         isOpen={this.props.modalIsOpen}
         onRequestClose={() => this.props.handleModalClose()}
-        style={this.customStyles}>
-          <h2>Welcome to the study page! Here you can study today's set of cards for as long as you like. Simply type the definition in the box below and press enter. If you are correct, the next card will come. If you are incorrect, the card will flip over to reveal the answer. You can end at any time by clicking the "quit" button in the lower right. Happy studying!</h2>
+        style={this.customStyles}
+        text={this.props.text}>
+          <h2>{this.props.text}</h2>
           <button className='green-button' to={this.props.to} onClick={() => this.props.handleModalClose()}>Let's Go!</button>
         </ReactModal>
       </div>

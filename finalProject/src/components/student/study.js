@@ -98,7 +98,7 @@ export default class StudentStudy extends Component {
   render () {
     return (
       <div className='study-page'>
-        <DialogBox modalIsOpen={this.state.dialogBoxOpen} to={"/study"} handleModalClose={this.handleModalClose}/>
+        <DialogBox text="Welcome to the study page! Here you can study today's set of cards for as long as you like. Simply type the definition in the box below and press enter. After entering your answer and either clicking submit answer or pushing the enter key, the card will flip over to reveal the answer. Go to the next card by clicking the next button. You can end at any time by clicking the quit button in the lower right. Happy studying!" className='study-page__modal' modalIsOpen={this.state.dialogBoxOpen} to={"/study"} handleModalClose={this.handleModalClose} />
         {this.state.cards.length === 0 ? <div className='study-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
         <div className='study-page__button-wrapper'>
           <button className='study-page__next' onClick={this.handleLoadNextCard}>Next</button>

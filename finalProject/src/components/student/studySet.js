@@ -84,7 +84,7 @@ export default class StudySet extends Component {
   render () {
     return (
       <div className='study-page'>
-        <DialogBox modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
+        <DialogBox text="In this mode, you will only study a certain set of cards based on their category. You will see fewer cards this way and can focus your efforts on a specific set." modalIsOpen={this.state.dialogBoxOpen} handleModalClose={this.handleModalClose}/>
         {this.state.set.length === 0 ? <div className='study-page__no-cards'>You don't have any card sets yet, please check back later</div> : this.state.cards.map(card => <StudyCard className="study-card" key={card.public_id} word={card.word} meaning={card.meaning} />)}
         <div className='study-page__button-wrapper'>
           <button className='study-page__next' onClick={this.handleLoadNextCard}>Next</button>

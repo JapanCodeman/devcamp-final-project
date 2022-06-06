@@ -1,4 +1,13 @@
 .modify-cards {
+  
+  &__page-titler {
+    color: #6BD35F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    padding-left: 200px;
+  }
+
   &__your-sets {
     color: #6BD35F;
     font-family: 'Roboto', sans-serif;
@@ -34,3 +43,16 @@
     }
   }
 }
+
+@media screen and (max-width: 1180px) {
+  .modify-cards {
+    &__page-titler {
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      padding-left: 50px;
+    }
+  }
+}
+

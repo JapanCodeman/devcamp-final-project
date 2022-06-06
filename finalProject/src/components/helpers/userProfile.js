@@ -31,6 +31,7 @@ export default class UserProfile extends Component {
     .catch(error => {
       console.log("There was an error with the patch request to instructor", error)
     })
+    // window.alert("Changes saved, confirm with new search")
   }
 
   handleClick = value => () => {

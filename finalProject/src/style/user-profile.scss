@@ -12,7 +12,7 @@
   padding-bottom: 20px;
   margin-bottom: 20px;
   width: 100%;
-  overflow:scroll;
+  overflow: scroll;
 
   .user-profile-info {
 
@@ -100,7 +100,123 @@
   }
 }
 
+@media screen and (max-width: 1180px) and (orientation: landscape) {
+  .user-profile-page-wrapper {
+    display: grid;
+    grid-template-columns: 20px [first-and-logged-s] 206px [first-and-logged-e] 20px [last-and-course-s] 206px [last-and-course-e] 20px [email-and-role-s] 206px [email-and-role-e] 20px [edit-button-s] 40px [edit-button-e];
+    grid-template-rows: [label1-s] 20px [label1-e] 10px [value1-s] 24px [value1-e] 20px [label2-s] 20px [label2-e] 10px [value2-s] 20px [value2-e];
+    background: rgb(10,36,0);
+    background: linear-gradient(0deg, rgba(10,36,0,1) 0%, rgba(15,171,45,1) 100%);  
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    height: 150px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+
+    input, select {
+      height: 36px;
+      font-size: 24px;
+    }
+  
+    .user-profile-info {
+  
+      &__first-name-label {
+        grid-column: first-and-logged-s/first-and-logged-e;
+        grid-row: label1-s/label1-e;
+      }
+  
+      &__first-name {
+        grid-column: first-and-logged-s/first-and-logged-e;
+        grid-row: value1-s/value1-e;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+  
+      &__last-name-label {
+        grid-column: last-and-course-s/last-and-course-e;
+        grid-row: label1-s/label1-e;
+      }
+  
+      &__last-name {
+        grid-column: last-and-course-s/last-and-course-e;
+        grid-row: value1-s/value1-e;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+  
+      &__email-label {
+        grid-column: email-and-role-s/email-and-role-e;
+        grid-row: label1-s/label1-e;
+      }
+  
+      &__email {
+        grid-column: email-and-role-s/email-and-role-e;
+        grid-row: value1-s/value1-e;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+  
+      &__logged-status-label {
+        grid-column: first-and-logged-s/first-and-logged-e;
+        grid-row: label2-s/label2-e;
+      }
+  
+      &__logged-status {
+        grid-column: first-and-logged-s/first-and-logged-e;
+        grid-row: value2-s/value2-e;
+      }
+  
+      &__course-label {
+        grid-column: last-and-course-s/last-and-course-e;
+        grid-row: label2-s/label2-e;
+      }
+  
+      &__course {
+        grid-column: last-and-course-s/last-and-course-e;
+        grid-row: value2-s/value2-e;
+      }
+  
+      &__role-label {
+        grid-column: email-and-role-s/email-and-role-e;
+        grid-row: label2-s/label2-e;
+      }
+  
+      &__role {
+        grid-column: email-and-role-s/email-and-role-e;
+        grid-row: value2-s/value2-e;
+      }
+  
+      &__edit-button {
+        grid-column: edit-button-s/edit-button-e;
+        grid-row: value-s/value-e;
+        text-align: right;
+        font-size: 64px;
+        transform: translate(50px, -75px);
+        cursor: pointer;
+  
+        &:hover {
+          color: #6BD35F;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 1180px) and (orientation: portrait) {
+  
+  input, select {
+    height: 36px;
+    font-size: 24px;
+  }
+
   .user-profile-page-wrapper {
     display: grid;
     grid-template-columns: 20px [first-and-logged-s] 206px [first-and-logged-e] 20px [last-and-course-s] 206px [last-and-course-e] 20px [email-and-role-s] 206px [email-and-role-e] 20px [edit-button-s] 40px [edit-button-e];

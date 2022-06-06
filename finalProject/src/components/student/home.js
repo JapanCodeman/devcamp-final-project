@@ -54,8 +54,8 @@ export default class Home extends Component {
   render () {
     return (
       <div className="student-home">
-        <PageTitler title="Home" />
-        <PageTitler title={`Welcome back, ${this.state.first}`} />
+        <PageTitler className="page-titler" title="Home" />
+        <PageTitler className="page-titler" title={`Welcome back, ${this.state.first}`} />
         <div className="student-home__agenda">Would you like to study all cards or by set?</div>
         <div className="student-home-button-wrapper">
           <GreenButton className="student-home-button-wrapper__green-button-study" to="/study" text="Study" />

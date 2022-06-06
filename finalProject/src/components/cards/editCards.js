@@ -44,7 +44,7 @@ export default class EditCards extends Component {
   render () {
     return (
       <div>
-        <PageTitler title="Edit Cards" />
+        <PageTitler className='page-titler' title="Edit Cards" />
         {this.state.cards.map(card => <EditCard key={card._id} id={card._id} handleUpdateCard={this.handleUpdateCard} created_by={card.created_by} set_name={card.set_name} course={card.course} word={card.word} meaning={card.meaning} />)}
       </div>
     );

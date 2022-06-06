@@ -58,3 +58,9 @@ margin-right: 50px;
     margin-left: 50px;
   }
 }
+
+@media screen and (max-width: 1180px) and (orientation: portrait) {
+  .student-home__agenda {
+    margin-left: 20px;
+  }
+}

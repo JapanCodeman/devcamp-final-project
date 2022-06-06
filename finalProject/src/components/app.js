@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Switch, Route } from "react-router-dom";
-import { Router } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -40,6 +39,7 @@ constructor(props) {
     role: "",
     id: ""
   }
+
 
   this.handleLogin = this.handleLogin.bind(this)
   this.handleLogout = this.handleLogout.bind(this)
@@ -117,7 +117,7 @@ handleLogout() {
     role: "",
     id: ""
   })
-  window.location.assign('http://localhost:3000/')
+  window.location.assign('/')
   window.sessionStorage.clear()
 }
 
@@ -158,23 +158,25 @@ studentAuthorizedPages() {
     return (
       <div>
         <Router history={history} >
+        <Route render={(props) => (<HeaderNavbar {...props} handleLogin={this.handleLogin} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus} role={this.state.role} key="header"/>)}/>
           <Switch>
-            <Route render={(props) => (<HeaderNavbar {...props} handleLogin={this.handleLogin} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus} role={this.state.role} key="header"/>)}/>
             <Route exact path="/" component={TitlePage} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin} key="login" />)}/>
-            {this.state.role === "Student" ? (
-              this.studentAuthorizedPages()) :
-              null}
+              {this.state.role === "Student" ? (
+                this.studentAuthorizedPages()) :
+                null}
             <Route exact path="/profile" component={UserProfile} />
-            {this.state.role === "Instructor" ? (
-              this.instructorAuthorizedPages()) :
-              null}
-            
-            {this.state.role==="Administrator" ? (
-              this.adminAuthorizedPages()) :
-              null}
-            {/* <Route path="*" component={PageNotFound} /> */}
+              {this.state.role === "Instructor" ? (
+                this.instructorAuthorizedPages()) :
+                null}
+              {this.state.role === "Administrator" ? (
+                this.adminAuthorizedPages()) :
+                null}
+
+            <Route path="*" component={PageNotFound} />
+            {/* <Route path='/404' component={PageNotFound} />
+            <Redirect to="/404" /> */}
           </Switch>
         </Router>
       </div>

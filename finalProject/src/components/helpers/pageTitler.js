@@ -6,7 +6,7 @@ export default class PageTitler extends Component {
   }
   render () {
     return (
-      <div className='page-titler'>
+      <div className={this.props.className}>
         {this.props.title}
       </div>
     );

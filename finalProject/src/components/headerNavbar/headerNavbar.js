@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
 import SmallOgLogo from '../../../static/images/small_og_logo.png';
 
 export default class HeaderNavbar extends Component {
