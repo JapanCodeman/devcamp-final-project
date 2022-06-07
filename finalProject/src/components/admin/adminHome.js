@@ -18,7 +18,8 @@ export default class AdministratorHome extends Component {
         admin:{},
         searchParams: "1-1",
         users: [],
-        changesMade: false
+        changesMade: false,
+        firstSearch: true
       }
     this.handleChange = this.handleChange.bind(this)
     this.getUsers = this.getUsers.bind(this)
@@ -54,7 +55,8 @@ export default class AdministratorHome extends Component {
       .get('http://127.0.0.1:5000/instructors')
       .then(response => {
         this.setState({
-          users: [...response.data]
+          users: [...response.data],
+          firstSearch: false
         })
       })
       .catch(error => {
@@ -65,7 +67,8 @@ export default class AdministratorHome extends Component {
       .get('http://127.0.0.1:5000/administrators')
       .then(response => {
         this.setState({
-          users: [...response.data]
+          users: [...response.data],
+          firstSearch: false
         })
       })
       .catch(error => {
@@ -76,7 +79,8 @@ export default class AdministratorHome extends Component {
     .get(`http://127.0.0.1:5000/users-by-course/${this.state.searchParams}`)
     .then(response => {
       this.setState({
-        users: [...response.data]
+        users: [...response.data],
+        firstSearch: false
       })
     })
     .catch(error => {
@@ -113,7 +117,7 @@ export default class AdministratorHome extends Component {
 
         <div className='user-status__results'>
           {this.state.changesMade === true ? <DialogBox text="Changes saved, please search again to confirm changes" to='/admin/home' /> : null}
-          {this.state.users.length === 0 ? <div className='user-not-found'>User Not Found</div> : this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} updateData={this.handleChange} id={user._id} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>)}
+          {this.state.users.length === 0 && this.state.firstSearch === false ? <div className='user-not-found'>User Not Found</div> : this.state.users.map(user => <UserProfile className="user-status__user-profile-component" key={user["_id"]} updateData={this.handleChange} id={user._id} first={user.first} last={user.last} email={user.email} logged_in={user.logged_in} role={user.role} course={user.course}/>)}
         </div>
       </div>
     );

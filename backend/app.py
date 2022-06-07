@@ -473,6 +473,17 @@ def delete_a_card(id):
   result = cards.find_one_and_delete(id_call)
   return "Card deleted"
 
+@app.route('/delete-card-set/<set_name>', methods=['DELETE'])
+def delete_a_set(set_name):
+  delete_set = {"set_name" : set_name}
+
+  result = cards.delete_many(delete_set)
+  
+  return Response(
+  status=200,
+  mimetype="application/json"
+)
+
 # Delete all cards
 @app.route('/delete-all-cards', methods=['DELETE'])
 def delete_all_cards():

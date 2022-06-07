@@ -117,7 +117,7 @@ handleLogout() {
     role: "",
     id: ""
   })
-  window.location.assign('/')
+  history.push('/')
   window.sessionStorage.clear()
 }
 

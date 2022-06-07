@@ -1,6 +1,12 @@
 .admin-home-wrapper {
   display: flex;
   flex-direction: column;
+
+  .user-status__results {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .admin-home {
@@ -13,6 +19,19 @@
   }
 
   &__page-name {
+    color: #6BD35F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    padding-left: 200px;
+  }
+}
+
+.page-titler-and-selector {
+  display: flex;
+  justify-items: space-between;
+
+  &__page-titler {
     color: #6BD35F;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
@@ -37,6 +56,12 @@
     font-size: 32px;
   }
 }
+
+// .user-status__results {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
 
 .user-not-found {
   color: #6BD35F;
