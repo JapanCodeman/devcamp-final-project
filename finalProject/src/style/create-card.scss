@@ -109,8 +109,6 @@
         font-family: 'Roboto', sans-serif;
         font-weight: 700;
         height: 36px;
-        // margin-left: 24px;
-        // margin-right: 24px;
         font-size: 24px;
         border: none;
         border-bottom: solid #FFFFFF 2px;
@@ -156,11 +154,13 @@
       grid-row: input-s/input-e;
       color: #FFFFFF;
       font-family: 'Roboto', sans-serif;
+      position: relative;
+      margin-right: 20px;
       font-size: 18px;
       font-weight: 700;
       border-radius: 10px;
-      height: 75px;
-      width: 100px;
+      height: 75%;
+      width: 100%;
       background-color: #6BD35F;
       text-decoration: none;
       justify-content: center;

@@ -1,7 +1,8 @@
 .setnames-wrapper {
   display: flex;
   flex-direction: row;
-  margin-left: 175px;
+  flex-wrap: wrap;
+  margin-left: 100px;
 }
 
 @media screen and (max-width: 1180px) and (orientation: portrait) {

@@ -70,6 +70,20 @@
 }
 
 @media screen and (max-width: 1180px) and (orientation: landscape) {
+  .admin-home {
+    &__welcome-message {
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      padding-left: 20px;
+    }
+  
+    &__page-name {
+      padding-left: 20px;
+    }
+  }
+  
   .page-titler-and-selector {
     display: flex;
     justify-items: space-between;

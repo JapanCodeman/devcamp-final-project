@@ -54,6 +54,7 @@ export default class Home extends Component {
   render () {
     return (
       <div className="student-home">
+        {this.state.first === "" ? <LoadingPage /> : null }
         <PageTitler className="page-titler" title="Home" />
         <PageTitler className="page-titler" title={`Welcome back, ${this.state.first}`} />
         <div className="student-home__agenda">Would you like to study all cards or by set?</div>

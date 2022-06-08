@@ -1,0 +1,23 @@
+.loading-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 80vh;
+  margin-bottom: 20vh;
+
+  .spinner {
+    color: #6BD35F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  .loading-message {
+    color: #6BD35F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+  }
+}

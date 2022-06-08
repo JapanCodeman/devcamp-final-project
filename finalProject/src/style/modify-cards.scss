@@ -19,7 +19,8 @@
   &__set-wrapper {
     display: flex;
     flex-direction: row;
-    margin-left: 200px;
+    flex-wrap: wrap;
+    margin-left: 100px;
   }
 
   &__set-entry {
@@ -44,7 +45,26 @@
   }
 }
 
-@media screen and (max-width: 1180px) {
+@media screen and (max-width: 1180px) and (orientation: landscape) {
+  .modify-cards {
+    &__page-titler {
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      padding-left: 200px;
+    }
+
+    &__set-wrapper {
+      display: flex;
+      flex-direction: row;
+      margin-left: 50px;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+@media screen and (max-width: 1180px) and (orientation: portrait) {
   .modify-cards {
     &__page-titler {
       color: #6BD35F;
@@ -52,6 +72,21 @@
       font-weight: 700;
       font-size: 64px;
       padding-left: 50px;
+    }
+
+    &__your-sets {
+      color: #6BD35F;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 48px;
+      padding-left: 50px;
+    }
+
+    &__set-wrapper {
+      display: flex;
+      flex-direction: row;
+      margin-left: 50px;
+      flex-wrap: wrap;
     }
   }
 }

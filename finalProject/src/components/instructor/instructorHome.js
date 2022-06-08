@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 
 import GreenButton from '../helpers/greenButton';
+import LoadingPage from '../helpers/loadingPage';
 import PageTitler from '../helpers/pageTitler';
 
 export default class InstructorHome extends Component {
@@ -10,7 +11,7 @@ export default class InstructorHome extends Component {
   super(props) 
     
     this.state = {
-
+      first: ""
     }
   }
 
@@ -31,16 +32,12 @@ export default class InstructorHome extends Component {
   render () {
     return (
       <div className='instructor-home'>
+        {this.state.first === "" ? <LoadingPage /> : null }
         <PageTitler className='instructor-home__title' title={'Instructor Home'}/> 
         <PageTitler className='instructor-home__welcome-back' title={`Welcome back, ${this.state.first}!`}/>
-        {/* <div className='instructor-home__graph-box'>
-          <div className='instructor-home__graph-box__title'>Student Progress at a Glance</div>
-          <div className='instructor-home__graph-box__graph'>Graph goes here</div>
-        </div> */}
         <div className='instructor-home__green-button-links'>
           <GreenButton className='green-button__instructor' to='/instructor/create' text="Create a Set" />
           <GreenButton className='green-button__instructor' to='/instructor/modify' text="Modify a Set" />
-          {/* <GreenButton className='green-button' to='/instructor/students' text="View Student Progress" /> */}
         </div>
       </div>
     );

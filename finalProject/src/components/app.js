@@ -5,7 +5,7 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faMinus, faRightFromBracket, faSquarePen, faUpload, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faRightFromBracket, faSquarePen, faUpload, faTrashCan, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import AdministratorHome from './admin/adminHome';
 import CreateCards from './cards/createCards';
@@ -14,6 +14,7 @@ import HeaderNavbar from './headerNavbar/headerNavbar';
 import history from '../history';
 import Home from './student/home';
 import InstructorHome from './instructor/instructorHome';
+import LoadingPage from './helpers/loadingPage';
 import Login from './login/login';
 import ModifyCards from './cards/modifyCards';
 import PageNotFound from './pages/pageNotFound';
@@ -28,7 +29,7 @@ import UserProfile from './helpers/userProfile';
 import ViewSets from './student/viewSets';
 
 
-library.add(faRightFromBracket, faSquarePen, faPlus, faMinus, faUpload, faTrashCan)
+library.add(faRightFromBracket, faSquarePen, faPlus, faMinus, faUpload, faTrashCan, faSpinner)
 
 export default class App extends Component {
 constructor(props) {
@@ -37,13 +38,15 @@ constructor(props) {
   this.state = {
     loggedInStatus: "NOT_LOGGED_IN",
     role: "",
-    id: ""
+    id: "",
+    isLoading: false
   }
 
 
   this.handleLogin = this.handleLogin.bind(this)
   this.handleLogout = this.handleLogout.bind(this)
 }
+
 
 checkLoginStatus() {
   if (this.state.loggedInStatus === "NOT_LOGGED_IN" && window.sessionStorage.getItem("token")) {
@@ -63,7 +66,8 @@ checkLoginStatus() {
       this.setState({
         loggedInStatus: "LOGGED_IN",
         role: response.data.role,
-        id: response.data._id
+        id: response.data._id,
+        isLoading: false
       })
     })
   }
@@ -74,6 +78,9 @@ componentDidMount() {
 }
 
 handleLogin(email) {
+  this.setState({
+    isLoading: true
+  })
   var token = window.sessionStorage.getItem("token")
   const decoded = jwtDecode(token) 
   let config = {
@@ -89,8 +96,9 @@ handleLogin(email) {
     this.setState({
     loggedInStatus: "LOGGED_IN",
     role: response.data.role,
-    id: response.data._id
-  })
+    id: response.data._id,
+    isLoading: false
+    })
   })  
   .catch(error => {
     console.log("There was an error in App.js with the handleLogin function", error)
@@ -124,7 +132,7 @@ handleLogout() {
 adminAuthorizedPages() {
   return [
       // <Route exact path="/admin/login" render={(props) => (<AdministratorLogin {...props} handleLogin={this.handleLogin} key="admin-login"/>)}/>,
-      <Route exact path="/admin/home" component={AdministratorHome} key="admin-home"/>,
+      <Route exact path="/admin/home" component={AdministratorHome} key="admin-home"/>
       // <Route exact path="/admin/userstatus" component={UserStatus} key="admin-userstatus"/>
   ]
 }
@@ -133,7 +141,7 @@ instructorAuthorizedPages() {
   try {
   return [
       <Route exact path="/instructor/create" component={CreateCards} key="instructor-create-cards"/>,
-      <Route exact path="/instructor/home" key="instructor-home" render={(props) => (<InstructorHome {...props} handleLogin={this.handleLogin} key="instructor-home"/>)}/>,
+      <Route exact path="/instructor/home" key="instructor-home" render={(props) => (<InstructorHome {...props} key="instructor-home"/>)}/>,
       <Route exact path="/instructor/modify" component={ModifyCards} key="instructor-modify"/>,
       <Route exact path="/instructor/modify/:slug" component={EditCards} key="instructor-modify-slug"/>,
       <Route exact path="/instructor/students" component={StudentProgress} key="instructor-student-progress"/>
@@ -162,7 +170,8 @@ studentAuthorizedPages() {
           <Switch>
             <Route exact path="/" component={TitlePage} />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin} key="login" />)}/>
+            <Route exact path="/login" render={(props) => (<Login {...props} handleLogin={this.handleLogin} handleNotLoading={this.handleNotLoading} key="login" />)}/>
+            {this.state.isLoading === true ? <Route component={LoadingPage}/> : null} 
               {this.state.role === "Student" ? (
                 this.studentAuthorizedPages()) :
                 null}

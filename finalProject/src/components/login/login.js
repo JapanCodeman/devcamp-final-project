@@ -34,13 +34,6 @@ export default class Login extends Component {
         "email": this.state.email,
         "password": this.state.password
       })
-      // .then(data => {
-      //   if (data.status === 200) {
-      //     return data}
-      //     else {
-      //       console.log(data)
-      //     };
-      // })
       .then(data => {
         if (data.status === 401) {
           this.setState({
@@ -55,6 +48,7 @@ export default class Login extends Component {
         })
         this.props.handleLogin(this.state.email)
         if (decoded.sub.role === "Student") {
+          // this.props.handleNotLoading
           this.props.history.push('/home')
         } else if (decoded.sub.role === "Administrator") {
           this.props.history.push('/admin/home') }
@@ -69,8 +63,8 @@ export default class Login extends Component {
           })
         }
       }
-      )
-}
+    )
+  }
 
   render () {
     return (
@@ -102,9 +96,6 @@ export default class Login extends Component {
                 required
                 />
               <button type="submit" className='login-form__login-button'>Login</button>
-              {/* <Link className='login-form__forgot-password' to='/reset-password'>
-                Forgot Password?
-              </Link> */}
           </form>
         </div>
       </div>

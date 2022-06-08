@@ -91,6 +91,7 @@ export default class AdministratorHome extends Component {
   render () {
     return (
  <div className="admin-home-wrapper">
+      {this.state.first === "" ? <LoadingPage /> : null }
       <div className='admin-home__welcome-message'>Welcome back, {this.state.admin.first}!</div>
         <div className='admin-home__page-name'>Home</div>
         <div className='page-titler-and-selector'>

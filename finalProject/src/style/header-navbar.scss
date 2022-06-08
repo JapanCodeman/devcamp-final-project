@@ -71,3 +71,40 @@
   }
 }
 
+@media screen and (max-width: 1180px) and (orientation: portrait) {
+  .header-navbar {
+    display: flex;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    height: 50px;
+    background-color: #6BD35F;
+
+    &__title {
+      font-family: 'Roboto', sans-serif;
+      text-decoration: none;
+      color: Green;
+      font-size: 36px;
+      font-weight: 700;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    &__logout-button {
+      position: absolute;
+      right: 0;
+      margin-right: 20px;
+      align-self: right;
+      color: darkgreen;
+      font-size: 4rem;
+      // transform: translateY(-20px);
+  
+      &:hover {
+        cursor: pointer;
+      }
+    }
+}
+}
+
+

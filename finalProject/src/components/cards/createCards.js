@@ -33,12 +33,15 @@ export default class CreateCards extends Component {
   }
 
   handleAddCardToSet(card) {
+    if (this.state.cards.indexOf(card) != -1) {
+      window.alert("You have already created that card")
+    } else {
     this.setState(prevState => ({
       created_by: this.state.user,
       set_name: this.state.set_name,
       cards: [...prevState.cards, card]
     }))
-  }
+  }}
 
   handleChange(event) {
     this.setState({
@@ -53,10 +56,6 @@ export default class CreateCards extends Component {
       cards: []
     })
   }
-
-// this.setState(prevState => ({
-//   myArray: [...prevState.myArray, {"name": "object"}]
-// }))
 
   handleSetName(event) {
     this.setState({
