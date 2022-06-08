@@ -2,3 +2,4 @@
 /backend/Pipfile.lock
 .DS_Store
 /backend/.env
+node_modules
